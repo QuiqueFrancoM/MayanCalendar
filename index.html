@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor a Calendario Maya con Glifos</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mayan+Numerals&display=swap');
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Convierte Fechas al Calendario Maya</h1>
+        <p>Selecciona una fecha para ver su equivalente con glifos mayas.</p>
+
+        <input type="date" id="fechaGregoriana">
+        <button id="botonConvertir">Convertir Fecha</button>
+
+        <div id="resultado-container">
+            <div class="calendario-resultado" id="long-count-result">
+                <h3>Cuenta Larga</h3>
+                <div class="glifo-container" id="long-count-glyphs"></div>
+                <p class="fecha-texto" id="long-count-text"></p>
+            </div>
+            <div class="calendario-resultado" id="tzolkin-result">
+                <h3>Tzolk'in (Calendario Sagrado)</h3>
+                <div class="glifo-container" id="tzolkin-glyphs"></div>
+                <p class="fecha-texto" id="tzolkin-text"></p>
+            </div>
+            <div class="calendario-resultado" id="haab-result">
+                <h3>Haab' (Calendario Civil)</h3>
+                <div class="glifo-container" id="haab-glyphs"></div>
+                <p class="fecha-texto" id="haab-text"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

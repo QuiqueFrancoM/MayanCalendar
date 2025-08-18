@@ -1,0 +1,126 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+}
+
+h1 {
+    color: #8C5E35;
+    margin-bottom: 10px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+input[type="date"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #5D8B71;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4A6F5A;
+}
+
+#resultado-container {
+    margin-top: 30px;
+}
+
+.calendario-resultado {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.calendario-resultado h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.glifo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Espacio entre glifos */
+    flex-wrap: wrap;
+}
+
+.glifo-img {
+    height: 80px; /* Altura fija para los glifos */
+    width: auto;
+    background-color: #8C5E35;
+    fill: #781f1f;
+    stroke: green;
+    stroke-width: 4px;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 6px 6px rgba(0,0,0,0.1);
+}
+
+.fecha-texto {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 15px;
+    color: #555;
+}
+
+.noto-sans-mayan-numerals-regular {
+  font-family: "Noto Sans Mayan Numerals", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+/* 1. Carga la fuente desde tu carpeta local */
+@font-face {
+  font-family: 'Noto Sans Mayan'; /* Le damos un nombre para usarla en nuestro CSS */
+  src: url('fonts/NotoSansMayanNumerals-Regular.ttf') format('truetype');
+}
+
+/* 2. Creamos una clase para aplicar la fuente a los números */
+.numero-maya {
+  font-family: 'Noto Sans Mayan', sans-serif; /* Usa nuestra fuente maya */
+  font-size: 90px; /* Ajusta el tamaño para que se vea bien */
+  color: #8C5E35;
+    text-shadow: darkgray 2px 2px 1px;
+    line-height: 2;
+
+}
