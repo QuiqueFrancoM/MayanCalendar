@@ -450,10 +450,11 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
         gy = int(by + 12 + (glifo_max_h - glifo_img.height) / 2)
         postal.alpha_composite(glifo_img, (gx, gy))
 
-    # Pie de la postal: lectura maya y fecha gregoriana en letras chiquitas
+    # Pie de la postal: lectura maya, fecha gregoriana en letras chiquitas y copyright
     draw = ImageDraw.Draw(postal)
     fuente_maya_pie = _cargar_fuente_texto(30, cursiva=True)
     fuente_greg_pie = _cargar_fuente_texto(20, cursiva=False)
+    fuente_copy = _cargar_fuente_texto(15, cursiva=False)
 
     draw.text(
         (W // 2, est_y + est_h + 52),
@@ -468,6 +469,13 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
         font=fuente_greg_pie,
         fill=(139, 125, 107, 255),
         anchor="mm",
+    )
+    draw.text(
+        (W - 42, H - 36),
+        "Copyright EFM 2026",
+        font=fuente_copy,
+        fill=(158, 146, 128, 255),
+        anchor="rb",
     )
 
     return postal.convert("RGB")
