@@ -78,8 +78,17 @@ MESES_GREGORIANO_NOMBRES = [
     "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
 ]
 
+MESES_GREGORIANO_NOMBRES_EN = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
 DIAS_SEMANA_NOMBRES = [
     "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
+]
+
+DIAS_SEMANA_NOMBRES_EN = [
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
 ]
 
 
@@ -120,7 +129,7 @@ def jdn_a_ymd(jdn: int) -> tuple[int, int, int]:
     return dia, mes, anio_astro
 
 
-def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc') -> dict:
+def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: str = 'es') -> dict:
     anio = max(1, min(9999, anio))
     mes = max(1, min(12, mes))
     anio_astro = (1 - anio) if era == 'ac' else anio
@@ -144,16 +153,27 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc') -> dict:
     dia_haab_total = (dias_totales + 348) % 365
     num_mes_haab_idx, dia_del_mes_haab = divmod(dia_haab_total, 20)
 
-    dia_semana = DIAS_SEMANA_NOMBRES[(jdn + 1) % 7]
-    nombre_mes = MESES_GREGORIANO_NOMBRES[mes - 1]
-    anio_texto = f"{1 - anio_astro} a. C." if anio_astro <= 0 else str(anio_astro)
-    texto_gregoriano = f"{dia_semana}, {dia} de {nombre_texto(nombre_mes)} de {anio_texto} (calendario gregoriano)"
+    idx_semana = (jdn + 1) % 7
+    if lang == 'en':
+        dia_semana = DIAS_SEMANA_NOMBRES_EN[idx_semana]
+        nombre_mes = MESES_GREGORIANO_NOMBRES_EN[mes - 1]
+        anio_texto = f"{1 - anio_astro} BC" if anio_astro <= 0 else str(anio_astro)
+        texto_gregoriano = f"{dia_semana}, {nombre_mes} {dia}, {anio_texto} (Gregorian calendar)"
+    else:
+        dia_semana = DIAS_SEMANA_NOMBRES[idx_semana]
+        nombre_mes = MESES_GREGORIANO_NOMBRES[mes - 1]
+        anio_texto = f"{1 - anio_astro} a. C." if anio_astro <= 0 else str(anio_astro)
+        texto_gregoriano = f"{dia_semana}, {dia} de {nombre_texto(nombre_mes)} de {anio_texto} (calendario gregoriano)"
+
     texto_maya = (
         f"{baktun}.{katun}.{tun}.{winal}.{kin} · "
         f"{coef_tzolkin} {DIAS_TZOLKIN_NOMBRES[num_tzolkin_idx]} · "
         f"{dia_del_mes_haab} {MESES_HAAB_NOMBRES[num_mes_haab_idx]}"
     )
-    slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{'aC' if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
+    if lang == 'en':
+        slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{'BC' if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
+    else:
+        slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{'aC' if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
 
     return {
         "dia": dia,
@@ -493,8 +513,8 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
     return postal.convert("RGB")
 
 
-def generar_postal_bytes(dia: int, mes: int, anio: int, era: str = 'dc', formato: str = 'jpg') -> tuple[bytes, str]:
-    estado = calcular_fecha_maya(dia, mes, anio, era)
+def generar_postal_bytes(dia: int, mes: int, anio: int, era: str = 'dc', formato: str = 'jpg', lang: str = 'es') -> tuple[bytes, str]:
+    estado = calcular_fecha_maya(dia, mes, anio, era, lang=lang)
     img_rgb = renderizar_postal_imagen(estado)
     buf = BytesIO()
     if formato == 'pdf':

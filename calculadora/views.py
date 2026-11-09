@@ -21,11 +21,17 @@ def _leer_parametros_fecha(request):
     era = request.GET.get("era", "dc")
     if era not in ("dc", "ac"):
         era = "dc"
-    return dia, mes, anio, era
+    lang = request.GET.get("lang", "es")
+    if lang not in ("es", "en"):
+        lang = "es"
+    return dia, mes, anio, era, lang
 
 
 def index(request):
     hoy = date.today()
+    lang_inicial = request.GET.get("lang", "es")
+    if lang_inicial not in ("es", "en"):
+        lang_inicial = "es"
     return render(
         request,
         "calculadora/index.html",
@@ -33,25 +39,27 @@ def index(request):
             "hoy_dia": hoy.day,
             "hoy_mes": hoy.month,
             "hoy_anio": hoy.year,
+            "lang_inicial": lang_inicial,
         },
     )
 
 
 def postal_jpg(request):
-    dia, mes, anio, era = _leer_parametros_fecha(request)
-    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="jpg")
+    dia, mes, anio, era, lang = _leer_parametros_fecha(request)
+    prefijo = "mayan-postcard" if lang == "en" else "postal-maya"
+    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="jpg", lang=lang)
     resp = HttpResponse(datos, content_type="image/jpeg")
     if request.GET.get("descargar") == "1":
-        resp["Content-Disposition"] = f'attachment; filename="postal-maya-{slug}.jpg"'
+        resp["Content-Disposition"] = f'attachment; filename="{prefijo}-{slug}.jpg"'
     else:
-        resp["Content-Disposition"] = f'inline; filename="postal-maya-{slug}.jpg"'
+        resp["Content-Disposition"] = f'inline; filename="{prefijo}-{slug}.jpg"'
     return resp
 
 
 def postal_pdf(request):
-    dia, mes, anio, era = _leer_parametros_fecha(request)
-    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="pdf")
+    dia, mes, anio, era, lang = _leer_parametros_fecha(request)
+    prefijo = "mayan-postcard" if lang == "en" else "postal-maya"
+    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="pdf", lang=lang)
     resp = HttpResponse(datos, content_type="application/pdf")
-    resp["Content-Disposition"] = f'attachment; filename="postal-maya-{slug}.pdf"'
+    resp["Content-Disposition"] = f'attachment; filename="{prefijo}-{slug}.pdf"'
     return resp
-

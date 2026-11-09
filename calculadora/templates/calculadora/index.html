@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora desarrollada por Enrique Franco — Calendario Maya</title>
+    <title id="pageTitle">Calculadora desarrollada por Enrique Franco — Calendario Maya</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -17,17 +17,62 @@
             padding: 24px 0;
         }
         .container {
+            position: relative;
             background-color: #ffffff;
-            padding: 30px 36px;
+            padding: 36px 36px 30px;
             border-radius: 14px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 560px;
             width: 92%;
         }
+        /* Selector de idioma con banderas en la esquina superior derecha */
+        .lang-switcher {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            display: inline-flex;
+            gap: 6px;
+            background: #f4efe6;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid #e0d5c1;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            background: transparent;
+            padding: 4px 9px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b5a45;
+            opacity: 0.65;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            opacity: 0.95;
+        }
+        .lang-btn.activo {
+            background: #ffffff;
+            color: #3b2d1f;
+            opacity: 1;
+            box-shadow: 0 1px 4px rgba(60, 45, 30, 0.18);
+        }
+        .lang-btn svg {
+            width: 22px;
+            height: 15px;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+            flex-shrink: 0;
+        }
         h1 {
             color: #8C5E35;
-            margin: 0 0 4px;
+            margin: 12px 0 4px;
         }
         p.autor {
             margin: 0 0 10px;
@@ -167,18 +212,46 @@
 </head>
 <body>
     <div class="container">
-        <h1>Convierte Fechas al Calendario Maya</h1>
-        <p class="autor">Calculadora desarrollada por Enrique Franco</p>
-        <p class="subtitulo">Selecciona una fecha para generar una postal de la estela maya que representa esa fecha</p>
+        <!-- Selector gráfico de idioma (México / USA) -->
+        <div class="lang-switcher" role="group" aria-label="Language selector">
+            <button type="button" class="lang-btn activo" id="btnLangEs" title="Español (México)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="7" height="15" x="0" fill="#006847"/>
+                    <rect width="7" height="15" x="7" fill="#ffffff"/>
+                    <rect width="7" height="15" x="14" fill="#ce1126"/>
+                    <circle cx="10.5" cy="7.5" r="1.9" fill="#8c5e35"/>
+                </svg>
+                <span>ES</span>
+            </button>
+            <button type="button" class="lang-btn" id="btnLangEn" title="English (USA)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#b22234"/>
+                    <path d="M0,2.3h21 M0,4.6h21 M0,6.9h21 M0,9.2h21 M0,11.5h21 M0,13.8h21" stroke="#ffffff" stroke-width="1.15"/>
+                    <rect width="9" height="8.1" fill="#3c3b6e"/>
+                    <g fill="#ffffff">
+                        <circle cx="1.8" cy="1.6" r="0.5"/><circle cx="3.6" cy="1.6" r="0.5"/><circle cx="5.4" cy="1.6" r="0.5"/><circle cx="7.2" cy="1.6" r="0.5"/>
+                        <circle cx="2.7" cy="2.8" r="0.5"/><circle cx="4.5" cy="2.8" r="0.5"/><circle cx="6.3" cy="2.8" r="0.5"/>
+                        <circle cx="1.8" cy="4.0" r="0.5"/><circle cx="3.6" cy="4.0" r="0.5"/><circle cx="5.4" cy="4.0" r="0.5"/><circle cx="7.2" cy="4.0" r="0.5"/>
+                        <circle cx="2.7" cy="5.2" r="0.5"/><circle cx="4.5" cy="5.2" r="0.5"/><circle cx="6.3" cy="5.2" r="0.5"/>
+                        <circle cx="1.8" cy="6.4" r="0.5"/><circle cx="3.6" cy="6.4" r="0.5"/><circle cx="5.4" cy="6.4" r="0.5"/><circle cx="7.2" cy="6.4" r="0.5"/>
+                    </g>
+                </svg>
+                <span>EN</span>
+            </button>
+        </div>
 
-        <div class="selector-fecha" aria-label="Selector de fecha">
+        <h1 id="txtHeading">Convierte Fechas al Calendario Maya</h1>
+        <p class="autor" id="txtAutor">Calculadora desarrollada por Enrique Franco</p>
+        <p class="subtitulo" id="txtSubtitulo">Selecciona una fecha para generar una postal de la estela maya que representa esa fecha</p>
+
+        <div class="selector-fecha" id="selectorFechaBox" aria-label="Selector de fecha">
             <div class="selector-controles">
                 <div class="campo-fecha">
-                    <label for="selectDia">Día</label>
+                    <label for="selectDia" id="lblDia">Día</label>
                     <select id="selectDia"></select>
                 </div>
                 <div class="campo-fecha campo-mes">
-                    <label for="selectMes">Mes</label>
+                    <label for="selectMes" id="lblMes">Mes</label>
                     <select id="selectMes">
                         <option value="1">Enero</option>
                         <option value="2">Febrero</option>
@@ -195,12 +268,12 @@
                     </select>
                 </div>
                 <div class="campo-fecha campo-anio">
-                    <label for="inputAnio">Año</label>
+                    <label for="inputAnio" id="lblAnio">Año</label>
                     <div class="anio-grupo">
                         <input type="number" id="inputAnio" min="1" max="4772" value="{{ hoy_anio }}">
                         <select id="selectEra" aria-label="Era">
-                            <option value="dc">d. C.</option>
-                            <option value="ac">a. C.</option>
+                            <option value="dc" id="optEraDc">d. C.</option>
+                            <option value="ac" id="optEraAc">a. C.</option>
                         </select>
                     </div>
                 </div>
@@ -209,8 +282,8 @@
                 <button type="button" class="btn-secundario" id="btnPrevDia" title="Día anterior">◀ −1 día</button>
                 <button type="button" class="btn-secundario" id="btnHoy">Hoy</button>
                 <button type="button" class="btn-secundario" id="btnNextDia" title="Día siguiente">+1 día ▶</button>
-                <label class="btn-secundario btn-calendario" title="Elegir desde el calendario">
-                    📅 Calendario
+                <label class="btn-secundario btn-calendario" id="lblBtnCalendario" title="Elegir desde el calendario">
+                    <span id="txtCalendario">📅 Calendario</span>
                     <input type="date" id="fechaGregoriana">
                 </label>
             </div>
@@ -227,6 +300,55 @@
     </div>
 
     <script>
+        const I18N = {
+            es: {
+                pageTitle: 'Calculadora desarrollada por Enrique Franco — Calendario Maya',
+                heading: 'Convierte Fechas al Calendario Maya',
+                autor: 'Calculadora desarrollada por Enrique Franco',
+                subtitulo: 'Selecciona una fecha para generar una postal de la estela maya que representa esa fecha',
+                lblDia: 'Día',
+                lblMes: 'Mes',
+                lblAnio: 'Año',
+                meses: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                eraDc: 'd. C.',
+                eraAc: 'a. C.',
+                prevDia: '◀ −1 día',
+                prevDiaTitle: 'Día anterior',
+                hoy: 'Hoy',
+                nextDia: '+1 día ▶',
+                nextDiaTitle: 'Día siguiente',
+                calendario: '📅 Calendario',
+                calendarioTitle: 'Elegir desde el calendario',
+                descJpg: '🖼 Descargar postal (JPG)',
+                descPdf: '📄 Descargar postal (PDF)',
+                altPostal: 'Postal de estela maya generada por el servidor',
+            },
+            en: {
+                pageTitle: 'Calculator developed by Enrique Franco — Mayan Calendar',
+                heading: 'Convert Dates to the Mayan Calendar',
+                autor: 'Calculator developed by Enrique Franco',
+                subtitulo: 'Select a date to generate a postcard of the Mayan stela representing that date',
+                lblDia: 'Day',
+                lblMes: 'Month',
+                lblAnio: 'Year',
+                meses: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                eraDc: 'AD',
+                eraAc: 'BC',
+                prevDia: '◀ −1 day',
+                prevDiaTitle: 'Previous day',
+                hoy: 'Today',
+                nextDia: '+1 day ▶',
+                nextDiaTitle: 'Next day',
+                calendario: '📅 Calendar',
+                calendarioTitle: 'Pick from calendar',
+                descJpg: '🖼 Download postcard (JPG)',
+                descPdf: '📄 Download postcard (PDF)',
+                altPostal: 'Mayan stela postcard generated by the server',
+            },
+        };
+
+        let idiomaActual = '{{ lang_inicial|default:"es" }}';
+
         const selectDia = document.getElementById('selectDia');
         const selectMes = document.getElementById('selectMes');
         const inputAnio = document.getElementById('inputAnio');
@@ -236,6 +358,50 @@
         const imagenPostal = document.getElementById('imagenPostal');
         const linkJpg = document.getElementById('linkDescargarJpg');
         const linkPdf = document.getElementById('linkDescargarPdf');
+        const btnLangEs = document.getElementById('btnLangEs');
+        const btnLangEn = document.getElementById('btnLangEn');
+
+        function aplicarIdioma(lang) {
+            idiomaActual = lang === 'en' ? 'en' : 'es';
+            const t = I18N[idiomaActual];
+            document.documentElement.lang = idiomaActual;
+            document.title = t.pageTitle;
+            document.getElementById('txtHeading').textContent = t.heading;
+            document.getElementById('txtAutor').textContent = t.autor;
+            document.getElementById('txtSubtitulo').textContent = t.subtitulo;
+            document.getElementById('lblDia').textContent = t.lblDia;
+            document.getElementById('lblMes').textContent = t.lblMes;
+            document.getElementById('lblAnio').textContent = t.lblAnio;
+
+            Array.from(selectMes.options).forEach((opt, idx) => {
+                opt.textContent = t.meses[idx];
+            });
+
+            document.getElementById('optEraDc').textContent = t.eraDc;
+            document.getElementById('optEraAc').textContent = t.eraAc;
+
+            const btnPrev = document.getElementById('btnPrevDia');
+            btnPrev.textContent = t.prevDia;
+            btnPrev.title = t.prevDiaTitle;
+
+            document.getElementById('btnHoy').textContent = t.hoy;
+
+            const btnNext = document.getElementById('btnNextDia');
+            btnNext.textContent = t.nextDia;
+            btnNext.title = t.nextDiaTitle;
+
+            document.getElementById('txtCalendario').textContent = t.calendario;
+            document.getElementById('lblBtnCalendario').title = t.calendarioTitle;
+
+            linkJpg.textContent = t.descJpg;
+            linkPdf.textContent = t.descPdf;
+            imagenPostal.alt = t.altPostal;
+
+            btnLangEs.classList.toggle('activo', idiomaActual === 'es');
+            btnLangEn.classList.toggle('activo', idiomaActual === 'en');
+
+            actualizarPostal();
+        }
 
         function anioAstro() {
             const a = Math.max(1, parseInt(inputAnio.value, 10) || 1);
@@ -267,6 +433,7 @@
                 mes: selectMes.value || 1,
                 anio: Math.max(1, parseInt(inputAnio.value, 10) || 1),
                 era: selectEra.value,
+                lang: idiomaActual,
             });
             visorPostal.classList.add('cargando');
             imagenPostal.src = `/postal.jpg?${params.toString()}`;
@@ -307,6 +474,9 @@
             establecerFecha(d, m, y);
         }
 
+        btnLangEs.addEventListener('click', () => aplicarIdioma('es'));
+        btnLangEn.addEventListener('click', () => aplicarIdioma('en'));
+
         selectMes.addEventListener('change', () => { actualizarOpcionesDia(); actualizarPostal(); });
         selectDia.addEventListener('change', actualizarPostal);
         inputAnio.addEventListener('input', () => { actualizarOpcionesDia(); actualizarPostal(); });
@@ -331,7 +501,7 @@
         });
 
         establecerFecha({{ hoy_dia }}, {{ hoy_mes }}, {{ hoy_anio }});
+        if (idiomaActual !== 'es') aplicarIdioma(idiomaActual);
     </script>
 </body>
 </html>
-
