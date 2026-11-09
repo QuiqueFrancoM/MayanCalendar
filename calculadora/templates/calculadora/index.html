@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">Calculadora desarrollada por Enrique Franco — Calendario Maya</title>
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5;
@@ -19,12 +22,12 @@
         .container {
             position: relative;
             background-color: #ffffff;
-            padding: 46px 36px 30px;
+            padding: 46px 28px 30px;
             border-radius: 14px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 560px;
-            width: 92%;
+            width: 94%;
         }
         /* Selector de idioma con banderas en la esquina superior derecha */
         .lang-switcher {
@@ -87,8 +90,8 @@
             line-height: 1.5;
         }
         .selector-fecha {
-            margin-top: 20px;
-            padding: 18px;
+            margin-top: 18px;
+            padding: 14px 12px;
             background: #f8f6f2;
             border: 1px solid #e5dec9;
             border-radius: 12px;
@@ -96,18 +99,20 @@
         }
         .selector-controles {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: flex-end;
+            flex-wrap: nowrap;
         }
         .campo-fecha {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             gap: 4px;
+            min-width: 0;
         }
         .campo-fecha label {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
@@ -115,11 +120,11 @@
         }
         .campo-fecha select,
         .campo-fecha input[type="number"] {
-            padding: 9px 12px;
+            padding: 8px 8px;
             border: 1px solid #cbbba0;
             border-radius: 8px;
             background-color: #fff;
-            font-size: 15px;
+            font-size: 14.5px;
             color: #333;
             outline: none;
         }
@@ -128,27 +133,66 @@
             border-color: #8C5E35;
             box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
         }
-        .campo-mes select { min-width: 140px; }
-        .anio-grupo { display: flex; gap: 6px; }
-        .anio-grupo input[type="number"] { width: 82px; }
+        .campo-mes { flex: 0 1 118px; }
+        .campo-mes select { width: 100%; }
+        .anio-grupo { display: flex; gap: 5px; }
+        .anio-grupo input[type="number"] { width: 64px; }
         .selector-acciones {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            margin-top: 14px;
-            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: nowrap;
         }
         .btn-secundario {
             background-color: #ece6da;
             color: #5a4632;
             border: 1px solid #d5cab6;
-            padding: 7px 14px;
+            padding: 7px 11px;
             border-radius: 8px;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 600;
+            white-space: nowrap;
             cursor: pointer;
             transition: background-color 0.2s;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 46px 12px 22px;
+                width: 96%;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .selector-fecha {
+                padding: 12px 8px;
+            }
+            .selector-controles {
+                gap: 5px;
+            }
+            .campo-fecha select,
+            .campo-fecha input[type="number"] {
+                padding: 7px 5px;
+                font-size: 13px;
+            }
+            .campo-mes {
+                flex: 1 1 88px;
+                max-width: 102px;
+            }
+            .anio-grupo {
+                gap: 4px;
+            }
+            .anio-grupo input[type="number"] {
+                width: 54px;
+            }
+            .selector-acciones {
+                gap: 4px;
+            }
+            .btn-secundario {
+                padding: 6px 8px;
+                font-size: 12px;
+            }
         }
         .btn-secundario:hover { background-color: #dfd6c5; }
         .btn-calendario {
@@ -269,9 +313,9 @@
             </button>
         </div>
 
-        <h1 id="txtHeading">Convierte Fechas al Calendario Maya</h1>
+        <h1 id="txtHeading">Crea una Estela Maya con tu fecha memorable!</h1>
         <p class="autor" id="txtAutor">Calculadora desarrollada por Enrique Franco</p>
-        <p class="subtitulo" id="txtSubtitulo">Selecciona una fecha para generar una postal de la estela maya que representa esa fecha</p>
+        <p class="subtitulo" id="txtSubtitulo">Selecciona tu fecha</p>
 
         <div class="selector-fecha" id="selectorFechaBox" aria-label="Selector de fecha">
             <div class="selector-controles">
@@ -332,9 +376,9 @@
         const I18N = {
             es: {
                 pageTitle: 'Calculadora desarrollada por Enrique Franco — Calendario Maya',
-                heading: 'Convierte Fechas al Calendario Maya',
+                heading: 'Crea una Estela Maya con tu fecha memorable!',
                 autor: 'Calculadora desarrollada por Enrique Franco',
-                subtitulo: 'Selecciona una fecha para generar una postal de la estela maya que representa esa fecha',
+                subtitulo: 'Selecciona tu fecha',
                 lblDia: 'Día',
                 lblMes: 'Mes',
                 lblAnio: 'Año',
@@ -354,9 +398,9 @@
             },
             en: {
                 pageTitle: 'Calculator developed by Enrique Franco — Mayan Calendar',
-                heading: 'Convert Dates to the Mayan Calendar',
+                heading: 'Create a Mayan Stela with your memorable date!',
                 autor: 'Calculator developed by Enrique Franco',
-                subtitulo: 'Select a date to generate a postcard of the Mayan stela representing that date',
+                subtitulo: 'Select your date',
                 lblDia: 'Day',
                 lblMes: 'Month',
                 lblAnio: 'Year',
@@ -376,9 +420,9 @@
             },
             fr: {
                 pageTitle: 'Calculatrice développée par Enrique Franco — Calendrier Maya',
-                heading: 'Convertir des Dates au Calendrier Maya',
+                heading: 'Créez une Stèle Maya avec votre date mémorable !',
                 autor: 'Calculatrice développée par Enrique Franco',
-                subtitulo: 'Sélectionnez une date pour générer une carte postale de la stèle maya représentant cette date',
+                subtitulo: 'Sélectionnez votre date',
                 lblDia: 'Jour',
                 lblMes: 'Mois',
                 lblAnio: 'Année',
@@ -398,9 +442,9 @@
             },
             ja: {
                 pageTitle: 'Enrique Franco 開発の計算機 — マヤ暦',
-                heading: '日付をマヤ暦に変換',
+                heading: '思い出の日付でマヤ石碑を作ろう！',
                 autor: 'Enrique Franco 開発の計算機',
-                subtitulo: '日付を選択すると、その日付を表すマヤ石碑のポストカードを生成します',
+                subtitulo: '日付を選択してください',
                 lblDia: '日',
                 lblMes: '月',
                 lblAnio: '年',
@@ -420,9 +464,9 @@
             },
             zh: {
                 pageTitle: 'Enrique Franco 开发的计算器 — 玛雅历法',
-                heading: '将日期转换为玛雅历法',
+                heading: '用你难忘的日期创建玛雅石碑！',
                 autor: 'Enrique Franco 开发的计算器',
-                subtitulo: '选择一个日期，生成代表该日期的玛雅石碑明信片',
+                subtitulo: '请选择日期',
                 lblDia: '日',
                 lblMes: '月',
                 lblAnio: '年',
