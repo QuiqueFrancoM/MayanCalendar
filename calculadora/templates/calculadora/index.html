@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estela Maya — Convertidor de Fechas</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px 36px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 560px;
+            width: 92%;
+        }
+        h1 {
+            color: #8C5E35;
+            margin: 0 0 8px;
+        }
+        p.subtitulo {
+            margin: 0;
+            color: #555;
+            line-height: 1.5;
+        }
+        .selector-fecha {
+            margin-top: 20px;
+            padding: 18px;
+            background: #f8f6f2;
+            border: 1px solid #e5dec9;
+            border-radius: 12px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .selector-controles {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .campo-fecha {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+        .campo-fecha label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #7a6a55;
+        }
+        .campo-fecha select,
+        .campo-fecha input[type="number"] {
+            padding: 9px 12px;
+            border: 1px solid #cbbba0;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+        }
+        .campo-fecha select:focus,
+        .campo-fecha input[type="number"]:focus {
+            border-color: #8C5E35;
+            box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
+        }
+        .campo-mes select { min-width: 140px; }
+        .anio-grupo { display: flex; gap: 6px; }
+        .anio-grupo input[type="number"] { width: 82px; }
+        .selector-acciones {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .btn-secundario {
+            background-color: #ece6da;
+            color: #5a4632;
+            border: 1px solid #d5cab6;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-secundario:hover { background-color: #dfd6c5; }
+        .btn-calendario {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            overflow: hidden;
+        }
+        .btn-calendario input[type="date"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        .visor-postal {
+            position: relative;
+            margin-top: 24px;
+        }
+        .visor-postal img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(40, 30, 18, 0.16);
+            transition: opacity 0.2s ease;
+        }
+        .visor-postal.cargando img {
+            opacity: 0.55;
+        }
+        .acciones-descarga {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .btn-descarga {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-size: 14.5px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-jpg {
+            background-color: #5D8B71;
+            box-shadow: 0 2px 8px rgba(93, 139, 113, 0.25);
+        }
+        .btn-jpg:hover { background-color: #4A6F5A; }
+        .btn-pdf {
+            background-color: #8C5E35;
+            box-shadow: 0 2px 8px rgba(140, 94, 53, 0.25);
+        }
+        .btn-pdf:hover { background-color: #724b29; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Convierte Fechas al Calendario Maya</h1>
+        <p class="subtitulo">Selecciona una fecha para generar su estela maya desde el servidor.</p>
+
+        <div class="selector-fecha" aria-label="Selector de fecha">
+            <div class="selector-controles">
+                <div class="campo-fecha">
+                    <label for="selectDia">Día</label>
+                    <select id="selectDia"></select>
+                </div>
+                <div class="campo-fecha campo-mes">
+                    <label for="selectMes">Mes</label>
+                    <select id="selectMes">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+                <div class="campo-fecha campo-anio">
+                    <label for="inputAnio">Año</label>
+                    <div class="anio-grupo">
+                        <input type="number" id="inputAnio" min="1" max="4772" value="{{ hoy_anio }}">
+                        <select id="selectEra" aria-label="Era">
+                            <option value="dc">d. C.</option>
+                            <option value="ac">a. C.</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="selector-acciones">
+                <button type="button" class="btn-secundario" id="btnPrevDia" title="Día anterior">◀ −1 día</button>
+                <button type="button" class="btn-secundario" id="btnHoy">Hoy</button>
+                <button type="button" class="btn-secundario" id="btnNextDia" title="Día siguiente">+1 día ▶</button>
+                <label class="btn-secundario btn-calendario" title="Elegir desde el calendario">
+                    📅 Calendario
+                    <input type="date" id="fechaGregoriana">
+                </label>
+            </div>
+        </div>
+
+        <div class="visor-postal" id="visorPostal">
+            <img id="imagenPostal" alt="Postal de estela maya generada por el servidor">
+        </div>
+
+        <div class="acciones-descarga">
+            <a class="btn-descarga btn-jpg" id="linkDescargarJpg" href="#">🖼 Descargar postal (JPG)</a>
+            <a class="btn-descarga btn-pdf" id="linkDescargarPdf" href="#">📄 Descargar postal (PDF)</a>
+        </div>
+    </div>
+
+    <script>
+        const selectDia = document.getElementById('selectDia');
+        const selectMes = document.getElementById('selectMes');
+        const inputAnio = document.getElementById('inputAnio');
+        const selectEra = document.getElementById('selectEra');
+        const fechaInput = document.getElementById('fechaGregoriana');
+        const visorPostal = document.getElementById('visorPostal');
+        const imagenPostal = document.getElementById('imagenPostal');
+        const linkJpg = document.getElementById('linkDescargarJpg');
+        const linkPdf = document.getElementById('linkDescargarPdf');
+
+        function anioAstro() {
+            const a = Math.max(1, parseInt(inputAnio.value, 10) || 1);
+            return selectEra.value === 'ac' ? 1 - a : a;
+        }
+
+        function diasEnMes(m, y) {
+            const bisiesto = (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0);
+            return [31, bisiesto ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1] || 31;
+        }
+
+        function actualizarOpcionesDia() {
+            const m = parseInt(selectMes.value, 10) || 1;
+            const maxD = diasEnMes(m, anioAstro());
+            const prev = parseInt(selectDia.value, 10) || 1;
+            selectDia.innerHTML = '';
+            for (let d = 1; d <= maxD; d++) {
+                const opt = document.createElement('option');
+                opt.value = d;
+                opt.textContent = d;
+                selectDia.appendChild(opt);
+            }
+            selectDia.value = Math.min(prev, maxD);
+        }
+
+        function actualizarPostal() {
+            const params = new URLSearchParams({
+                dia: selectDia.value || 1,
+                mes: selectMes.value || 1,
+                anio: Math.max(1, parseInt(inputAnio.value, 10) || 1),
+                era: selectEra.value,
+            });
+            visorPostal.classList.add('cargando');
+            imagenPostal.src = `/postal.jpg?${params.toString()}`;
+            linkJpg.href = `/postal.jpg?${params.toString()}&descargar=1`;
+            linkPdf.href = `/postal.pdf?${params.toString()}`;
+        }
+
+        imagenPostal.addEventListener('load', () => visorPostal.classList.remove('cargando'));
+
+        function establecerFecha(d, m, yAstro) {
+            if (yAstro <= 0) {
+                selectEra.value = 'ac';
+                inputAnio.value = 1 - yAstro;
+            } else {
+                selectEra.value = 'dc';
+                inputAnio.value = yAstro;
+            }
+            selectMes.value = m;
+            actualizarOpcionesDia();
+            selectDia.value = Math.min(d, diasEnMes(m, yAstro));
+            actualizarPostal();
+        }
+
+        function moverDias(delta) {
+            let d = parseInt(selectDia.value, 10) + delta;
+            let m = parseInt(selectMes.value, 10);
+            let y = anioAstro();
+            while (d > diasEnMes(m, y)) {
+                d -= diasEnMes(m, y);
+                m++;
+                if (m > 12) { m = 1; y++; }
+            }
+            while (d < 1) {
+                m--;
+                if (m < 1) { m = 12; y--; }
+                d += diasEnMes(m, y);
+            }
+            establecerFecha(d, m, y);
+        }
+
+        selectMes.addEventListener('change', () => { actualizarOpcionesDia(); actualizarPostal(); });
+        selectDia.addEventListener('change', actualizarPostal);
+        inputAnio.addEventListener('input', () => { actualizarOpcionesDia(); actualizarPostal(); });
+        selectEra.addEventListener('change', () => { actualizarOpcionesDia(); actualizarPostal(); });
+
+        document.getElementById('btnHoy').addEventListener('click', () => {
+            const h = new Date();
+            establecerFecha(h.getDate(), h.getMonth() + 1, h.getFullYear());
+        });
+        document.getElementById('btnPrevDia').addEventListener('click', () => moverDias(-1));
+        document.getElementById('btnNextDia').addEventListener('click', () => moverDias(1));
+
+        fechaInput.addEventListener('click', () => {
+            if (typeof fechaInput.showPicker === 'function') {
+                try { fechaInput.showPicker(); } catch (_) {}
+            }
+        });
+        fechaInput.addEventListener('change', () => {
+            if (!fechaInput.value) return;
+            const [y, m, d] = fechaInput.value.split('-').map(Number);
+            if (y && m && d) establecerFecha(d, m, y);
+        });
+
+        establecerFecha({{ hoy_dia }}, {{ hoy_mes }}, {{ hoy_anio }});
+    </script>
+</body>
+</html>
+

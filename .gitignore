@@ -2,3 +2,9 @@
 desktop.ini
 Thumbs.db
 .DS_Store
+
+# Python / Django
+__pycache__/
+*.py[cod]
+.venv/
+db.sqlite3
