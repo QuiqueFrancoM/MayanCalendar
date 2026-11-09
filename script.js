@@ -15,28 +15,28 @@ const haabText = document.getElementById('haab-text');
 // NOTA: Hemos quitado los números de aquí, ya que ahora se usarán fuentes.
 const GLYPH_URLS = {
     tzolkin: [
-       "/imagenes/tzolkin/MAYA-g-log-cal-D01-Imix.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D02-Ik.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D03-Akbal-cdxW.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D03-Akbal.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D04-Kan.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D05-Chikchan.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D06-Kimi.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D07-Manik.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D08-Lamat.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D09-Muluk.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D10-Ok.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D11-Chuwen.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D12-Eb.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D13-Ben.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D14-Ix.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D15-Men.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D16-Kib.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D17-Kaban.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D18-Etznab.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D19-Kawak.svg", "/imagenes/tzolkin/MAYA-g-log-cal-D20-Ajaw.svg"
+       "imagenes/tzolkin/MAYA-g-log-cal-D01-Imix.svg", "imagenes/tzolkin/MAYA-g-log-cal-D02-Ik.svg", "imagenes/tzolkin/MAYA-g-log-cal-D03-Akbal.svg", "imagenes/tzolkin/MAYA-g-log-cal-D04-Kan.svg", "imagenes/tzolkin/MAYA-g-log-cal-D05-Chikchan.svg", "imagenes/tzolkin/MAYA-g-log-cal-D06-Kimi.svg", "imagenes/tzolkin/MAYA-g-log-cal-D07-Manik.svg", "imagenes/tzolkin/MAYA-g-log-cal-D08-Lamat.svg", "imagenes/tzolkin/MAYA-g-log-cal-D09-Muluk.svg", "imagenes/tzolkin/MAYA-g-log-cal-D10-Ok.svg", "imagenes/tzolkin/MAYA-g-log-cal-D11-Chuwen.svg", "imagenes/tzolkin/MAYA-g-log-cal-D12-Eb.svg", "imagenes/tzolkin/MAYA-g-log-cal-D13-Ben.svg", "imagenes/tzolkin/MAYA-g-log-cal-D14-Ix.svg", "imagenes/tzolkin/MAYA-g-log-cal-D15-Men.svg", "imagenes/tzolkin/MAYA-g-log-cal-D16-Kib.svg", "imagenes/tzolkin/MAYA-g-log-cal-D17-Kaban.svg", "imagenes/tzolkin/MAYA-g-log-cal-D18-Etznab.svg", "imagenes/tzolkin/MAYA-g-log-cal-D19-Kawak.svg", "imagenes/tzolkin/MAYA-g-log-cal-D20-Ajaw.svg"
     ],
     haab: [
-        "/imagenes/haab/Maya_months_-_0_-_Pop.svg",
-        "/imagenes/haab/Maya_months_-_1_-_Wo.svg",
-        "/imagenes/haab/Maya_months_-_2_-_Sip.svg",
-        "/imagenes/haab/Maya-months-03-sotz.svg",
-        "/imagenes/haab/Maya_months_-_4_-_Sek.svg",
-        "/imagenes/haab/Maya-months-05-xul.svg",
-        "/imagenes/haab/Maya_months_-_6_-_Yaxkin.svg",
-        "/imagenes/haab/Maya_months_-_7_-_Mol.svg",
-        "/imagenes/haab/Maya-months-08-chen.svg",
-        "/imagenes/haab/Maya-months-09-yax.svg",
-        "/imagenes/haab/Maya-months-10-sak.svg",
-        "/imagenes/haab/Maya-months-11-kej.svg",
-        "/imagenes/haab/Maya-months-12-mak.svg",
-        "/imagenes/haab/Maya-months-13-kankin.svg",
-        "/imagenes/haab/Maya-months-14-muwan.svg",
-        "/imagenes/haab/Maya-months-15-pax.svg",
-        "/imagenes/haab/Maya-months-16-kayab.svg",
-        "/imagenes/haab/Maya-months-17-kumku.svg",
-        "/imagenes/haab/Maya-months-18-wayeb.svg",
+        "imagenes/haab/Maya_months_-_0_-_Pop.svg",
+        "imagenes/haab/Maya_months_-_1_-_Wo.svg",
+        "imagenes/haab/Maya_months_-_2_-_Sip.svg",
+        "imagenes/haab/Maya-months-03-sotz.svg",
+        "imagenes/haab/Maya_months_-_4_-_Sek.svg",
+        "imagenes/haab/Maya-months-05-xul.svg",
+        "imagenes/haab/Maya_months_-_6_-_Yaxkin.svg",
+        "imagenes/haab/Maya_months_-_7_-_Mol.svg",
+        "imagenes/haab/Maya-months-08-chen.svg",
+        "imagenes/haab/Maya-months-09-yax.svg",
+        "imagenes/haab/Maya-months-10-sak.svg",
+        "imagenes/haab/Maya-months-11-kej.svg",
+        "imagenes/haab/Maya-months-12-mak.svg",
+        "imagenes/haab/Maya-months-13-kankin.svg",
+        "imagenes/haab/Maya-months-14-muwan.svg",
+        "imagenes/haab/Maya-months-15-pax.svg",
+        "imagenes/haab/Maya-months-16-kayab.svg",
+        "imagenes/haab/Maya-months-17-kumku.svg",
+        "imagenes/haab/Maya-months-18-wayeb.svg",
     ]
 };
 

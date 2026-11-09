@@ -112,12 +112,13 @@ button:hover {
 /* 1. Carga la fuente desde tu carpeta local */
 @font-face {
   font-family: 'Noto Sans Mayan'; /* Le damos un nombre para usarla en nuestro CSS */
-  src: url('fonts/NotoSansMayanNumerals-Regular.ttf') format('truetype');
+  src: local('Noto Sans Mayan Numerals'), url('fonts/NotoSansMayanNumerals-Regular.ttf') format('truetype');
 }
 
 /* 2. Creamos una clase para aplicar la fuente a los números */
 .numero-maya {
-  font-family: 'Noto Sans Mayan', sans-serif; /* Usa nuestra fuente maya */
+  /* Usa la fuente local si existe; si no, la de Google Fonts */
+  font-family: 'Noto Sans Mayan', 'Noto Sans Mayan Numerals', sans-serif;
   font-size: 90px; /* Ajusta el tamaño para que se vea bien */
   color: #8C5E35;
     text-shadow: darkgray 2px 2px 1px;
