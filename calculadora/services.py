@@ -83,12 +83,29 @@ MESES_GREGORIANO_NOMBRES_EN = [
     "July", "August", "September", "October", "November", "December",
 ]
 
+MESES_GREGORIANO_NOMBRES_FR = [
+    "janvier", "février", "mars", "avril", "mai", "juin",
+    "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+]
+
 DIAS_SEMANA_NOMBRES = [
     "domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado",
 ]
 
 DIAS_SEMANA_NOMBRES_EN = [
     "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+]
+
+DIAS_SEMANA_NOMBRES_FR = [
+    "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi",
+]
+
+DIAS_SEMANA_NOMBRES_JA = [
+    "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日",
+]
+
+DIAS_SEMANA_NOMBRES_ZH = [
+    "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六",
 ]
 
 
@@ -159,6 +176,19 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: st
         nombre_mes = MESES_GREGORIANO_NOMBRES_EN[mes - 1]
         anio_texto = f"{1 - anio_astro} BC" if anio_astro <= 0 else str(anio_astro)
         texto_gregoriano = f"{dia_semana}, {nombre_mes} {dia}, {anio_texto} (Gregorian calendar)"
+    elif lang == 'fr':
+        dia_semana = DIAS_SEMANA_NOMBRES_FR[idx_semana]
+        nombre_mes = MESES_GREGORIANO_NOMBRES_FR[mes - 1]
+        anio_texto = f"{1 - anio_astro} av. J.-C." if anio_astro <= 0 else str(anio_astro)
+        texto_gregoriano = f"{dia_semana} {dia} {nombre_mes} {anio_texto} (calendrier grégorien)"
+    elif lang == 'ja':
+        dia_semana = DIAS_SEMANA_NOMBRES_JA[idx_semana]
+        anio_texto = f"紀元前{1 - anio_astro}年" if anio_astro <= 0 else f"{anio_astro}年"
+        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}（グレゴリオ暦）"
+    elif lang == 'zh':
+        dia_semana = DIAS_SEMANA_NOMBRES_ZH[idx_semana]
+        anio_texto = f"公元前{1 - anio_astro}年" if anio_astro <= 0 else f"{anio_astro}年"
+        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}（公历）"
     else:
         dia_semana = DIAS_SEMANA_NOMBRES[idx_semana]
         nombre_mes = MESES_GREGORIANO_NOMBRES[mes - 1]
@@ -170,16 +200,15 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: st
         f"{coef_tzolkin} {DIAS_TZOLKIN_NOMBRES[num_tzolkin_idx]} · "
         f"{dia_del_mes_haab} {MESES_HAAB_NOMBRES[num_mes_haab_idx]}"
     )
-    if lang == 'en':
-        slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{'BC' if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
-    else:
-        slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{'aC' if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
+    sufijo_ac = 'BC' if lang in ('en', 'ja', 'zh') else ('avJC' if lang == 'fr' else 'aC')
+    slug = f"{(1 - anio_astro) if anio_astro <= 0 else anio_astro}{sufijo_ac if anio_astro <= 0 else ''}-{mes:02d}-{dia:02d}"
 
     return {
         "dia": dia,
         "mes": mes,
         "anio": anio,
         "era": era,
+        "lang": lang,
         "anio_astro": anio_astro,
         "jdn": jdn,
         "cuenta_larga": [baktun, katun, tun, winal, kin],
@@ -211,26 +240,32 @@ def _cargar_fuente_maya(tam: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(ruta), tam)
 
 
-@lru_cache(maxsize=16)
-def _cargar_fuente_texto(tam: int, cursiva: bool = False) -> ImageFont.FreeTypeFont:
+@lru_cache(maxsize=24)
+def _cargar_fuente_texto(tam: int, cursiva: bool = False, cjk: bool = False) -> ImageFont.FreeTypeFont:
     ruta_fonts = Path(settings.PRIVATE_ASSETS_DIR) / "fonts"
-    candidatos = (
-        [
+    if cjk:
+        candidatos = [
+            str(ruta_fonts / "NotoSansCJK-Subset.ttf"),
+            "msyh.ttc",
+            "YuGothM.ttc",
+            "msgothic.ttc",
+        ]
+    elif cursiva:
+        candidatos = [
             str(ruta_fonts / "NotoSerif-Italic.ttf"),
             "georgiai.ttf",
             "timesi.ttf",
             "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
             "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
         ]
-        if cursiva
-        else [
+    else:
+        candidatos = [
             str(ruta_fonts / "NotoSans-Regular.ttf"),
             "segoeui.ttf",
             "arial.ttf",
             "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
             "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
         ]
-    )
     for nombre in candidatos:
         try:
             return ImageFont.truetype(nombre, tam)
@@ -474,18 +509,19 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
     draw = ImageDraw.Draw(postal)
     max_ancho_texto = W - 110
 
-    def _fuente_ajustada(texto: str, tam_base: int, cursiva: bool) -> ImageFont.FreeTypeFont:
+    def _fuente_ajustada(texto: str, tam_base: int, cursiva: bool, cjk: bool = False) -> ImageFont.FreeTypeFont:
         tam = tam_base
         while tam > 12:
-            f = _cargar_fuente_texto(tam, cursiva=cursiva)
+            f = _cargar_fuente_texto(tam, cursiva=cursiva, cjk=cjk)
             bbox = draw.textbbox((0, 0), texto, font=f)
             if (bbox[2] - bbox[0]) <= max_ancho_texto:
                 return f
             tam -= 1
-        return _cargar_fuente_texto(12, cursiva=cursiva)
+        return _cargar_fuente_texto(12, cursiva=cursiva, cjk=cjk)
 
+    es_cjk = estado.get("lang") in ("ja", "zh")
     fuente_maya_pie = _fuente_ajustada(estado["texto_maya"], 42, cursiva=True)
-    fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 27, cursiva=False)
+    fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 27, cursiva=False, cjk=es_cjk)
     fuente_copy = _fuente_ajustada("Copyright EFM 2026", 20, cursiva=False)
 
     draw.text(

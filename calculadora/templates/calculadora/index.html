@@ -19,7 +19,7 @@
         .container {
             position: relative;
             background-color: #ffffff;
-            padding: 36px 36px 30px;
+            padding: 46px 36px 30px;
             border-radius: 14px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -29,10 +29,11 @@
         /* Selector de idioma con banderas en la esquina superior derecha */
         .lang-switcher {
             position: absolute;
-            top: 14px;
-            right: 16px;
+            top: 12px;
+            right: 14px;
             display: inline-flex;
-            gap: 6px;
+            flex-wrap: wrap;
+            gap: 4px;
             background: #f4efe6;
             padding: 4px;
             border-radius: 999px;
@@ -42,13 +43,13 @@
         .lang-btn {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             border: none;
             background: transparent;
-            padding: 4px 9px;
+            padding: 4px 8px;
             border-radius: 999px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 700;
             color: #6b5a45;
             opacity: 0.65;
@@ -64,15 +65,15 @@
             box-shadow: 0 1px 4px rgba(60, 45, 30, 0.18);
         }
         .lang-btn svg {
-            width: 22px;
-            height: 15px;
+            width: 21px;
+            height: 14px;
             border-radius: 2px;
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.45);
             flex-shrink: 0;
         }
         h1 {
             color: #8C5E35;
-            margin: 12px 0 4px;
+            margin: 10px 0 4px;
         }
         p.autor {
             margin: 0 0 10px;
@@ -212,9 +213,9 @@
 </head>
 <body>
     <div class="container">
-        <!-- Selector gráfico de idioma (México / USA) -->
+        <!-- Selector gráfico de idioma (México, USA, Francia, Japón, China) -->
         <div class="lang-switcher" role="group" aria-label="Language selector">
-            <button type="button" class="lang-btn activo" id="btnLangEs" title="Español (México)">
+            <button type="button" class="lang-btn activo" data-lang="es" title="Español (México)">
                 <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <rect width="7" height="15" x="0" fill="#006847"/>
                     <rect width="7" height="15" x="7" fill="#ffffff"/>
@@ -223,7 +224,7 @@
                 </svg>
                 <span>ES</span>
             </button>
-            <button type="button" class="lang-btn" id="btnLangEn" title="English (USA)">
+            <button type="button" class="lang-btn" data-lang="en" title="English (USA)">
                 <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <rect width="21" height="15" fill="#b22234"/>
                     <path d="M0,2.3h21 M0,4.6h21 M0,6.9h21 M0,9.2h21 M0,11.5h21 M0,13.8h21" stroke="#ffffff" stroke-width="1.15"/>
@@ -237,6 +238,34 @@
                     </g>
                 </svg>
                 <span>EN</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="fr" title="Français (France)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="7" height="15" x="0" fill="#002395"/>
+                    <rect width="7" height="15" x="7" fill="#ffffff"/>
+                    <rect width="7" height="15" x="14" fill="#ed2939"/>
+                </svg>
+                <span>FR</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="ja" title="日本語 (Japan)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#ffffff"/>
+                    <circle cx="10.5" cy="7.5" r="4.3" fill="#bc002d"/>
+                </svg>
+                <span>日本語</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="zh" title="中文 (China)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#de2910"/>
+                    <polygon points="4.2,2.2 4.8,4.1 6.7,4.1 5.1,5.2 5.7,7.1 4.2,5.9 2.7,7.1 3.3,5.2 1.7,4.1 3.6,4.1" fill="#ffde00"/>
+                    <g fill="#ffde00">
+                        <circle cx="8.2" cy="1.8" r="0.65"/>
+                        <circle cx="9.6" cy="3.3" r="0.65"/>
+                        <circle cx="9.6" cy="5.5" r="0.65"/>
+                        <circle cx="8.2" cy="7.0" r="0.65"/>
+                    </g>
+                </svg>
+                <span>中文</span>
             </button>
         </div>
 
@@ -345,6 +374,72 @@
                 descPdf: '📄 Download postcard (PDF)',
                 altPostal: 'Mayan stela postcard generated by the server',
             },
+            fr: {
+                pageTitle: 'Calculatrice développée par Enrique Franco — Calendrier Maya',
+                heading: 'Convertir des Dates au Calendrier Maya',
+                autor: 'Calculatrice développée par Enrique Franco',
+                subtitulo: 'Sélectionnez une date pour générer une carte postale de la stèle maya représentant cette date',
+                lblDia: 'Jour',
+                lblMes: 'Mois',
+                lblAnio: 'Année',
+                meses: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                eraDc: 'ap. J.-C.',
+                eraAc: 'av. J.-C.',
+                prevDia: '◀ −1 jour',
+                prevDiaTitle: 'Jour précédent',
+                hoy: "Aujourd'hui",
+                nextDia: '+1 jour ▶',
+                nextDiaTitle: 'Jour suivant',
+                calendario: '📅 Calendrier',
+                calendarioTitle: 'Choisir dans le calendrier',
+                descJpg: '🖼 Télécharger la carte (JPG)',
+                descPdf: '📄 Télécharger la carte (PDF)',
+                altPostal: 'Carte postale de stèle maya générée par le serveur',
+            },
+            ja: {
+                pageTitle: 'Enrique Franco 開発の計算機 — マヤ暦',
+                heading: '日付をマヤ暦に変換',
+                autor: 'Enrique Franco 開発の計算機',
+                subtitulo: '日付を選択すると、その日付を表すマヤ石碑のポストカードを生成します',
+                lblDia: '日',
+                lblMes: '月',
+                lblAnio: '年',
+                meses: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                eraDc: '西暦',
+                eraAc: '紀元前',
+                prevDia: '◀ 前日',
+                prevDiaTitle: '前日',
+                hoy: '今日',
+                nextDia: '翌日 ▶',
+                nextDiaTitle: '翌日',
+                calendario: '📅 カレンダー',
+                calendarioTitle: 'カレンダーから選択',
+                descJpg: '🖼 ポストカードを保存 (JPG)',
+                descPdf: '📄 ポストカードを保存 (PDF)',
+                altPostal: 'サーバーで生成されたマヤ石碑のポストカード',
+            },
+            zh: {
+                pageTitle: 'Enrique Franco 开发的计算器 — 玛雅历法',
+                heading: '将日期转换为玛雅历法',
+                autor: 'Enrique Franco 开发的计算器',
+                subtitulo: '选择一个日期，生成代表该日期的玛雅石碑明信片',
+                lblDia: '日',
+                lblMes: '月',
+                lblAnio: '年',
+                meses: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                eraDc: '公元',
+                eraAc: '公元前',
+                prevDia: '◀ 前一天',
+                prevDiaTitle: '前一天',
+                hoy: '今天',
+                nextDia: '后一天 ▶',
+                nextDiaTitle: '后一天',
+                calendario: '📅 日历',
+                calendarioTitle: '从日历中选择',
+                descJpg: '🖼 下载明信片 (JPG)',
+                descPdf: '📄 下载明信片 (PDF)',
+                altPostal: '服务器生成的玛雅石碑明信片',
+            },
         };
 
         let idiomaActual = '{{ lang_inicial|default:"es" }}';
@@ -358,11 +453,10 @@
         const imagenPostal = document.getElementById('imagenPostal');
         const linkJpg = document.getElementById('linkDescargarJpg');
         const linkPdf = document.getElementById('linkDescargarPdf');
-        const btnLangEs = document.getElementById('btnLangEs');
-        const btnLangEn = document.getElementById('btnLangEn');
+        const botonesIdioma = document.querySelectorAll('.lang-btn');
 
         function aplicarIdioma(lang) {
-            idiomaActual = lang === 'en' ? 'en' : 'es';
+            idiomaActual = I18N[lang] ? lang : 'es';
             const t = I18N[idiomaActual];
             document.documentElement.lang = idiomaActual;
             document.title = t.pageTitle;
@@ -397,8 +491,9 @@
             linkPdf.textContent = t.descPdf;
             imagenPostal.alt = t.altPostal;
 
-            btnLangEs.classList.toggle('activo', idiomaActual === 'es');
-            btnLangEn.classList.toggle('activo', idiomaActual === 'en');
+            botonesIdioma.forEach(btn => {
+                btn.classList.toggle('activo', btn.dataset.lang === idiomaActual);
+            });
 
             actualizarPostal();
         }
@@ -474,8 +569,9 @@
             establecerFecha(d, m, y);
         }
 
-        btnLangEs.addEventListener('click', () => aplicarIdioma('es'));
-        btnLangEn.addEventListener('click', () => aplicarIdioma('en'));
+        botonesIdioma.forEach(btn => {
+            btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+        });
 
         selectMes.addEventListener('change', () => { actualizarOpcionesDia(); actualizarPostal(); });
         selectDia.addEventListener('change', actualizarPostal);

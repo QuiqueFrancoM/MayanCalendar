@@ -3,6 +3,15 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .services import generar_postal_bytes
 
+IDIOMAS_VALIDOS = ("es", "en", "fr", "ja", "zh")
+PREFIJOS_ARCHIVO = {
+    "es": "postal-maya",
+    "en": "mayan-postcard",
+    "fr": "carte-maya",
+    "ja": "mayan-postcard-ja",
+    "zh": "mayan-postcard-zh",
+}
+
 
 def _leer_parametros_fecha(request):
     hoy = date.today()
@@ -22,7 +31,7 @@ def _leer_parametros_fecha(request):
     if era not in ("dc", "ac"):
         era = "dc"
     lang = request.GET.get("lang", "es")
-    if lang not in ("es", "en"):
+    if lang not in IDIOMAS_VALIDOS:
         lang = "es"
     return dia, mes, anio, era, lang
 
@@ -30,7 +39,7 @@ def _leer_parametros_fecha(request):
 def index(request):
     hoy = date.today()
     lang_inicial = request.GET.get("lang", "es")
-    if lang_inicial not in ("es", "en"):
+    if lang_inicial not in IDIOMAS_VALIDOS:
         lang_inicial = "es"
     return render(
         request,
@@ -46,7 +55,7 @@ def index(request):
 
 def postal_jpg(request):
     dia, mes, anio, era, lang = _leer_parametros_fecha(request)
-    prefijo = "mayan-postcard" if lang == "en" else "postal-maya"
+    prefijo = PREFIJOS_ARCHIVO.get(lang, "postal-maya")
     datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="jpg", lang=lang)
     resp = HttpResponse(datos, content_type="image/jpeg")
     if request.GET.get("descargar") == "1":
@@ -58,7 +67,7 @@ def postal_jpg(request):
 
 def postal_pdf(request):
     dia, mes, anio, era, lang = _leer_parametros_fecha(request)
-    prefijo = "mayan-postcard" if lang == "en" else "postal-maya"
+    prefijo = PREFIJOS_ARCHIVO.get(lang, "postal-maya")
     datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="pdf", lang=lang)
     resp = HttpResponse(datos, content_type="application/pdf")
     resp["Content-Disposition"] = f'attachment; filename="{prefijo}-{slug}.pdf"'
