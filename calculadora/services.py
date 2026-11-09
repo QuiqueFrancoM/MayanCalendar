@@ -450,31 +450,43 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
         gy = int(by + 12 + (glifo_max_h - glifo_img.height) / 2)
         postal.alpha_composite(glifo_img, (gx, gy))
 
-    # Pie de la postal: lectura maya, fecha gregoriana en letras chiquitas y copyright
+    # Pie de la postal: lectura maya, fecha gregoriana y copyright escalados proporcionalmente
     draw = ImageDraw.Draw(postal)
-    fuente_maya_pie = _cargar_fuente_texto(30, cursiva=True)
-    fuente_greg_pie = _cargar_fuente_texto(20, cursiva=False)
-    fuente_copy = _cargar_fuente_texto(15, cursiva=False)
+    max_ancho_texto = W - 110
+
+    def _fuente_ajustada(texto: str, tam_base: int, cursiva: bool) -> ImageFont.FreeTypeFont:
+        tam = tam_base
+        while tam > 12:
+            f = _cargar_fuente_texto(tam, cursiva=cursiva)
+            bbox = draw.textbbox((0, 0), texto, font=f)
+            if (bbox[2] - bbox[0]) <= max_ancho_texto:
+                return f
+            tam -= 1
+        return _cargar_fuente_texto(12, cursiva=cursiva)
+
+    fuente_maya_pie = _fuente_ajustada(estado["texto_maya"], 42, cursiva=True)
+    fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 27, cursiva=False)
+    fuente_copy = _fuente_ajustada("Copyright EFM 2026", 20, cursiva=False)
 
     draw.text(
-        (W // 2, est_y + est_h + 52),
+        (W // 2, est_y + est_h + 50),
         estado["texto_maya"],
         font=fuente_maya_pie,
         fill=(94, 79, 60, 255),
         anchor="mm",
     )
     draw.text(
-        (W // 2, est_y + est_h + 94),
+        (W // 2, est_y + est_h + 100),
         estado["texto_gregoriano"],
         font=fuente_greg_pie,
         fill=(139, 125, 107, 255),
         anchor="mm",
     )
     draw.text(
-        (W - 42, H - 36),
+        (W - 44, H - 34),
         "Copyright EFM 2026",
         font=fuente_copy,
-        fill=(158, 146, 128, 255),
+        fill=(150, 138, 120, 255),
         anchor="rb",
     )
 
