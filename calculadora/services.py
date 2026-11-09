@@ -193,17 +193,30 @@ def _cargar_fuente_maya(tam: int) -> ImageFont.FreeTypeFont:
 
 @lru_cache(maxsize=16)
 def _cargar_fuente_texto(tam: int, cursiva: bool = False) -> ImageFont.FreeTypeFont:
+    ruta_fonts = Path(settings.PRIVATE_ASSETS_DIR) / "fonts"
     candidatos = (
-        ["georgiai.ttf", "timesi.ttf", "ariali.ttf"]
+        [
+            str(ruta_fonts / "NotoSerif-Italic.ttf"),
+            "georgiai.ttf",
+            "timesi.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSerif-Italic.ttf",
+        ]
         if cursiva
-        else ["segoeui.ttf", "arial.ttf", "calibri.ttf"]
+        else [
+            str(ruta_fonts / "NotoSans-Regular.ttf"),
+            "segoeui.ttf",
+            "arial.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        ]
     )
     for nombre in candidatos:
         try:
             return ImageFont.truetype(nombre, tam)
         except OSError:
             continue
-    return ImageFont.load_default()
+    return ImageFont.load_default(size=tam)
 
 
 @lru_cache(maxsize=1)
