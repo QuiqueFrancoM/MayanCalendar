@@ -33,7 +33,8 @@ def _leer_parametros_fecha(request):
     lang = request.GET.get("lang", "es")
     if lang not in IDIOMAS_VALIDOS:
         lang = "es"
-    return dia, mes, anio, era, lang
+    titulo = (request.GET.get("titulo") or "").strip()[:50]
+    return dia, mes, anio, era, lang, titulo
 
 
 def index(request):
@@ -54,9 +55,9 @@ def index(request):
 
 
 def postal_jpg(request):
-    dia, mes, anio, era, lang = _leer_parametros_fecha(request)
+    dia, mes, anio, era, lang, titulo = _leer_parametros_fecha(request)
     prefijo = PREFIJOS_ARCHIVO.get(lang, "postal-maya")
-    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="jpg", lang=lang)
+    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="jpg", lang=lang, titulo=titulo)
     resp = HttpResponse(datos, content_type="image/jpeg")
     if request.GET.get("descargar") == "1":
         resp["Content-Disposition"] = f'attachment; filename="{prefijo}-{slug}.jpg"'
@@ -66,9 +67,9 @@ def postal_jpg(request):
 
 
 def postal_pdf(request):
-    dia, mes, anio, era, lang = _leer_parametros_fecha(request)
+    dia, mes, anio, era, lang, titulo = _leer_parametros_fecha(request)
     prefijo = PREFIJOS_ARCHIVO.get(lang, "postal-maya")
-    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="pdf", lang=lang)
+    datos, slug = generar_postal_bytes(dia, mes, anio, era, formato="pdf", lang=lang, titulo=titulo)
     resp = HttpResponse(datos, content_type="application/pdf")
     resp["Content-Disposition"] = f'attachment; filename="{prefijo}-{slug}.pdf"'
     return resp

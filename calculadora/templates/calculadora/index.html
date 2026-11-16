@@ -84,10 +84,46 @@
             font-weight: 600;
             color: #6b533b;
         }
-        p.subtitulo {
+        p.subtitulo,
+        label.subtitulo {
+            display: block;
             margin: 0;
             color: #555;
+            font-weight: 600;
             line-height: 1.5;
+        }
+        .bloque-titulo-estela {
+            margin: 14px 0 14px;
+        }
+        .titulo-input-wrap {
+            position: relative;
+            max-width: 420px;
+            margin: 6px auto 0;
+        }
+        .titulo-input-wrap input[type="text"] {
+            width: 100%;
+            padding: 9px 52px 9px 12px;
+            border: 1px solid #cbbba0;
+            border-radius: 8px;
+            background-color: #f8f6f2;
+            font-size: 14.5px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+        .titulo-input-wrap input[type="text"]:focus {
+            background-color: #fff;
+            border-color: #8C5E35;
+            box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
+        }
+        .contador-titulo {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11.5px;
+            color: #8b7d6b;
+            pointer-events: none;
         }
         .selector-fecha {
             margin-top: 18px;
@@ -315,6 +351,15 @@
 
         <h1 id="txtHeading">Crea una Estela Maya con tu fecha memorable!</h1>
         <p class="autor" id="txtAutor">Calculadora desarrollada por Enrique Franco</p>
+
+        <div class="bloque-titulo-estela">
+            <label class="subtitulo" for="inputTitulo" id="txtLblTitulo">Escribe un título para tu Estela</label>
+            <div class="titulo-input-wrap">
+                <input type="text" id="inputTitulo" maxlength="50" placeholder="Opcional (máx. 50 caracteres)">
+                <span class="contador-titulo" id="contadorTitulo">0/50</span>
+            </div>
+        </div>
+
         <p class="subtitulo" id="txtSubtitulo">Selecciona tu fecha</p>
 
         <div class="selector-fecha" id="selectorFechaBox" aria-label="Selector de fecha">
@@ -378,6 +423,8 @@
                 pageTitle: 'Calculadora desarrollada por Enrique Franco — Calendario Maya',
                 heading: 'Crea una Estela Maya con tu fecha memorable!',
                 autor: 'Calculadora desarrollada por Enrique Franco',
+                lblTitulo: 'Escribe un título para tu Estela',
+                phTitulo: 'Opcional (máx. 50 caracteres)',
                 subtitulo: 'Selecciona tu fecha',
                 lblDia: 'Día',
                 lblMes: 'Mes',
@@ -400,6 +447,8 @@
                 pageTitle: 'Calculator developed by Enrique Franco — Mayan Calendar',
                 heading: 'Create a Mayan Stela with your memorable date!',
                 autor: 'Calculator developed by Enrique Franco',
+                lblTitulo: 'Write a title for your Stela',
+                phTitulo: 'Optional (max 50 characters)',
                 subtitulo: 'Select your date',
                 lblDia: 'Day',
                 lblMes: 'Month',
@@ -422,6 +471,8 @@
                 pageTitle: 'Calculatrice développée par Enrique Franco — Calendrier Maya',
                 heading: 'Créez une Stèle Maya avec votre date mémorable !',
                 autor: 'Calculatrice développée par Enrique Franco',
+                lblTitulo: 'Écrivez un titre pour votre Stèle',
+                phTitulo: 'Optionnel (50 caractères max.)',
                 subtitulo: 'Sélectionnez votre date',
                 lblDia: 'Jour',
                 lblMes: 'Mois',
@@ -444,6 +495,8 @@
                 pageTitle: 'Enrique Franco 開発の計算機 — マヤ暦',
                 heading: '思い出の日付でマヤ石碑を作ろう！',
                 autor: 'Enrique Franco 開発の計算機',
+                lblTitulo: '石碑のタイトルを入力してください',
+                phTitulo: '任意（最大50文字）',
                 subtitulo: '日付を選択してください',
                 lblDia: '日',
                 lblMes: '月',
@@ -466,6 +519,8 @@
                 pageTitle: 'Enrique Franco 开发的计算器 — 玛雅历法',
                 heading: '用你难忘的日期创建玛雅石碑！',
                 autor: 'Enrique Franco 开发的计算器',
+                lblTitulo: '为你的石碑写一个标题',
+                phTitulo: '可选（最多50个字符）',
                 subtitulo: '请选择日期',
                 lblDia: '日',
                 lblMes: '月',
@@ -493,11 +548,14 @@
         const inputAnio = document.getElementById('inputAnio');
         const selectEra = document.getElementById('selectEra');
         const fechaInput = document.getElementById('fechaGregoriana');
+        const inputTitulo = document.getElementById('inputTitulo');
+        const contadorTitulo = document.getElementById('contadorTitulo');
         const visorPostal = document.getElementById('visorPostal');
         const imagenPostal = document.getElementById('imagenPostal');
         const linkJpg = document.getElementById('linkDescargarJpg');
         const linkPdf = document.getElementById('linkDescargarPdf');
         const botonesIdioma = document.querySelectorAll('.lang-btn');
+        let timerTitulo = null;
 
         function aplicarIdioma(lang) {
             idiomaActual = I18N[lang] ? lang : 'es';
@@ -506,6 +564,8 @@
             document.title = t.pageTitle;
             document.getElementById('txtHeading').textContent = t.heading;
             document.getElementById('txtAutor').textContent = t.autor;
+            document.getElementById('txtLblTitulo').textContent = t.lblTitulo;
+            inputTitulo.placeholder = t.phTitulo;
             document.getElementById('txtSubtitulo').textContent = t.subtitulo;
             document.getElementById('lblDia').textContent = t.lblDia;
             document.getElementById('lblMes').textContent = t.lblMes;
@@ -574,6 +634,10 @@
                 era: selectEra.value,
                 lang: idiomaActual,
             });
+            const tituloLimpio = inputTitulo.value.trim().slice(0, 50);
+            if (tituloLimpio) {
+                params.set('titulo', tituloLimpio);
+            }
             visorPostal.classList.add('cargando');
             imagenPostal.src = `/postal.jpg?${params.toString()}`;
             linkJpg.href = `/postal.jpg?${params.toString()}&descargar=1`;
@@ -615,6 +679,16 @@
 
         botonesIdioma.forEach(btn => {
             btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+        });
+
+        inputTitulo.addEventListener('input', () => {
+            contadorTitulo.textContent = `${inputTitulo.value.length}/50`;
+            clearTimeout(timerTitulo);
+            timerTitulo = setTimeout(actualizarPostal, 350);
+        });
+        inputTitulo.addEventListener('change', () => {
+            clearTimeout(timerTitulo);
+            actualizarPostal();
         });
 
         selectMes.addEventListener('change', () => { actualizarOpcionesDia(); actualizarPostal(); });

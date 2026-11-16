@@ -146,7 +146,7 @@ def jdn_a_ymd(jdn: int) -> tuple[int, int, int]:
     return dia, mes, anio_astro
 
 
-def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: str = 'es') -> dict:
+def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: str = 'es', titulo: str = '') -> dict:
     anio = max(1, min(9999, anio))
     mes = max(1, min(12, mes))
     anio_astro = (1 - anio) if era == 'ac' else anio
@@ -209,6 +209,7 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: st
         "anio": anio,
         "era": era,
         "lang": lang,
+        "titulo": (titulo or "").strip()[:50],
         "anio_astro": anio_astro,
         "jdn": jdn,
         "cuenta_larga": [baktun, katun, tun, winal, kin],
@@ -358,14 +359,16 @@ def _dibujar_numero_maya_rotado(destino: Image.Image, numero: int, cx: int, cy: 
 
 
 def renderizar_postal_imagen(estado: dict) -> Image.Image:
-    W, H = 960, 1520
+    titulo = (estado.get("titulo") or "").strip()[:50]
+    offset_titulo = 64 if titulo else 0
+    W, H = 960, 1520 + offset_titulo
     postal = Image.new("RGBA", (W, H), (248, 245, 238, 255))
     draw = ImageDraw.Draw(postal)
 
     # Borde exterior de la postal
     draw.rounded_rectangle((22, 22, W - 22, H - 22), radius=16, outline=(220, 211, 192, 255), width=3)
 
-    est_x, est_y = 70, 58
+    est_x, est_y = 70, 58 + offset_titulo
     est_w, est_h = W - 140, 1280
     marco = 82
 
@@ -524,6 +527,17 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
     fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 27, cursiva=False, cjk=es_cjk)
     fuente_copy = _fuente_ajustada("Copyright EFM 2026", 20, cursiva=False)
 
+    if titulo:
+        tiene_cjk_titulo = any("\u3000" <= c <= "\u9fff" or "\uff00" <= c <= "\uffef" for c in titulo)
+        fuente_titulo = _fuente_ajustada(titulo, 44, cursiva=not tiene_cjk_titulo, cjk=tiene_cjk_titulo)
+        draw.text(
+            (W // 2, 72),
+            titulo,
+            font=fuente_titulo,
+            fill=(110, 82, 52, 255),
+            anchor="mm",
+        )
+
     draw.text(
         (W // 2, est_y + est_h + 50),
         estado["texto_maya"],
@@ -549,8 +563,16 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
     return postal.convert("RGB")
 
 
-def generar_postal_bytes(dia: int, mes: int, anio: int, era: str = 'dc', formato: str = 'jpg', lang: str = 'es') -> tuple[bytes, str]:
-    estado = calcular_fecha_maya(dia, mes, anio, era, lang=lang)
+def generar_postal_bytes(
+    dia: int,
+    mes: int,
+    anio: int,
+    era: str = 'dc',
+    formato: str = 'jpg',
+    lang: str = 'es',
+    titulo: str = '',
+) -> tuple[bytes, str]:
+    estado = calcular_fecha_maya(dia, mes, anio, era, lang=lang, titulo=titulo)
     img_rgb = renderizar_postal_imagen(estado)
     buf = BytesIO()
     if formato == 'pdf':
