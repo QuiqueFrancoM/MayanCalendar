@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Matriz del Haab' y Desplazamiento del Tzolk'in — Calendario Maya</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 24px 12px 48px;
+            line-height: 1.6;
+        }
+        .container {
+            position: relative;
+            background-color: #ffffff;
+            padding: 38px 28px 36px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+        /* Barra superior: navegación + selector de idioma */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e8e1d5;
+        }
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            background-color: #ece6da;
+            color: #5a4632;
+            border: 1px solid #d5cab6;
+            padding: 7px 15px;
+            border-radius: 999px;
+            font-size: 13.5px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .btn-nav:hover {
+            background-color: #dfd6c5;
+            color: #3b2d1f;
+            transform: translateX(-2px);
+        }
+        .lang-switcher {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: #f4efe6;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid #e0d5c1;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: none;
+            background: transparent;
+            padding: 4px 8px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #6b5a45;
+            opacity: 0.65;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover { opacity: 0.95; }
+        .lang-btn.activo {
+            background: #ffffff;
+            color: #3b2d1f;
+            opacity: 1;
+            box-shadow: 0 1px 4px rgba(60, 45, 30, 0.18);
+        }
+        .lang-btn svg {
+            width: 21px;
+            height: 14px;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.45);
+            flex-shrink: 0;
+        }
+        header.encabezado-pagina {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        h1 {
+            color: #8C5E35;
+            margin: 0 0 8px;
+            font-size: 1.9rem;
+        }
+        p.subtitulo-header {
+            margin: 0 auto;
+            max-width: 820px;
+            font-size: 16px;
+            color: #6b533b;
+            font-weight: 500;
+        }
+        .resaltado-sin-engranes {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e5c3a 0%, #2f7d52 100%);
+            color: #ffffff;
+            font-weight: 800;
+            padding: 2px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.6px;
+            box-shadow: 0 2px 6px rgba(30, 92, 58, 0.28);
+            border: 1px solid #144329;
+        }
+        h2 {
+            color: #724b29;
+            border-left: 5px solid #8C5E35;
+            padding-left: 14px;
+            margin: 34px 0 14px;
+            font-size: 1.4rem;
+        }
+        p {
+            margin: 0 0 14px;
+            color: #3d352e;
+        }
+
+        /* Panel de control de la barra desplazable del Tzolk'in */
+        .panel-desplazamiento {
+            background: linear-gradient(135deg, #f9f5ec 0%, #efe6d5 100%);
+            border: 1.5px solid #d5c4a8;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 10px rgba(90, 64, 40, 0.07);
+        }
+        .controles-fila-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .grupo-botones-anio {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .btn-ctrl {
+            background-color: #8C5E35;
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 5px rgba(140, 94, 53, 0.22);
+        }
+        .btn-ctrl:hover {
+            background-color: #724b29;
+            transform: translateY(-1px);
+        }
+        .btn-ctrl.secundario {
+            background-color: #ffffff;
+            color: #5a4028;
+            border: 1px solid #cbb89d;
+            box-shadow: none;
+        }
+        .btn-ctrl.secundario:hover {
+            background-color: #e8dfd1;
+        }
+        .btn-ctrl.verde {
+            background-color: #5D8B71;
+            box-shadow: 0 2px 5px rgba(93, 139, 113, 0.25);
+        }
+        .btn-ctrl.verde:hover {
+            background-color: #4A6F5A;
+        }
+        .estado-anio-badges {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .badge-info {
+            background: #ffffff;
+            border: 1px solid #d5c4a8;
+            color: #463321;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .badge-info strong {
+            color: #8C5E35;
+        }
+        .badge-cargador {
+            background: #5D8B71;
+            color: #ffffff;
+            padding: 5px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .slider-fila {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding-top: 8px;
+            border-top: 1px dashed #d6c5a9;
+        }
+        .slider-fila label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #5a4028;
+        }
+        .slider-fila input[type="range"] {
+            flex: 1;
+            min-width: 180px;
+            accent-color: #8C5E35;
+            cursor: pointer;
+        }
+
+        /* Contenedor con scroll de la tabla Haab x Tzolk'in */
+        .tabla-haab-wrapper {
+            overflow-x: auto;
+            border: 2px solid #b8a68e;
+            border-radius: 14px;
+            background: #dfd7c8;
+            box-shadow: 0 6px 20px rgba(45, 35, 22, 0.14);
+        }
+        table.tabla-haab {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 980px;
+            user-select: none;
+        }
+        /* Encabezado pegajoso con 2 renglones: 1) barra móvil de los 20 glifos del Tzolk'in, 2) numerales mayas 0..19 del mes Haab' */
+        .tabla-haab thead tr.fila-head-tzolkin th {
+            position: sticky;
+            top: 0;
+            z-index: 12;
+            background: #e9e0cf;
+            border-bottom: 1.5px solid #bfa98b;
+            border-right: 1px solid #cbbba2;
+            padding: 6px 3px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .tabla-haab thead tr.fila-head-num-haab th {
+            position: sticky;
+            top: 71px;
+            z-index: 11;
+            background: #f2eadc;
+            border-bottom: 3px solid #8C5E35;
+            border-right: 1px solid #cbbba2;
+            padding: 5px 2px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .tabla-haab thead th.esquina-fija {
+            position: sticky;
+            left: 0;
+            z-index: 16 !important;
+            background: #dfd3be !important;
+            min-width: 164px;
+            max-width: 164px;
+            border-right: 3px solid #8C5E35 !important;
+            padding: 6px 10px;
+            text-align: left;
+            font-size: 11.5px;
+            color: #463321;
+        }
+        .esquina-fija .etiq-sup {
+            display: block;
+            font-weight: 800;
+            color: #724b29;
+            text-align: right;
+            font-size: 11px;
+            margin-bottom: 3px;
+        }
+        .esquina-fija .etiq-inf {
+            display: block;
+            font-weight: 800;
+            color: #463321;
+            font-size: 11px;
+        }
+        .head-num-haab-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        .head-num-haab-card .num-arabigo-head {
+            font-size: 10px;
+            font-weight: 800;
+            color: #5a4028;
+            line-height: 1;
+        }
+        /* Barra desplazable del Tzolk'in */
+        .th-tzolkin {
+            cursor: grab;
+            transition: background-color 0.25s ease;
+            min-width: 42px;
+        }
+        .th-tzolkin:active {
+            cursor: grabbing;
+        }
+        /* Resaltado especial de los 4 Cargadores del Tiempo (Ik', Manik', Eb', Kaban) */
+        .th-tzolkin.es-cargador-tiempo {
+            background: linear-gradient(180deg, #dcefe3 0%, #c4e4d0 100%) !important;
+            box-shadow: inset 0 0 0 2px #3b7a57;
+        }
+        .th-tzolkin.es-cargador-tiempo .nom-tz {
+            color: #1e4d32;
+        }
+        .th-num-haab.es-cargador-tiempo {
+            background: #e5f2ea !important;
+        }
+        /* Columna 0 activa (Cargador del Año en turno sobre 0 Pop) */
+        .th-tzolkin.col-cargador {
+            background: linear-gradient(180deg, #b6dec5 0%, #95cda9 100%) !important;
+            box-shadow: inset 0 0 0 2.5px #1e5c3a !important;
+        }
+        .th-num-haab.col-cargador {
+            background: #cfe8d8 !important;
+            box-shadow: inset 0 0 0 2px #1e5c3a;
+        }
+        .badge-estrella-cargador {
+            font-size: 9px;
+            font-weight: 800;
+            color: #ffffff;
+            background: #3b7a57;
+            padding: 0 5px;
+            border-radius: 999px;
+            line-height: 1.3;
+        }
+        .th-tzolkin.col-cargador .badge-estrella-cargador {
+            background: #1e5c3a;
+        }
+        /* Botones rápidos de las 4 posiciones en la barra deslizable */
+        .pills-cargadores {
+            display: inline-flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .pill-pos-cargador {
+            border: 1.5px solid #3b7a57;
+            background: #eef7f1;
+            color: #26593c;
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .pill-pos-cargador:hover {
+            background: #d5ebdd;
+        }
+        .pill-pos-cargador.activo {
+            background: #3b7a57;
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(47, 107, 72, 0.3);
+        }
+        .tzolkin-header-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .tzolkin-header-card img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            display: block;
+            pointer-events: none;
+        }
+        .tzolkin-header-card .nom-tz {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #3b2816;
+            white-space: nowrap;
+        }
+
+        /* Encabezado de cada renglón: Nombre y Glifo del mes Haab' */
+        .tabla-haab tbody th.th-mes-haab {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            background: #ece3d2;
+            border-right: 3px solid #8C5E35;
+            border-bottom: 1px solid #c7b89e;
+            padding: 4px 10px;
+            text-align: left;
+            min-width: 164px;
+            max-width: 164px;
+        }
+        .mes-haab-row-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mes-haab-row-head .num-mes {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #8b7962;
+            width: 18px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .mes-haab-row-head img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+        .mes-haab-row-head .info-mes {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        .mes-haab-row-head .nom-mes {
+            font-size: 13px;
+            font-weight: 800;
+            color: #463321;
+        }
+        .mes-haab-row-head .sub-mes {
+            font-size: 10px;
+            color: #75624d;
+        }
+
+        /* Celdas con el número 1 al 13 del Tzolk'in */
+        .tabla-haab tbody td.celda-dia-haab {
+            background: #faf6ee;
+            border-right: 1px solid #dfd5c3;
+            border-bottom: 1px solid #dfd5c3;
+            padding: 3px 2px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            transition: background-color 0.15s, transform 0.1s;
+        }
+        .tabla-haab tbody tr:nth-child(even) td.celda-dia-haab {
+            background: #f4ede0;
+        }
+        /* Columnas de los 4 Cargadores del Tiempo (0, 5, 10, 15) resaltadas con color jade suave */
+        .tabla-haab tbody td.celda-dia-haab.col-cargador-tiempo-cell {
+            background: #edf6f0;
+        }
+        .tabla-haab tbody tr:nth-child(even) td.celda-dia-haab.col-cargador-tiempo-cell {
+            background: #e3f0e7;
+        }
+        /* Primera columna (Día 0 del mes / Cargador del Año en turno) más destacada */
+        .tabla-haab tbody td.celda-dia-haab.col-cargador-cell {
+            background: #d8ede0 !important;
+            border-right: 1.5px solid #7ab391;
+        }
+        .tabla-haab tbody td.celda-dia-haab:hover,
+        .tabla-haab tbody td.celda-dia-haab.activa {
+            background: #e3d1b4 !important;
+            box-shadow: inset 0 0 0 2px #8C5E35;
+        }
+        .tabla-haab tbody td.celda-vacia-wayeb {
+            background: repeating-linear-gradient(
+                -45deg,
+                #e4dbc9,
+                #e4dbc9 6px,
+                #dad0bc 6px,
+                #dad0bc 12px
+            );
+            border-right: 1px solid #cfc3ac;
+            border-bottom: 1px solid #cfc3ac;
+            color: #7a6852;
+            font-size: 11px;
+            font-style: italic;
+        }
+        .contenido-celda-maya {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+        }
+        .svg-num-maya {
+            width: 30px;
+            height: 22px;
+            display: block;
+        }
+        .num-tzolkin-badge {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #6b4423;
+            line-height: 1.1;
+            margin-top: 1px;
+        }
+        .celda-dia-haab.col-cargador-tiempo-cell .num-tzolkin-badge {
+            color: #1e5c3a;
+        }
+
+        /* Inspector de celda seleccionada debajo de la gráfica */
+        .inspector-celda {
+            margin-top: 14px;
+            background: #faf7f2;
+            border: 1.5px solid #d8cbb8;
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .inspector-glifo-par {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .mini-cartucho {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #efe7d8;
+            border: 1.5px solid #b8a487;
+            border-radius: 12px;
+            padding: 6px 12px;
+        }
+        .mini-cartucho img {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+        }
+        .mini-cartucho .txt-cart {
+            font-weight: 800;
+            color: #463321;
+            font-size: 14px;
+        }
+
+        /* Tarjetas de detalles aclaratorios */
+        .grid-aclaraciones {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin: 20px 0 28px;
+        }
+        .card-aclaracion {
+            background: #faf7f2;
+            border: 1px solid #e4dac8;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(90, 64, 40, 0.05);
+        }
+        .card-aclaracion h3 {
+            margin: 0 0 10px;
+            color: #724b29;
+            font-size: 1.15rem;
+        }
+        .lista-cargadores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 16px 0 24px;
+        }
+        .card-cargador {
+            background: #eef7f1;
+            border: 2px solid #3b7a57;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .card-cargador img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+        }
+        .card-cargador .nom-carg {
+            font-weight: 800;
+            color: #1e4d32;
+            font-size: 15px;
+        }
+        .card-cargador .rumbo-carg {
+            font-size: 12px;
+            color: #2f6b48;
+            font-weight: 600;
+        }
+
+        .footer-volver {
+            text-align: center;
+            margin-top: 34px;
+            padding-top: 22px;
+            border-top: 1px solid #e8e1d5;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-volver-grande {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            background-color: #8C5E35;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(140, 94, 53, 0.28);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-volver-grande:hover {
+            background-color: #724b29;
+            transform: translateY(-1px);
+        }
+        .btn-volver-grande.secundario {
+            background-color: #ece6da;
+            color: #5a4632;
+            border: 1px solid #cbb89d;
+            box-shadow: none;
+        }
+        .btn-volver-grande.secundario:hover {
+            background-color: #dfd6c5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="nav-links">
+                <a class="btn-nav" id="linkVolverExp" href="/explicacion/?lang={{ lang_inicial|default:'es' }}">
+                    ◀ <span id="txtVolverExp">Explicación general</span>
+                </a>
+                <a class="btn-nav" id="linkVolverCalc" href="/?lang={{ lang_inicial|default:'es' }}">
+                    🏛 <span id="txtVolverCalc">Tablero de la Estela</span>
+                </a>
+            </div>
+
+            <!-- Selector de idioma -->
+            <div class="lang-switcher" role="group" aria-label="Language selector">
+                <button type="button" class="lang-btn activo" data-lang="es" title="Español (México)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="7" height="15" x="0" fill="#006847"/>
+                        <rect width="7" height="15" x="7" fill="#ffffff"/>
+                        <rect width="7" height="15" x="14" fill="#ce1126"/>
+                        <circle cx="10.5" cy="7.5" r="1.9" fill="#8c5e35"/>
+                    </svg>
+                    <span>ES</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="en" title="English (USA)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#b22234"/>
+                        <path d="M0,2.3h21 M0,4.6h21 M0,6.9h21 M0,9.2h21 M0,11.5h21 M0,13.8h21" stroke="#ffffff" stroke-width="1.15"/>
+                        <rect width="9" height="8.1" fill="#3c3b6e"/>
+                        <g fill="#ffffff">
+                            <circle cx="1.8" cy="1.6" r="0.5"/><circle cx="3.6" cy="1.6" r="0.5"/><circle cx="5.4" cy="1.6" r="0.5"/><circle cx="7.2" cy="1.6" r="0.5"/>
+                            <circle cx="2.7" cy="2.8" r="0.5"/><circle cx="4.5" cy="2.8" r="0.5"/><circle cx="6.3" cy="2.8" r="0.5"/>
+                            <circle cx="1.8" cy="4.0" r="0.5"/><circle cx="3.6" cy="4.0" r="0.5"/><circle cx="5.4" cy="4.0" r="0.5"/><circle cx="7.2" cy="4.0" r="0.5"/>
+                            <circle cx="2.7" cy="5.2" r="0.5"/><circle cx="4.5" cy="5.2" r="0.5"/><circle cx="6.3" cy="5.2" r="0.5"/>
+                            <circle cx="1.8" cy="6.4" r="0.5"/><circle cx="3.6" cy="6.4" r="0.5"/><circle cx="5.4" cy="6.4" r="0.5"/><circle cx="7.2" cy="6.4" r="0.5"/>
+                        </g>
+                    </svg>
+                    <span>EN</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="fr" title="Français (France)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="7" height="15" x="0" fill="#002395"/>
+                        <rect width="7" height="15" x="7" fill="#ffffff"/>
+                        <rect width="7" height="15" x="14" fill="#ed2939"/>
+                    </svg>
+                    <span>FR</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="ja" title="日本語 (Japan)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#ffffff"/>
+                        <circle cx="10.5" cy="7.5" r="4.3" fill="#bc002d"/>
+                    </svg>
+                    <span>日本語</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="zh" title="中文 (China)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#de2910"/>
+                        <polygon points="4.2,2.2 4.8,4.1 6.7,4.1 5.1,5.2 5.7,7.1 4.2,5.9 2.7,7.1 3.3,5.2 1.7,4.1 3.6,4.1" fill="#ffde00"/>
+                        <g fill="#ffde00">
+                            <circle cx="8.2" cy="1.8" r="0.65"/>
+                            <circle cx="9.6" cy="3.3" r="0.65"/>
+                            <circle cx="9.6" cy="5.5" r="0.65"/>
+                            <circle cx="8.2" cy="7.0" r="0.65"/>
+                        </g>
+                    </svg>
+                    <span>中文</span>
+                </button>
+            </div>
+        </div>
+
+        <header class="encabezado-pagina">
+            <h1 id="mainHeading">Calendario Franco-Thompson</h1>
+            <p class="subtitulo-header" id="subHeading">Explicando la interacción entre los calendarios Haab' y Tzolk'in de una manera sencilla y <span class="resaltado-sin-engranes">SIN ENGRANES</span></p>
+        </header>
+
+        <!-- PANEL DE CONTROL DE LOS 4 CARGADORES DEL TIEMPO -->
+        <div class="panel-desplazamiento">
+            <div class="controles-fila-top">
+                <div class="grupo-botones-anio">
+                    <button type="button" class="btn-ctrl" id="btnPrevAnio" title="-5 glifos y -1 coeficiente">
+                        ◀ <span id="txtBtnPrevAnio">Año Haab' anterior (−5 glifos, −1 núm.)</span>
+                    </button>
+                    <button type="button" class="btn-ctrl verde" id="btnNextAnio" title="+5 glifos y +1 coeficiente">
+                        <span id="txtBtnNextAnio">Siguiente Año Haab' (+5 glifos, +1 núm.)</span> ▶
+                    </button>
+                    <button type="button" class="btn-ctrl secundario" id="btnReset">↺ <span id="txtBtnReset">Reiniciar</span></button>
+                </div>
+
+                <div class="estado-anio-badges">
+                    <span class="badge-info">
+                        <span id="lblAnioHaab">Año Haab':</span> <strong id="valAnioHaab">1</strong> / 52
+                        (<span id="lblDesplazamiento">Posición:</span> <strong id="valOffset">1/4 · +0</strong>)
+                    </span>
+                    <span class="badge-cargador">
+                        ★ <span id="lblCargador">Cargador del Año (Día 0 Pop):</span> <strong id="valCargador">1 Ik'</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div class="slider-fila">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <label for="selectCoefInicial" id="lblCoefInicial">Núm. en 0 Pop (1–13):</label>
+                    <select id="selectCoefInicial" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbb89d; font-weight: 700; color: #463321;">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-left: auto;">
+                    <label id="lblSlider">★ 4 posiciones de los Cargadores del Tiempo:</label>
+                    <div class="pills-cargadores" role="group" aria-label="4 Cargadores del Tiempo">
+                        <button type="button" class="pill-pos-cargador activo" data-step="0">1. Ik' (+0)</button>
+                        <button type="button" class="pill-pos-cargador" data-step="1">2. Manik' (+5)</button>
+                        <button type="button" class="pill-pos-cargador" data-step="2">3. Eb' (+10)</button>
+                        <button type="button" class="pill-pos-cargador" data-step="3">4. Kaban (+15)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA MATRIZ DEL HAAB CON DOBLE ENCABEZADO (GLIFOS TZOLK'IN + NUMERALES 0..19) Y CELDAS CON NÚMEROS 1..13 -->
+        <div class="tabla-haab-wrapper">
+            <table class="tabla-haab" id="tablaHaab">
+                <thead>
+                    <!-- Renglón 1 del encabezado: Barra desplazable con los 20 glifos del Tzolk'in -->
+                    <tr class="fila-head-tzolkin" id="headerTzolkinRow">
+                        <th class="esquina-fija">
+                            <span class="etiq-sup" id="txtEtiqTzolkin">1. Glifo Tzolk'in (4 posiciones) ▶</span>
+                        </th>
+                        {% for col in rango_20 %}
+                        <th class="th-tzolkin {% if col == 0 %}col-cargador{% endif %}" id="thTz_{{ col }}" data-col="{{ col }}">
+                            <div class="tzolkin-header-card">
+                                <span class="badge-estrella-cargador" id="tzStar_{{ col }}" style="display:none;">★ Cargador</span>
+                                <img id="tzImg_{{ col }}" src="/glifo/tzolkin/{{ col }}.png" alt="Glifo Tzolk'in">
+                                <span class="nom-tz" id="tzNom_{{ col }}">Imix'</span>
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                    <!-- Renglón 2 del encabezado: Numerales mayas del 0 al 19 (día del mes Haab') -->
+                    <tr class="fila-head-num-haab">
+                        <th class="esquina-fija">
+                            <span class="etiq-sup" id="txtEtiqNumHaab">2. Numeral del mes (0–19) ▶</span>
+                            <span class="etiq-inf" id="txtEtiqHaab">▼ Mes Haab' \ Celda: Tzolk'in (1–13)</span>
+                        </th>
+                        {% for col in rango_20 %}
+                        <th class="th-num-haab {% if col == 0 %}col-cargador{% endif %}" id="thNumHaab_{{ col }}" data-col="{{ col }}">
+                            <div class="head-num-haab-card">
+                                <svg class="svg-num-maya svg-head-haab" viewBox="0 0 36 28" data-num-maya="{{ col }}"></svg>
+                                <span class="num-arabigo-head">{{ col }}</span>
+                            </div>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mes in haab_meses %}
+                    <tr data-mes-idx="{{ mes.idx }}">
+                        <th class="th-mes-haab">
+                            <div class="mes-haab-row-head">
+                                <span class="num-mes">{{ forloop.counter }}</span>
+                                <img src="/glifo/haab/{{ mes.idx }}.png" alt="{{ mes.nombre }}">
+                                <div class="info-mes">
+                                    <span class="nom-mes">{{ mes.nombre }}</span>
+                                    <span class="sub-mes">{% if mes.es_wayeb %}5 d (0–4){% else %}20 d (0–19){% endif %}</span>
+                                </div>
+                            </div>
+                        </th>
+                        {% for dia in rango_20 %}
+                            {% if mes.es_wayeb and dia >= 5 %}
+                                {% if dia == 5 %}
+                                <td class="celda-vacia-wayeb" colspan="15" id="txtWayebVacio">
+                                    El mes Wayeb' solo tiene 5 días (0 al 4) → el siguiente año salta al siguiente Cargador (+5 glifos) y +1 en el número (1–13)
+                                </td>
+                                {% endif %}
+                            {% else %}
+                            <td class="celda-dia-haab {% if dia == 0 %}col-cargador-cell{% endif %} {% if dia == 0 or dia == 5 or dia == 10 or dia == 15 %}col-cargador-tiempo-cell{% endif %}"
+                                data-mes-idx="{{ mes.idx }}"
+                                data-mes-nombre="{{ mes.nombre }}"
+                                data-dia="{{ dia }}">
+                                <div class="contenido-celda-maya">
+                                    <svg class="svg-num-maya svg-celda-tz" viewBox="0 0 36 28"></svg>
+                                    <span class="num-tzolkin-badge">1</span>
+                                </div>
+                            </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- INSPECTOR INTERACTIVO DE LA CELDA SELECCIONADA -->
+        <div class="inspector-celda" id="inspectorCelda">
+            <div>
+                <strong id="lblInspectorTitulo">🔍 Haz clic en cualquier celda de la matriz para inspeccionar su combinación:</strong>
+                <div id="txtInspectorDetalle" style="font-size: 14px; color: #5a4632; margin-top: 4px;">
+                    El día <strong>0 Pop</strong> (Año Nuevo Haab') cae en el glifo sagrado <strong id="insTzNom">Ik'</strong>. En este mismo año, el día <strong>0</strong> de los 19 meses del Haab' caerá siempre en <strong id="insTzNom2">Ik'</strong>.
+                </div>
+            </div>
+            <div class="inspector-glifo-par">
+                <div class="mini-cartucho">
+                    <img id="insImgTz" src="/glifo/tzolkin/1.png" alt="Tzolk'in">
+                    <span class="txt-cart" id="insTxtTz">Ik'</span>
+                </div>
+                <div class="mini-cartucho">
+                    <img id="insImgHaab" src="/glifo/haab/0.png" alt="Haab'">
+                    <span class="txt-cart" id="insTxtHaab">0 Pop</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE DETALLES ACLARATORIOS -->
+        <section>
+            <h2 id="secAclaracionTitle">Detalles Aclaratorios: ¿Por qué el Tzolk'in se desplaza 5 unidades cada año?</h2>
+            <p id="secAclaracionIntro">Al observar la gráfica superior, se revelan tres leyes matemáticas y astronómicas fundamentales del calendario maya que a menudo pasan desapercibidas:</p>
+
+            <div class="grid-aclaraciones">
+                <div class="card-aclaracion">
+                    <h3 id="acl1Title">1. Sincronía perfecta durante los primeros 18 meses</h3>
+                    <p id="acl1Desc">Tanto el ciclo de glifos del <strong>Tzolk'in</strong> como los primeros 18 meses del <strong>Haab'</strong> (de <em>Pop</em> a <em>Kumk'u</em>) tienen exactamente <strong>20 días (una veintena)</strong>. Por eso, dentro de un mismo año Haab', todos los días que comparten el mismo número de mes (por ejemplo, todos los días <em>0</em>, o todos los días <em>12</em>) caen <strong>en la misma columna y bajo el mismo glifo del Tzolk'in</strong>.</p>
+                </div>
+
+                <div class="card-aclaracion">
+                    <h3 id="acl2Title">2. El salto de 5 glifos provocado por el Wayeb'</h3>
+                    <p id="acl2Desc">Si el año Haab' tuviera solo 18 meses (360 días = 18 × 20), la barra superior del Tzolk'in nunca se movería. Pero el año solar dura <strong>365 días</strong>. Al agregar el mes corto <strong>Wayeb' de 5 días</strong> (días 0, 1, 2, 3 y 4) en el último renglón, se consumen solo 5 glifos de la barra superior. Como resultado, el día <strong>0 Pop del año siguiente</strong> arranca exactamente <strong>5 posiciones más adelante</strong> ($365 \equiv 5 \pmod{20}$).</p>
+                </div>
+
+                <div class="card-aclaracion">
+                    <h3 id="acl3Title">3. Los 4 «Cargadores del Año» (Year Bearers)</h3>
+                    <p id="acl3Desc">Como la barra de 20 glifos se recorre de <strong>5 en 5</strong> cada año nuevo, y $20 \div 5 = 4$, ¡solo <strong>4 de los 20 glifos del Tzolk'in</strong> pueden ocupar la primera columna (el día <em>0 Pop</em>, Año Nuevo Maya)! Los mayas llamaron a estos cuatro glifos privilegiados los <strong>Cargadores del Año</strong> (<em>Kuch Haab'</em>), y después de 4 años la barra vuelve exactamente a su posición inicial.</p>
+                </div>
+            </div>
+
+            <h2 id="secCargadoresTitle">Los 4 Cargadores del Año Clásico (Día 0 Pop)</h2>
+            <p id="secCargadoresIntro">En el período Clásico Maya (al que pertenece la Cuenta Larga de las estelas), los cuatro glifos que se turnan año tras año en saltos de 5 posiciones para cargar el día <strong>0 Pop</strong> son:</p>
+
+            <div class="lista-cargadores">
+                <div class="card-cargador">
+                    <img src="/glifo/tzolkin/1.png" alt="Ik'">
+                    <span class="nom-carg">Ik' (#2)</span>
+                    <span class="rumbo-carg" id="carg1Sub">Posición +0 · Viento / Aliento</span>
+                </div>
+                <div class="card-cargador">
+                    <img src="/glifo/tzolkin/6.png" alt="Manik'">
+                    <span class="nom-carg">Manik' (#7)</span>
+                    <span class="rumbo-carg" id="carg2Sub">Posición +5 · Mano / Venado</span>
+                </div>
+                <div class="card-cargador">
+                    <img src="/glifo/tzolkin/11.png" alt="Eb'">
+                    <span class="nom-carg">Eb' (#12)</span>
+                    <span class="rumbo-carg" id="carg3Sub">Posición +10 · Camino / Rocío</span>
+                </div>
+                <div class="card-cargador">
+                    <img src="/glifo/tzolkin/16.png" alt="Kaban">
+                    <span class="nom-carg">Kaban (#17)</span>
+                    <span class="rumbo-carg" id="carg4Sub">Posición +15 · Tierra / Movimiento</span>
+                </div>
+            </div>
+
+            <div class="card-aclaracion" style="background: linear-gradient(135deg, #f6f0e4 0%, #ede3d0 100%); border-color: #cbb89d;">
+                <h3 id="acl4Title">4. ¿Y qué pasa con los números del 1 al 13 del Tzolk'in?</h3>
+                <p id="acl4Desc" style="margin-bottom:0;">Mientras el glifo del Tzolk'in avanza <strong>5 posiciones</strong> cada año ($365 \bmod 20 = 5$), el coeficiente numérico del Tzolk'in (del 1 al 13) avanza <strong>1 unidad</strong> cada año, porque $365 = (28 \times 13) + 1$, es decir, $365 \equiv 1 \pmod{13}$. Así, si un año comienza en <strong>1 Ik' 0 Pop</strong>, el año siguiente comenzará en <strong>2 Manik' 0 Pop</strong>, luego <strong>3 Eb' 0 Pop</strong>, <strong>4 Kaban 0 Pop</strong>, <strong>5 Ik' 0 Pop</strong>... hasta completar los $4 \times 13 = 52$ años de la Rueda Calendárica.</p>
+            </div>
+        </section>
+
+        <div class="footer-volver">
+            <a class="btn-volver-grande secundario" id="linkFooterExp" href="/explicacion/?lang={{ lang_inicial|default:'es' }}">
+                ◀ <span id="txtFooterExp">Volver a Explicación de la Estela</span>
+            </a>
+            <a class="btn-volver-grande" id="linkFooterAhau" href="/explicacion/mas/ahau/?lang={{ lang_inicial|default:'es' }}" style="background: linear-gradient(135deg, #1e5c3a, #2f7d52);">
+                ★ <span id="txtFooterAhau">Abreviaturas «8 Ahau» (Cuenta Corta)</span> ▶
+            </a>
+            <a class="btn-volver-grande" id="linkFooterCalc" href="/?lang={{ lang_inicial|default:'es' }}">
+                🏛 <span id="txtFooterCalc">Ir al Tablero de la Calculadora Maya</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const TZOLKIN_NOMBRES = [
+            "Imix'", "Ik'", "Ak'b'al", "K'an", "Chikchan",
+            "Kimi", "Manik'", "Lamat", "Muluk", "Ok",
+            "Chuwen", "Eb'", "B'en", "Ix", "Men",
+            "K'ib'", "Kaban", "Etz'nab'", "Kawak", "Ajaw"
+        ];
+
+        // Índices de los 4 Cargadores del Tiempo Clásicos en TZOLKIN_NOMBRES: Ik' (1), Manik' (6), Eb' (11), Kaban (16)
+        const CARGADORES_INDICES = [1, 6, 11, 16];
+
+        const I18N_MAS = {
+            es: {
+                pageTitle: "Calendario Franco-Thompson — Calendario Maya",
+                volverExp: "Explicación general",
+                volverCalc: "Tablero de la Estela",
+                mainHeading: "Calendario Franco-Thompson",
+                subHeading: "Explicando la interacción entre los calendarios Haab' y Tzolk'in de una manera sencilla y <span class=\"resaltado-sin-engranes\">SIN ENGRANES</span>",
+                btnPrevAnio: "Año Haab' anterior (−5 glifos, −1 núm.)",
+                btnNextAnio: "Siguiente Año Haab' (+5 glifos, +1 núm.)",
+                btnReset: "Reiniciar",
+                lblAnioHaab: "Año Haab':",
+                lblDesplazamiento: "Posición:",
+                lblCargador: "Cargador del Año (Día 0 Pop):",
+                lblSlider: "★ 4 posiciones de los Cargadores del Tiempo:",
+                lblCoefInicial: "Núm. en 0 Pop (1–13):",
+                etiqTzolkin: "1. Glifo Tzolk'in (4 posiciones) ▶",
+                etiqNumHaab: "2. Numeral del mes (0–19) ▶",
+                etiqHaab: "▼ Mes Haab' \\ Celda: Tzolk'in (1–13)",
+                badgeCargador: "★ Cargador",
+                wayebVacio: "El mes Wayeb' solo tiene 5 días (0 al 4) → el siguiente año salta al siguiente Cargador (+5 glifos) y +1 en el número (1–13)",
+                lblInspectorTitulo: "🔍 Haz clic en cualquier celda de la matriz para inspeccionar la fecha completa de la Rueda Calendárica:",
+                secAclaracionTitle: "Detalles Aclaratorios: ¿Por qué el Tzolk'in se desplaza 5 glifos y 1 número cada año?",
+                secAclaracionIntro: "Con el doble encabezado (glifos del Tzolk'in + numerales 0 al 19 del mes) y los números del 1 al 13 dentro de las celdas, toda la Rueda Calendárica de 365 días queda a la vista en una sola tabla:",
+                acl1Title: "1. Lectura por coordenadas (Columna + Renglón + Celda)",
+                acl1Desc: "Cada casilla de la tabla te da una fecha completa de la Rueda Calendárica: el <strong>número de la celda (1 al 13)</strong> más el <strong>glifo superior de la columna</strong> forman el día <em>Tzolk'in</em>; y el <strong>numeral maya del segundo encabezado (0 al 19)</strong> más el <strong>mes del renglón izquierdo</strong> forman la fecha <em>Haab'</em>.",
+                acl2Title: "2. El salto de +5 glifos y +1 número provocado por el Wayeb'",
+                acl2Desc: "Como los primeros 18 meses duran 20 días cada uno, el glifo del encabezado se mantiene fijo en cada columna todo el año. En cambio, como 20 no es múltiplo de 13 ($20 \equiv 7 \pmod{13}$), el número de las celdas (1 al 13) suma <strong>+7</strong> al bajar de un renglón al siguiente. Al terminar los 5 días del <strong>Wayeb'</strong>, el año nuevo (<em>0 Pop</em>) salta <strong>+5 glifos</strong> ($365 \equiv 5 \pmod{20}$) y <strong>+1 en el número de la celda</strong> ($365 \equiv 1 \pmod{13}$).",
+                acl3Title: "3. Los 4 «Cargadores del Tiempo» resaltados en verde jade",
+                acl3Desc: "Como la barra de 20 glifos se recorre de <strong>5 en 5</strong> cada año nuevo, y $20 \div 5 = 4$, ¡solo <strong>4 de los 20 glifos del Tzolk'in</strong> pueden ocupar la primera columna (el día <em>0 Pop</em>, Año Nuevo Maya)! Por eso existen únicamente esas <strong>4 posiciones</strong> y se resaltan en verde jade los 4 <strong>Cargadores del Tiempo</strong> (<em>Ik', Manik', Eb', Kaban</em>).",
+                secCargadoresTitle: "Los 4 Cargadores del Año Clásico (Día 0 Pop)",
+                secCargadoresIntro: "En el período Clásico Maya (al que pertenece la Cuenta Larga de las estelas), los cuatro glifos que se turnan año tras año en saltos de 5 posiciones para cargar el día <strong>0 Pop</strong> son:",
+                carg1Sub: "Posición 1 (+0) · Viento / Aliento",
+                carg2Sub: "Posición 2 (+5) · Mano / Venado",
+                carg3Sub: "Posición 3 (+10) · Camino / Rocío",
+                carg4Sub: "Posición 4 (+15) · Tierra / Movimiento",
+                acl4Title: "4. El ciclo exacto de 52 años en las celdas (1 al 13 × 4 Cargadores)",
+                acl4Desc: "Si presionas el botón <strong>«Siguiente Año Haab' (+5 glifos, +1 núm.)»</strong> verás cómo la primera celda (<em>0 Pop</em>) pasa sucesivamente por <strong>1 Ik'</strong> → <strong>2 Manik'</strong> → <strong>3 Eb'</strong> → <strong>4 Kaban</strong> → <strong>5 Ik'</strong>... Necesitarás exactamente <strong>52 años Haab'</strong> ($4 \times 13 = 52$) para que tanto la barra de glifos como los números del 1 al 13 de las celdas regresen a la misma configuración inicial.",
+                footerExp: "Volver a Explicación de la Estela",
+                footerCalc: "Ir al Tablero de la Calculadora Maya",
+                tplInspector: (coef, tz, dia, mes, diaAnio) => `Día <strong>#${diaAnio}</strong> del año Haab' → Fecha completa: <strong>${coef} ${tz} · ${dia} ${mes}</strong> (Celda: coeficiente <strong>${coef}</strong> + Columna: glifo <strong>${tz}</strong> y numeral <strong>${dia}</strong> + Renglón: mes <strong>${mes}</strong>).`
+            },
+            en: {
+                pageTitle: "Franco-Thompson Calendar — Mayan Calendar",
+                volverExp: "General Explanation",
+                volverCalc: "Stela Board",
+                mainHeading: "Franco-Thompson Calendar",
+                subHeading: "Explaining the interaction between the Haab' and Tzolk'in calendars in a simple way and <span class=\"resaltado-sin-engranes\">WITHOUT GEARS</span>",
+                btnPrevAnio: "Previous Haab' Year (−5 glyphs, −1 num.)",
+                btnNextAnio: "Next Haab' Year (+5 glyphs, +1 num.)",
+                btnReset: "Reset",
+                lblAnioHaab: "Haab' Year:",
+                lblDesplazamiento: "Position:",
+                lblCargador: "Year Bearer (Day 0 Pop):",
+                lblSlider: "★ 4 Year Bearer positions:",
+                lblCoefInicial: "Num. on 0 Pop (1–13):",
+                etiqTzolkin: "1. Tzolk'in Glyph (4 positions) ▶",
+                etiqNumHaab: "2. Month Numeral (0–19) ▶",
+                etiqHaab: "▼ Haab' Month \\ Cell: Tzolk'in (1–13)",
+                badgeCargador: "★ Bearer",
+                wayebVacio: "Wayeb' has only 5 days (0 to 4) → the next year jumps to the next Year Bearer (+5 glyphs) and +1 in the cell number (1–13)",
+                lblInspectorTitulo: "🔍 Click any cell in the matrix to inspect its full Calendar Round date:",
+                secAclaracionTitle: "Clarifying Details: Why Does the Tzolk'in Shift by 5 Glyphs and 1 Number Every Year?",
+                secAclaracionIntro: "With the double header (Tzolk'in glyphs + month numerals 0–19) and the numbers 1–13 inside the cells, the entire 365-day Calendar Round is visible in a single matrix:",
+                acl1Title: "1. Reading by Coordinates (Column + Row + Cell)",
+                acl1Desc: "Every cell gives a complete Calendar Round date: the <strong>cell number (1 to 13)</strong> plus the <strong>top column glyph</strong> form the <em>Tzolk'in</em> date; and the <strong>Mayan numeral in the second header row (0 to 19)</strong> plus the <strong>left row month</strong> form the <em>Haab'</em> date.",
+                acl2Title: "2. The +5 Glyph and +1 Number Jump Caused by Wayeb'",
+                acl2Desc: "Because the first 18 months have 20 days each, the top glyph stays fixed in its column all year. However, since 20 is not a multiple of 13 (20 mod 13 = 7), the cell number (1 to 13) increases by <strong>+7</strong> as you move down one row in the same column. After the 5 days of <strong>Wayeb'</strong>, New Year's Day (<em>0 Pop</em>) jumps <strong>+5 glyphs</strong> (365 mod 20 = 5) and <strong>+1 in the cell number</strong> (365 mod 13 = 1).",
+                acl3Title: "3. The 4 'Year Bearers' Highlighted in Jade Green",
+                acl3Desc: "Because the 20-glyph bar shifts by <strong>5 units</strong> every New Year, and 20 ÷ 5 = 4, only <strong>4 of the 20 Tzolk'in glyphs</strong> can ever land on the first column (day <em>0 Pop</em>, Mayan New Year)! That is why there are only those <strong>4 positions</strong> and the 4 <strong>Year Bearers</strong> (<em>Ik', Manik', Eb', Kaban</em>) are highlighted in jade green.",
+                secCargadoresTitle: "The 4 Classic Year Bearers (Day 0 Pop)",
+                secCargadoresIntro: "During the Classic Maya period (used on Long Count stelae), the four glyphs that take turns in 5-position jumps to carry day <strong>0 Pop</strong> are:",
+                carg1Sub: "Position 1 (+0) · Wind / Breath",
+                carg2Sub: "Position 2 (+5) · Hand / Deer",
+                carg3Sub: "Position 3 (+10) · Road / Dew",
+                carg4Sub: "Position 4 (+15) · Earth / Motion",
+                acl4Title: "4. The Exact 52-Year Cycle in the Cells (1–13 × 4 Year Bearers)",
+                acl4Desc: "Clicking <strong>'Next Haab' Year (+5 glyphs, +1 num.)'</strong> shows the first cell (<em>0 Pop</em>) advancing through <strong>1 Ik'</strong> → <strong>2 Manik'</strong> → <strong>3 Eb'</strong> → <strong>4 Kaban</strong> → <strong>5 Ik'</strong>... It takes exactly <strong>52 Haab' years</strong> (4 × 13 = 52) for both the glyph bar and the 1–13 cell numbers to return to their initial state.",
+                footerExp: "Back to Stela Explanation",
+                footerCalc: "Go to Mayan Calculator Board",
+                tplInspector: (coef, tz, dia, mes, diaAnio) => `Day <strong>#${diaAnio}</strong> of the Haab' year → Full date: <strong>${coef} ${tz} · ${dia} ${mes}</strong> (Cell: coefficient <strong>${coef}</strong> + Column: glyph <strong>${tz}</strong> & numeral <strong>${dia}</strong> + Row: month <strong>${mes}</strong>).`
+            },
+            fr: {
+                pageTitle: "Calendrier Franco-Thompson — Calendrier Maya",
+                volverExp: "Explication générale",
+                volverCalc: "Tableau de la Stèle",
+                mainHeading: "Calendrier Franco-Thompson",
+                subHeading: "Expliquer l'interaction entre les calendriers Haab' et Tzolk'in de manière simple et <span class=\"resaltado-sin-engranes\">SANS ENGRENAGES</span>",
+                btnPrevAnio: "Année Haab' précédente (−5 glyphes, −1 ch.)",
+                btnNextAnio: "Année Haab' suivante (+5 glyphes, +1 ch.)",
+                btnReset: "Réinitialiser",
+                lblAnioHaab: "Année Haab' :",
+                lblDesplazamiento: "Position :",
+                lblCargador: "Porteur d'Année (Jour 0 Pop) :",
+                lblSlider: "★ 4 positions des Porteurs d'Année :",
+                lblCoefInicial: "Chiffre au 0 Pop (1–13) :",
+                etiqTzolkin: "1. Glyphe Tzolk'in (4 positions) ▶",
+                etiqNumHaab: "2. Chiffre du mois (0–19) ▶",
+                etiqHaab: "▼ Mois Haab' \\ Cellule : Tzolk'in (1–13)",
+                badgeCargador: "★ Porteur",
+                wayebVacio: "Le mois Wayeb' n'a que 5 jours (0 à 4) → l'année suivante saute au Porteur d'Année suivant (+5 glyphes) et +1 sur le chiffre (1–13)",
+                lblInspectorTitulo: "🔍 Cliquez sur une cellule de la matrice pour inspecter la date complète de la Roue Calendaire :",
+                secAclaracionTitle: "Détails Explicatifs : Pourquoi le Tzolk'in se décale-t-il de 5 glyphes et 1 chiffre chaque année ?",
+                secAclaracionIntro: "Avec le double en-tête (glyphes du Tzolk'in + chiffres 0 à 19 du mois) et les nombres de 1 à 13 dans les cellules, toute la Roue Calendaire de 365 jours est visible d'un seul coup d'œil :",
+                acl1Title: "1. Lecture par coordonnées (Colonne + Ligne + Cellule)",
+                acl1Desc: "Chaque case donne une date complète : le <strong>chiffre de la cellule (1 à 13)</strong> plus le <strong>glyphe en haut de la colonne</strong> forment le jour <em>Tzolk'in</em> ; et le <strong>chiffre maya du second en-tête (0 à 19)</strong> plus le <strong>mois de la ligne</strong> forment la date <em>Haab'</em>.",
+                acl2Title: "2. Le saut de +5 glyphes et +1 chiffre provoqué par le Wayeb'",
+                acl2Desc: "Les 18 premiers mois ayant 20 jours, le glyphe reste fixe dans chaque colonne toute l'année. En revanche, comme 20 n'est pas un multiple de 13 (20 mod 13 = 7), le chiffre dans les cellules (1 à 13) augmente de <strong>+7</strong> lorsqu'on descend d'une ligne. Après les 5 jours du <strong>Wayeb'</strong>, le nouvel an (<em>0 Pop</em>) avance de <strong>+5 glyphes</strong> (365 mod 20 = 5) et de <strong>+1 sur le chiffre de la cellule</strong> (365 mod 13 = 1).",
+                acl3Title: "3. Les 4 « Porteurs d'Année » surlignés en vert jade",
+                acl3Desc: "Comme la barre de 20 glyphes avance de <strong>5 en 5</strong> chaque nouvel an (20 ÷ 5 = 4), seuls <strong>4 des 20 glyphes du Tzolk'in</strong> peuvent occuper la première colonne (le jour <em>0 Pop</em>) ! C'est pourquoi il n'y a que ces <strong>4 positions</strong> et les 4 <strong>Porteurs d'Année</strong> (<em>Ik', Manik', Eb', Kaban</em>) sont mis en évidence en vert jade.",
+                secCargadoresTitle: "Les 4 Porteurs d'Année Classiques (Jour 0 Pop)",
+                secCargadoresIntro: "À l'époque Classique Maya, les quatre glyphes qui se relaient par sauts de 5 positions pour porter le jour <strong>0 Pop</strong> sont :",
+                carg1Sub: "Position 1 (+0) · Vent / Souffle",
+                carg2Sub: "Position 2 (+5) · Main / Cerf",
+                carg3Sub: "Position 3 (+10) · Chemin / Rosée",
+                carg4Sub: "Position 4 (+15) · Terre / Mouvement",
+                acl4Title: "4. Le cycle exact de 52 ans dans les cellules (1–13 × 4 Porteurs)",
+                acl4Desc: "En cliquant sur <strong>« Année Haab' suivante (+5 glyphes, +1 ch.) »</strong>, la première cellule (<em>0 Pop</em>) passe par <strong>1 Ik'</strong> → <strong>2 Manik'</strong> → <strong>3 Eb'</strong> → <strong>4 Kaban</strong> → <strong>5 Ik'</strong>... Il faut exactement <strong>52 années Haab'</strong> (4 × 13 = 52) pour que la barre des glyphes et les chiffres 1–13 des cellules retrouvent leur configuration initiale.",
+                footerExp: "Retour à l'Explication de la Stèle",
+                footerCalc: "Aller à la Calculatrice Maya",
+                tplInspector: (coef, tz, dia, mes, diaAnio) => `Jour <strong>#${diaAnio}</strong> de l'année Haab' → Date complète : <strong>${coef} ${tz} · ${dia} ${mes}</strong> (Cellule : coefficient <strong>${coef}</strong> + Colonne : glyphe <strong>${tz}</strong> et chiffre <strong>${dia}</strong> + Ligne : mois <strong>${mes}</strong>).`
+            },
+            ja: {
+                pageTitle: "フランコ・トンプソン暦 — マヤ暦",
+                volverExp: "基本解説に戻る",
+                volverCalc: "石碑ボード",
+                mainHeading: "フランコ・トンプソン暦",
+                subHeading: "ハアブ暦とツォルキン暦の相互作用を、<span class=\"resaltado-sin-engranes\">歯車なしで</span>シンプルにわかりやすく解説",
+                btnPrevAnio: "前のハアブ年（−5グリフ, −1数字）",
+                btnNextAnio: "次のハアブ年（+5グリフ, +1数字）",
+                btnReset: "リセット",
+                lblAnioHaab: "ハアブ年:",
+                lblDesplazamiento: "位置:",
+                lblCargador: "年の担ぎ手（0 Popの日）:",
+                lblSlider: "★ 年の担ぎ手の4ポジション:",
+                lblCoefInicial: "0 Popの数字 (1–13):",
+                etiqTzolkin: "1. ツォルキン・グリフ（4位置） ▶",
+                etiqNumHaab: "2. 月のマヤ数字 (0–19) ▶",
+                etiqHaab: "▼ ハアブ月 \\ セル: ツォルキン数字 (1–13)",
+                badgeCargador: "★ 担ぎ手",
+                wayebVacio: "ワヤブ月は5日間（0〜4）のみ → 翌年は次の「年の担ぎ手」（+5グリフ）へ進み、セルの数字（1〜13）が+1シフトします",
+                lblInspectorTitulo: "🔍 任意のセルをクリックするとカレンダー・ラウンドの完全な日付を確認できます:",
+                secAclaracionTitle: "詳細解説：なぜ毎年5グリフと1数字ずつ移動するのか？",
+                secAclaracionIntro: "2段ヘッダー（ツォルキンの日グリフ＋月の数字0〜19）とセル内の数字（1〜13）により、365日のカレンダー・ラウンド全体が1つの表で完全に可視化されます：",
+                acl1Title: "1. 座標による読み方（縦列＋横行＋セル）",
+                acl1Desc: "各セルは完全な日付を表します。<strong>セル内の数字（1〜13）</strong>と<strong>列の一番上のグリフ</strong>で<em>ツォルキン暦</em>の日付になり、<strong>2段目ヘッダーのマヤ数字（0〜19）</strong>と<strong>左端の月名</strong>で<em>ハアブ暦</em>の日付になります。",
+                acl2Title: "2. ワヤブ月が生み出す「+5グリフ・+1数字」のジャンプ",
+                acl2Desc: "最初の18ヶ月は各20日間なので、列のグリフは1年中固定されます。一方、20は13の倍数ではないため（20 mod 13 = 7）、同じ列で1行下に進むごとにセルの数字（1〜13）は<strong>+7</strong>ずつ増えます。そして5日間の<strong>ワヤブ月</strong>が終わると、翌年の元日（<em>0 Pop</em>）は<strong>+5グリフ</strong>（365 mod 20 = 5）、セルの数字は<strong>+1</strong>（365 mod 13 = 1）進みます。",
+                acl3Title: "3. 翡翠色で強調された4つの「年の担ぎ手（イヤー・ベアラー）」",
+                acl3Desc: "20個のグリフ・バーが毎年<strong>5つずつ</strong>進むため（20 ÷ 5 = 4）、第1列（マヤの元日である<em>0 Pop</em>）に来ることができるのは<strong>20種類のうちわずか4つのグリフだけ</strong>です！そのためこの<strong>4ポジション</strong>のみが存在し、4つの<strong>年の担ぎ手</strong>（<em>Ik', Manik', Eb', Kaban</em>）が翡翠色でハイライトされています。",
+                secCargadoresTitle: "古典期マヤの4つの「年の担ぎ手」（0 Popの日）",
+                secCargadoresIntro: "古典期マヤにおいて、5グリフ飛ばしで毎年順番に元日（<strong>0 Pop</strong>）を担う4つのグリフは以下の通りです：",
+                carg1Sub: "位置 1 (+0) · 風 / 息吹",
+                carg2Sub: "位置 2 (+5) · 手 / 鹿",
+                carg3Sub: "位置 3 (+10) · 道 / 露",
+                carg4Sub: "位置 4 (+15) · 大地 / 動き",
+                acl4Title: "4. セル内の52年周期（1〜13 × 4つの年の担ぎ手）",
+                acl4Desc: "<strong>「次のハアブ年（+5グリフ, +1数字）」</strong>ボタンを押すと、最初のセル（<em>0 Pop</em>）が <strong>1 Ik'</strong> → <strong>2 Manik'</strong> → <strong>3 Eb'</strong> → <strong>4 Kaban</strong> → <strong>5 Ik'</strong>…と変化します。グリフ・バーとセル内の数字（1〜13）の両方が元の配置に戻るには、正確に<strong>52ハアブ年</strong>（4 × 13 = 52）かかります。",
+                footerExp: "石碑の解説ページへ戻る",
+                footerCalc: "マヤ石碑計算機ボードへ",
+                tplInspector: (coef, tz, dia, mes, diaAnio) => `ハアブ年の<strong>第${diaAnio}日</strong> → 完全な日付: <strong>${coef} ${tz} · ${dia} ${mes}</strong>（セル: 数字 <strong>${coef}</strong> ＋ 縦列: グリフ <strong>${tz}</strong>・月内数字 <strong>${dia}</strong> ＋ 横行: <strong>${mes}</strong>月）。`
+            },
+            zh: {
+                pageTitle: "弗兰科-汤普森历（Calendario Franco-Thompson） — 玛雅历法",
+                volverExp: "返回基础详解",
+                volverCalc: "石碑计算器面板",
+                mainHeading: "弗兰科-汤普森历（Calendario Franco-Thompson）",
+                subHeading: "以简单直观、<span class=\"resaltado-sin-engranes\">无需齿轮</span>的方式解析哈布历（Haab'）与卓尔金历（Tzolk'in）的互动关系",
+                btnPrevAnio: "上一个哈布年（−5雕文, −1数字）",
+                btnNextAnio: "下一个哈布年（+5雕文, +1数字）",
+                btnReset: "重置",
+                lblAnioHaab: "哈布年:",
+                lblDesplazamiento: "位置:",
+                lblCargador: "荷年者 / 岁首日 (0 Pop):",
+                lblSlider: "★ 4个“荷年者”位置:",
+                lblCoefInicial: "0 Pop 数字 (1–13):",
+                etiqTzolkin: "1. 卓尔金雕文（4个位置） ▶",
+                etiqNumHaab: "2. 月内玛雅数字 (0–19) ▶",
+                etiqHaab: "▼ 哈布月 \\ 单元格: 卓尔金数字 (1–13)",
+                badgeCargador: "★ 荷年者",
+                wayebVacio: "Wayeb'短月只有5天（0至4）→ 下一年将跳至下一位“荷年者”（+5雕文），且单元格数字（1–13）推进 +1",
+                lblInspectorTitulo: "🔍 点击矩阵中的任意单元格以查看完整的历法轮（Calendar Round）日期:",
+                secAclaracionTitle: "深度解析：为什么每年会位移 5 个雕文并推进 1 个数字？",
+                secAclaracionIntro: "通过双层表头（卓尔金雕文 + 月内数字 0–19）以及单元格内的数字（1–13），整整365天的历法轮在单张表格中一目了然：",
+                acl1Title: "1. 坐标式读法（列 + 行 + 单元格）",
+                acl1Desc: "每个格子都给出一个完整的历法轮日期：<strong>单元格内的数字（1至13）</strong>加上<strong>列顶部的雕文</strong>组成<em>卓尔金历</em>日期；而<strong>第二层表头的玛雅数字（0至19）</strong>加上<strong>左侧行的月份</strong>组成<em>哈布历</em>日期。",
+                acl2Title: "2. 由 Wayeb' 引起的“+5雕文、+1数字”跳跃",
+                acl2Desc: "由于前18个月各有20天，列顶部的雕文在整年中保持不变。但由于20不是13的倍数（20 mod 13 = 7），同列每往下一行，单元格内的数字（1至13）就会增加 <strong>+7</strong>。走完5天的 <strong>Wayeb'</strong> 后，新年第一天（<em>0 Pop</em>）会向后跳跃 <strong>+5个雕文</strong>（365 mod 20 = 5），同时单元格数字推进 <strong>+1</strong>（365 mod 13 = 1）。",
+                acl3Title: "3. 以翡翠绿高亮显示的四个“荷年者”（Year Bearers）",
+                acl3Desc: "由于20个雕文的横栏每年以 <strong>5格</strong> 为步长移动（20 ÷ 5 = 4），因此20个卓尔金日名中<strong>只有4个雕文</strong>有机会落在第一列（即玛雅新年 <em>0 Pop</em>）！因此仅设这 <strong>4个位置</strong>，并以翡翠绿高亮显示4位<strong>“荷年者”</strong>（<em>Ik', Manik', Eb', Kaban</em>）。",
+                secCargadoresTitle: "古典期玛雅的四大“荷年者”（0 Pop 岁首日）",
+                secCargadoresIntro: "在古典期玛雅（长计历石碑所使用的体系），每隔5个位置轮流背负新年第一天（<strong>0 Pop</strong>）的四个雕文是：",
+                carg1Sub: "位置 1 (+0) · 风 / 呼吸",
+                carg2Sub: "位置 2 (+5) · 手 / 鹿",
+                carg3Sub: "位置 3 (+10) · 道路 / 甘露",
+                carg4Sub: "位置 4 (+15) · 大地 / 律动",
+                acl4Title: "4. 单元格内的52年完整周期（1–13 × 4位荷年者）",
+                acl4Desc: "点击<strong>“下一个哈布年（+5雕文, +1数字）”</strong>按钮，你会看到第一个格子（<em>0 Pop</em>）依次经历 <strong>1 Ik'</strong> → <strong>2 Manik'</strong> → <strong>3 Eb'</strong> → <strong>4 Kaban</strong> → <strong>5 Ik'</strong>……需要整整 <strong>52个哈布年</strong>（4 × 13 = 52），顶部的雕文滑尺与单元格内的1–13数字才会同时回到初始状态。",
+                footerExp: "返回石碑详解页",
+                footerCalc: "前往玛雅石碑计算器",
+                tplInspector: (coef, tz, dia, mes, diaAnio) => `哈布年第 <strong>#${diaAnio}</strong> 天 → 完整日期: <strong>${coef} ${tz} · ${dia} ${mes}</strong>（单元格: 数字 <strong>${coef}</strong> + 列: 雕文 <strong>${tz}</strong> 与月内数字 <strong>${dia}</strong> + 行: <strong>${mes}</strong>月）。`
+            }
+        };
+
+        // Dibuja el numeral maya (0..19) en horizontal (puntos arriba, barras abajo, o caracol para el 0)
+        function generarSvgNumeroMaya(n, color = "#4d3824") {
+            if (n === 0) {
+                return `
+                    <ellipse cx="18" cy="14" rx="12" ry="7.5" fill="#e5d9c3" stroke="${color}" stroke-width="2"/>
+                    <path d="M8,14 Q18,19 28,14 M13,9 Q15,14 13,20 M18,7 L18,21 M23,9 Q21,14 23,20" stroke="${color}" stroke-width="1.5" fill="none"/>
+                `;
+            }
+            const barras = Math.floor(n / 5);
+            const puntos = n % 5;
+            let svg = "";
+
+            const totalItems = (puntos > 0 ? 1 : 0) + barras;
+            let startY = 14 - (totalItems * 5) / 2;
+
+            if (puntos > 0) {
+                const gap = 6.2;
+                const startX = 18 - ((puntos - 1) * gap) / 2;
+                const py = startY + 2.5;
+                for (let p = 0; p < puntos; p++) {
+                    svg += `<circle cx="${startX + p * gap}" cy="${py}" r="2.4" fill="${color}"/>`;
+                }
+                startY += 6.5;
+            }
+
+            for (let b = 0; b < barras; b++) {
+                const by = startY + b * 5.2;
+                svg += `<rect x="6" y="${by}" width="24" height="3.6" rx="1.8" fill="${color}"/>`;
+            }
+            return svg;
+        }
+
+        // Renderiza los SVGs fijos del segundo renglón del encabezado (numerales mayas del 0 al 19 del mes Haab')
+        document.querySelectorAll('.svg-head-haab').forEach(svgEl => {
+            const num = parseInt(svgEl.dataset.numMaya, 10) || 0;
+            const col = parseInt(svgEl.closest('th')?.dataset.col, 10);
+            const esColCargador = (col === 0 || col === 5 || col === 10 || col === 15);
+            svgEl.innerHTML = generarSvgNumeroMaya(num, esColCargador ? "#1e5c3a" : "#5a4028");
+        });
+
+        let idiomaActual = '{{ lang_inicial|default:"es" }}';
+        // Arrancamos en pasoCargador = 0 -> Ik' (índice 1) en 0 Pop, y COEF_INICIAL = 1 (1 Ik' 0 Pop)
+        const COEF_INICIAL = 1;
+        let pasoCargador = 0; // Solo 4 posiciones posibles: 0 (Ik'), 1 (Manik'), 2 (Eb'), 3 (Kaban)
+        let anioIndice = 0; // índice dentro de la Rueda Calendárica (0..51)
+        let offsetTzolkin = CARGADORES_INDICES[pasoCargador]; // siempre uno de [1, 6, 11, 16]
+        let coefBasePop = COEF_INICIAL; // número Tzolk'in (1..13) en la primera celda (0 Pop)
+        let celdaSeleccionada = { mesIdx: 0, mesNombre: "Pop", dia: 0 };
+
+        const selectCoefInicial = document.getElementById('selectCoefInicial');
+        const valAnioHaab = document.getElementById('valAnioHaab');
+        const valOffset = document.getElementById('valOffset');
+        const valCargador = document.getElementById('valCargador');
+        const todasLasCeldas = document.querySelectorAll('.celda-dia-haab');
+        const pillsCargadores = document.querySelectorAll('.pill-pos-cargador');
+
+        // Calcula el coeficiente Tzolk'in (1..13) para un mes (0..18) y día del mes (0..19)
+        function obtenerCoeficienteCelda(mesIdx, dia) {
+            const diaDelAnio = mesIdx * 20 + dia;
+            return ((coefBasePop - 1 + diaDelAnio) % 13 + 13) % 13 + 1;
+        }
+
+        // Actualiza los números del 1 al 13 dentro de las 365 celdas de la matriz
+        function actualizarCeldasTzolkin() {
+            todasLasCeldas.forEach(td => {
+                const mesIdx = parseInt(td.dataset.mesIdx, 10) || 0;
+                const dia = parseInt(td.dataset.dia, 10) || 0;
+                const coef = obtenerCoeficienteCelda(mesIdx, dia);
+
+                td.dataset.coef = coef;
+                td.classList.toggle('coef-1', coef === 1);
+
+                const svgEl = td.querySelector('.svg-celda-tz');
+                const badgeEl = td.querySelector('.num-tzolkin-badge');
+                const colorSvg = coef === 1 ? "#2f6b48" : "#5a4028";
+                if (svgEl) svgEl.innerHTML = generarSvgNumeroMaya(coef, colorSvg);
+                if (badgeEl) badgeEl.textContent = coef;
+            });
+        }
+
+        function actualizarBarraTzolkin() {
+            pasoCargador = ((pasoCargador % 4) + 4) % 4;
+            offsetTzolkin = CARGADORES_INDICES[pasoCargador];
+            const offsetNorm = offsetTzolkin;
+            const t = I18N_MAS[idiomaActual] || I18N_MAS.es;
+
+            selectCoefInicial.value = coefBasePop;
+
+            pillsCargadores.forEach(btn => {
+                const stepBtn = parseInt(btn.dataset.step, 10) || 0;
+                btn.classList.toggle('activo', stepBtn === pasoCargador);
+            });
+
+            for (let col = 0; col < 20; col++) {
+                const tzIdx = (offsetNorm + col) % 20;
+                const esCargador = CARGADORES_INDICES.includes(tzIdx);
+
+                const imgEl = document.getElementById(`tzImg_${col}`);
+                const nomEl = document.getElementById(`tzNom_${col}`);
+                const thTz = document.getElementById(`thTz_${col}`);
+                const thNum = document.getElementById(`thNumHaab_${col}`);
+                const starEl = document.getElementById(`tzStar_${col}`);
+
+                if (imgEl) imgEl.src = `/glifo/tzolkin/${tzIdx}.png`;
+                if (nomEl) nomEl.textContent = TZOLKIN_NOMBRES[tzIdx];
+                if (thTz) thTz.classList.toggle('es-cargador-tiempo', esCargador);
+                if (thNum) thNum.classList.toggle('es-cargador-tiempo', esCargador);
+                if (starEl) {
+                    starEl.style.display = esCargador ? 'inline-block' : 'none';
+                    starEl.textContent = t.badgeCargador || '★ Cargador';
+                }
+            }
+
+            const deltaGlifos = pasoCargador * 5;
+            const anioCiclo52 = ((anioIndice % 52) + 52) % 52 + 1;
+            valAnioHaab.textContent = anioCiclo52;
+            valOffset.textContent = `${pasoCargador + 1}/4 · +${deltaGlifos}`;
+            valCargador.textContent = `${coefBasePop} ${TZOLKIN_NOMBRES[offsetNorm]}`;
+
+            actualizarCeldasTzolkin();
+            actualizarInspector();
+        }
+
+        function actualizarInspector() {
+            const offsetNorm = CARGADORES_INDICES[pasoCargador];
+            const tzIdx = (offsetNorm + celdaSeleccionada.dia) % 20;
+            const tzNombre = TZOLKIN_NOMBRES[tzIdx];
+            const coef = obtenerCoeficienteCelda(celdaSeleccionada.mesIdx, celdaSeleccionada.dia);
+            const diaAnio = celdaSeleccionada.mesIdx * 20 + celdaSeleccionada.dia + 1;
+            const t = I18N_MAS[idiomaActual] || I18N_MAS.es;
+
+            document.getElementById('txtInspectorDetalle').innerHTML = t.tplInspector(
+                coef,
+                tzNombre,
+                celdaSeleccionada.dia,
+                celdaSeleccionada.mesNombre,
+                diaAnio
+            );
+            document.getElementById('insImgTz').src = `/glifo/tzolkin/${tzIdx}.png`;
+            document.getElementById('insTxtTz').textContent = `${coef} ${tzNombre}`;
+            document.getElementById('insImgHaab').src = `/glifo/haab/${celdaSeleccionada.mesIdx}.png`;
+            document.getElementById('insTxtHaab').textContent = `${celdaSeleccionada.dia} ${celdaSeleccionada.mesNombre}`;
+        }
+
+        // Función auxiliar para saltar a una de las 4 posiciones de los Cargadores del Tiempo (0..3)
+        function irAPosicionCargador(nuevoPaso) {
+            const pasoNorm = ((nuevoPaso % 4) + 4) % 4;
+            const deltaPasos = pasoNorm - pasoCargador;
+            if (deltaPasos === 0) return;
+            pasoCargador = pasoNorm;
+            anioIndice += deltaPasos;
+            coefBasePop = ((coefBasePop - 1 + deltaPasos) % 13 + 13) % 13 + 1;
+            actualizarBarraTzolkin();
+        }
+
+        // Eventos de botones de desplazamiento anual (+5 glifos = siguiente posición de Cargador, +1 coeficiente)
+        document.getElementById('btnNextAnio').addEventListener('click', () => {
+            anioIndice += 1;
+            pasoCargador = (pasoCargador + 1) % 4;
+            coefBasePop = (coefBasePop % 13) + 1;
+            actualizarBarraTzolkin();
+        });
+
+        document.getElementById('btnPrevAnio').addEventListener('click', () => {
+            anioIndice -= 1;
+            pasoCargador = (pasoCargador + 3) % 4;
+            coefBasePop = ((coefBasePop - 2 + 13) % 13) + 1;
+            actualizarBarraTzolkin();
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+            anioIndice = 0;
+            pasoCargador = 0;
+            coefBasePop = COEF_INICIAL;
+            actualizarBarraTzolkin();
+        });
+
+        // Botones rápidos (pills) de las 4 posiciones de Cargadores
+        pillsCargadores.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const nuevoPaso = parseInt(btn.dataset.step, 10) || 0;
+                irAPosicionCargador(nuevoPaso);
+            });
+        });
+
+        selectCoefInicial.addEventListener('change', () => {
+            coefBasePop = parseInt(selectCoefInicial.value, 10) || 1;
+            actualizarBarraTzolkin();
+        });
+
+        // Clic en cualquier celda de la matriz
+        todasLasCeldas.forEach(td => {
+            td.addEventListener('click', () => {
+                todasLasCeldas.forEach(c => c.classList.remove('activa'));
+                td.classList.add('activa');
+                celdaSeleccionada = {
+                    mesIdx: parseInt(td.dataset.mesIdx, 10) || 0,
+                    mesNombre: td.dataset.mesNombre || "Pop",
+                    dia: parseInt(td.dataset.dia, 10) || 0
+                };
+                actualizarInspector();
+            });
+        });
+
+        // Arrastre con el ratón sobre la barra de encabezado del Tzolk'in (salta entre las 4 posiciones de Cargadores)
+        let arrastrandoHeader = false;
+        let xInicialDrag = 0;
+        const headerRow = document.getElementById('headerTzolkinRow');
+        headerRow.addEventListener('mousedown', (e) => {
+            arrastrandoHeader = true;
+            xInicialDrag = e.clientX;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!arrastrandoHeader) return;
+            const dx = e.clientX - xInicialDrag;
+            if (Math.abs(dx) >= 65) {
+                const pasos = Math.trunc(dx / 65);
+                const nuevoPaso = ((pasoCargador - pasos) % 4 + 4) % 4;
+                xInicialDrag += pasos * 65;
+                irAPosicionCargador(nuevoPaso);
+            }
+        });
+        window.addEventListener('mouseup', () => {
+            arrastrandoHeader = false;
+        });
+
+        // Cambio de idioma
+        const botonesIdioma = document.querySelectorAll('.lang-btn');
+        function aplicarIdioma(lang) {
+            idiomaActual = I18N_MAS[lang] ? lang : 'es';
+            const t = I18N_MAS[idiomaActual];
+            document.documentElement.lang = idiomaActual;
+            document.title = t.pageTitle;
+
+            document.getElementById('txtVolverExp').textContent = t.volverExp;
+            document.getElementById('txtVolverCalc').textContent = t.volverCalc;
+            document.getElementById('txtFooterExp').textContent = t.footerExp;
+            document.getElementById('txtFooterCalc').textContent = t.footerCalc;
+
+            document.getElementById('linkVolverExp').href = `/explicacion/?lang=${idiomaActual}`;
+            document.getElementById('linkVolverCalc').href = `/?lang=${idiomaActual}`;
+            document.getElementById('linkFooterExp').href = `/explicacion/?lang=${idiomaActual}`;
+            document.getElementById('linkFooterAhau').href = `/explicacion/mas/ahau/?lang=${idiomaActual}`;
+            document.getElementById('linkFooterCalc').href = `/?lang=${idiomaActual}`;
+
+            const mapaTexto = {
+                mainHeading: t.mainHeading,
+                txtBtnPrevAnio: t.btnPrevAnio,
+                txtBtnNextAnio: t.btnNextAnio,
+                txtBtnReset: t.btnReset,
+                lblAnioHaab: t.lblAnioHaab,
+                lblDesplazamiento: t.lblDesplazamiento,
+                lblCargador: t.lblCargador,
+                lblSlider: t.lblSlider,
+                lblCoefInicial: t.lblCoefInicial,
+                txtEtiqTzolkin: t.etiqTzolkin,
+                txtEtiqNumHaab: t.etiqNumHaab,
+                txtEtiqHaab: t.etiqHaab,
+                txtWayebVacio: t.wayebVacio,
+                lblInspectorTitulo: t.lblInspectorTitulo,
+                secAclaracionTitle: t.secAclaracionTitle,
+                secAclaracionIntro: t.secAclaracionIntro,
+                acl1Title: t.acl1Title,
+                acl2Title: t.acl2Title,
+                acl3Title: t.acl3Title,
+                secCargadoresTitle: t.secCargadoresTitle,
+                carg1Sub: t.carg1Sub,
+                carg2Sub: t.carg2Sub,
+                carg3Sub: t.carg3Sub,
+                carg4Sub: t.carg4Sub,
+                acl4Title: t.acl4Title,
+            };
+            Object.entries(mapaTexto).forEach(([id, val]) => {
+                const el = document.getElementById(id);
+                if (el && val) el.textContent = val;
+            });
+
+            const mapaHtml = {
+                subHeading: t.subHeading,
+                acl1Desc: t.acl1Desc,
+                acl2Desc: t.acl2Desc,
+                acl3Desc: t.acl3Desc,
+                secCargadoresIntro: t.secCargadoresIntro,
+                acl4Desc: t.acl4Desc,
+            };
+            Object.entries(mapaHtml).forEach(([id, val]) => {
+                const el = document.getElementById(id);
+                if (el && val) el.innerHTML = val;
+            });
+
+            botonesIdioma.forEach(btn => {
+                btn.classList.toggle('activo', btn.dataset.lang === idiomaActual);
+            });
+
+            actualizarBarraTzolkin();
+        }
+
+        botonesIdioma.forEach(btn => {
+            btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+        });
+
+        // Seleccionar por defecto la primera celda (0 Pop)
+        if (todasLasCeldas.length > 0) {
+            todasLasCeldas[0].classList.add('activa');
+        }
+        actualizarBarraTzolkin();
+        if (idiomaActual !== 'es') {
+            aplicarIdioma(idiomaActual);
+        }
+    </script>
+</body>
+</html>

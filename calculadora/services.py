@@ -175,25 +175,25 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: st
         dia_semana = DIAS_SEMANA_NOMBRES_EN[idx_semana]
         nombre_mes = MESES_GREGORIANO_NOMBRES_EN[mes - 1]
         anio_texto = f"{1 - anio_astro} BC" if anio_astro <= 0 else str(anio_astro)
-        texto_gregoriano = f"{dia_semana}, {nombre_mes} {dia}, {anio_texto} (Gregorian calendar)"
+        texto_gregoriano = f"{dia_semana}, {nombre_mes} {dia}, {anio_texto}"
     elif lang == 'fr':
         dia_semana = DIAS_SEMANA_NOMBRES_FR[idx_semana]
         nombre_mes = MESES_GREGORIANO_NOMBRES_FR[mes - 1]
         anio_texto = f"{1 - anio_astro} av. J.-C." if anio_astro <= 0 else str(anio_astro)
-        texto_gregoriano = f"{dia_semana} {dia} {nombre_mes} {anio_texto} (calendrier grégorien)"
+        texto_gregoriano = f"{dia_semana} {dia} {nombre_mes} {anio_texto}"
     elif lang == 'ja':
         dia_semana = DIAS_SEMANA_NOMBRES_JA[idx_semana]
         anio_texto = f"紀元前{1 - anio_astro}年" if anio_astro <= 0 else f"{anio_astro}年"
-        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}（グレゴリオ暦）"
+        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}"
     elif lang == 'zh':
         dia_semana = DIAS_SEMANA_NOMBRES_ZH[idx_semana]
         anio_texto = f"公元前{1 - anio_astro}年" if anio_astro <= 0 else f"{anio_astro}年"
-        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}（公历）"
+        texto_gregoriano = f"{anio_texto}{mes}月{dia}日 {dia_semana}"
     else:
         dia_semana = DIAS_SEMANA_NOMBRES[idx_semana]
         nombre_mes = MESES_GREGORIANO_NOMBRES[mes - 1]
         anio_texto = f"{1 - anio_astro} a. C." if anio_astro <= 0 else str(anio_astro)
-        texto_gregoriano = f"{dia_semana}, {dia} de {nombre_texto(nombre_mes)} de {anio_texto} (calendario gregoriano)"
+        texto_gregoriano = f"{dia_semana}, {dia} de {nombre_texto(nombre_mes)} de {anio_texto}"
 
     texto_maya = (
         f"{baktun}.{katun}.{tun}.{winal}.{kin} · "
@@ -225,6 +225,39 @@ def calcular_fecha_maya(dia: int, mes: int, anio: int, era: str = 'dc', lang: st
 
 def nombre_texto(s: str) -> str:
     return s
+
+
+def calcular_desde_cuenta_larga(
+    baktun: int,
+    katun: int,
+    tun: int,
+    winal: int,
+    kin: int,
+    lang: str = "es",
+    titulo: str = "",
+) -> dict:
+    baktun = max(0, min(19, int(baktun)))
+    katun = max(0, min(19, int(katun)))
+    tun = max(0, min(19, int(tun)))
+    winal = max(0, min(17, int(winal)))
+    kin = max(0, min(19, int(kin)))
+
+    dias_totales = (
+        baktun * 144000
+        + katun * 7200
+        + tun * 360
+        + winal * 20
+        + kin
+    )
+    jdn = JDN_EPOCH + dias_totales
+    dia, mes, anio_astro = jdn_a_ymd(jdn)
+    if anio_astro <= 0:
+        era = "ac"
+        anio = 1 - anio_astro
+    else:
+        era = "dc"
+        anio = anio_astro
+    return calcular_fecha_maya(dia, mes, anio, era=era, lang=lang, titulo=titulo)
 
 
 # --- Renderizado de la estela en el servidor con Pillow ---
@@ -524,7 +557,7 @@ def renderizar_postal_imagen(estado: dict) -> Image.Image:
 
     es_cjk = estado.get("lang") in ("ja", "zh")
     fuente_maya_pie = _fuente_ajustada(estado["texto_maya"], 42, cursiva=True)
-    fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 27, cursiva=False, cjk=es_cjk)
+    fuente_greg_pie = _fuente_ajustada(estado["texto_gregoriano"], 34, cursiva=False, cjk=es_cjk)
     fuente_copy = _fuente_ajustada("Copyright EFM 2026", 20, cursiva=False)
 
     if titulo:

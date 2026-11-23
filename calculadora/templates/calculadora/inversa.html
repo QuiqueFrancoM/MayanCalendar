@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="{{ lang_inicial|default:'es' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Calculadora Inversa (Cuenta Larga a Gregoriano) — Enrique Franco</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px 0;
+        }
+        .container {
+            position: relative;
+            background-color: #ffffff;
+            padding: 46px 26px 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 95%;
+        }
+        /* Selector de idioma con banderas en la esquina superior derecha */
+        .lang-switcher {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: #f4efe6;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid #e0d5c1;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: none;
+            background: transparent;
+            padding: 4px 8px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #6b5a45;
+            opacity: 0.65;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            opacity: 0.95;
+        }
+        .lang-btn.activo {
+            background: #ffffff;
+            color: #3b2d1f;
+            opacity: 1;
+            box-shadow: 0 1px 4px rgba(60, 45, 30, 0.18);
+        }
+        .lang-btn svg {
+            width: 21px;
+            height: 14px;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.45);
+            flex-shrink: 0;
+        }
+        h1 {
+            color: #8C5E35;
+            margin: 10px 0 4px;
+            font-size: 1.65rem;
+        }
+        p.autor {
+            margin: 0 0 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #6b533b;
+        }
+        p.subtitulo,
+        label.subtitulo {
+            display: block;
+            margin: 0;
+            color: #555;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .bloque-titulo-estela {
+            margin: 14px 0 14px;
+        }
+        .titulo-input-wrap {
+            position: relative;
+            max-width: 420px;
+            margin: 6px auto 0;
+        }
+        .titulo-input-wrap input[type="text"] {
+            width: 100%;
+            padding: 9px 52px 9px 12px;
+            border: 1px solid #cbbba0;
+            border-radius: 8px;
+            background-color: #f8f6f2;
+            font-size: 14.5px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        }
+        .titulo-input-wrap input[type="text"]:focus {
+            background-color: #fff;
+            border-color: #8C5E35;
+            box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
+        }
+        .contador-titulo {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11.5px;
+            color: #8b7d6b;
+            pointer-events: none;
+        }
+
+        /* SELECTOR DE LOS 5 NUMERALES DE LA CUENTA LARGA */
+        .selector-fecha {
+            margin-top: 14px;
+            padding: 14px 12px;
+            background: #f8f6f2;
+            border: 1px solid #e5dec9;
+            border-radius: 12px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        .selector-cuenta-larga {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            align-items: stretch;
+        }
+        .campo-cl {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #dfd5c3;
+            border-radius: 10px;
+            padding: 8px 6px 9px;
+            box-shadow: 0 1px 3px rgba(60, 45, 30, 0.05);
+        }
+        .campo-cl img.glifo-periodo {
+            width: 34px;
+            height: 34px;
+            object-fit: contain;
+            margin-bottom: 3px;
+        }
+        .campo-cl label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #6b533b;
+            margin-bottom: 2px;
+        }
+        .campo-cl span.rango-hint {
+            font-size: 10px;
+            color: #96836c;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .campo-cl svg.svg-num-cl {
+            width: 34px;
+            height: 24px;
+            margin-bottom: 5px;
+        }
+        .campo-cl select {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid #cbbba0;
+            border-radius: 7px;
+            background-color: #fdfbf7;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #33261a;
+            text-align: center;
+            outline: none;
+            cursor: pointer;
+        }
+        .campo-cl select:focus {
+            border-color: #8C5E35;
+            box-shadow: 0 0 0 3px rgba(140, 94, 53, 0.15);
+        }
+
+        .selector-acciones {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-secundario {
+            background-color: #ece6da;
+            color: #5a4632;
+            border: 1px solid #d5cab6;
+            padding: 7px 11px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-secundario:hover {
+            background-color: #dfd6c5;
+        }
+        .btn-secundario.destacado {
+            background-color: #dcefe3;
+            color: #1e5c3a;
+            border-color: #9ec9af;
+        }
+        .btn-secundario.destacado:hover {
+            background-color: #cae6d5;
+        }
+
+        /* TARJETA DE RESULTADO GREGORIANO Y RUEDA CALENDÁRICA */
+        .resultado-gregoriano-card {
+            margin-top: 16px;
+            padding: 13px 16px;
+            background: linear-gradient(135deg, #f3faf6 0%, #e4f3ea 100%);
+            border: 1.5px solid #84b899;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(30, 92, 58, 0.08);
+        }
+        .resultado-gregoriano-card .etiq-res {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #286643;
+            margin-bottom: 3px;
+        }
+        .resultado-gregoriano-card .fecha-greg-grande {
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #163f28;
+            margin: 0 0 6px;
+        }
+        .resultado-gregoriano-card .resumen-maya-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .pill-res-maya {
+            background: #ffffff;
+            border: 1px solid #b8d8c5;
+            color: #3b2d1f;
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+        .pill-res-maya strong {
+            color: #8C5E35;
+        }
+
+        .visor-postal {
+            position: relative;
+            margin-top: 20px;
+        }
+        .visor-postal img {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(40, 30, 18, 0.16);
+            transition: opacity 0.2s ease;
+        }
+        .visor-postal.cargando img {
+            opacity: 0.55;
+        }
+        .acciones-descarga {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .btn-descarga {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-size: 14.5px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-jpg {
+            background-color: #5D8B71;
+            box-shadow: 0 2px 8px rgba(93, 139, 113, 0.25);
+        }
+        .btn-jpg:hover { background-color: #4A6F5A; }
+        .btn-pdf {
+            background-color: #8C5E35;
+            box-shadow: 0 2px 8px rgba(140, 94, 53, 0.25);
+        }
+        .btn-pdf:hover { background-color: #724b29; }
+
+        .bloque-explicacion {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e8e1d5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-explicacion {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 400px;
+            text-decoration: none;
+            background-color: #f4efe6;
+            color: #5a4028;
+            border: 1.5px solid #cbb89d;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14.5px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(90, 64, 40, 0.08);
+        }
+        .btn-explicacion:hover {
+            background-color: #e8dfd1;
+            border-color: #8C5E35;
+            color: #3b2816;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(90, 64, 40, 0.14);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 46px 10px 22px;
+                width: 97%;
+            }
+            h1 {
+                font-size: 1.35rem;
+            }
+            .selector-cuenta-larga {
+                gap: 4px;
+            }
+            .campo-cl {
+                padding: 6px 3px 7px;
+            }
+            .campo-cl label {
+                font-size: 9.5px;
+            }
+            .campo-cl select {
+                font-size: 13px;
+                padding: 5px 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Selector gráfico de idioma (México, USA, Francia, Japón, China) -->
+        <div class="lang-switcher" role="group" aria-label="Language selector">
+            <button type="button" class="lang-btn activo" data-lang="es" title="Español (México)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="7" height="15" x="0" fill="#006847"/>
+                    <rect width="7" height="15" x="7" fill="#ffffff"/>
+                    <rect width="7" height="15" x="14" fill="#ce1126"/>
+                    <circle cx="10.5" cy="7.5" r="1.9" fill="#8c5e35"/>
+                </svg>
+                <span>ES</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="en" title="English (USA)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#b22234"/>
+                    <path d="M0,2.3h21 M0,4.6h21 M0,6.9h21 M0,9.2h21 M0,11.5h21 M0,13.8h21" stroke="#ffffff" stroke-width="1.15"/>
+                    <rect width="9" height="8.1" fill="#3c3b6e"/>
+                    <g fill="#ffffff">
+                        <circle cx="1.8" cy="1.6" r="0.5"/><circle cx="3.6" cy="1.6" r="0.5"/><circle cx="5.4" cy="1.6" r="0.5"/><circle cx="7.2" cy="1.6" r="0.5"/>
+                        <circle cx="2.7" cy="2.8" r="0.5"/><circle cx="4.5" cy="2.8" r="0.5"/><circle cx="6.3" cy="2.8" r="0.5"/>
+                        <circle cx="1.8" cy="4.0" r="0.5"/><circle cx="3.6" cy="4.0" r="0.5"/><circle cx="5.4" cy="4.0" r="0.5"/><circle cx="7.2" cy="4.0" r="0.5"/>
+                        <circle cx="2.7" cy="5.2" r="0.5"/><circle cx="4.5" cy="5.2" r="0.5"/><circle cx="6.3" cy="5.2" r="0.5"/>
+                        <circle cx="1.8" cy="6.4" r="0.5"/><circle cx="3.6" cy="6.4" r="0.5"/><circle cx="5.4" cy="6.4" r="0.5"/><circle cx="7.2" cy="6.4" r="0.5"/>
+                    </g>
+                </svg>
+                <span>EN</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="fr" title="Français (France)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="7" height="15" x="0" fill="#002395"/>
+                    <rect width="7" height="15" x="7" fill="#ffffff"/>
+                    <rect width="7" height="15" x="14" fill="#ed2939"/>
+                </svg>
+                <span>FR</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="ja" title="日本語 (Japan)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#ffffff"/>
+                    <circle cx="10.5" cy="7.5" r="4.3" fill="#bc002d"/>
+                </svg>
+                <span>日本語</span>
+            </button>
+            <button type="button" class="lang-btn" data-lang="zh" title="中文 (China)">
+                <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect width="21" height="15" fill="#de2910"/>
+                    <polygon points="4.2,2.2 4.8,4.1 6.7,4.1 5.1,5.2 5.7,7.1 4.2,5.9 2.7,7.1 3.3,5.2 1.7,4.1 3.6,4.1" fill="#ffde00"/>
+                    <g fill="#ffde00">
+                        <circle cx="8.2" cy="1.8" r="0.65"/>
+                        <circle cx="9.6" cy="3.3" r="0.65"/>
+                        <circle cx="9.6" cy="5.5" r="0.65"/>
+                        <circle cx="8.2" cy="7.0" r="0.65"/>
+                    </g>
+                </svg>
+                <span>中文</span>
+            </button>
+        </div>
+
+        <h1 id="txtHeading">Calculadora Inversa de Cuenta Larga Maya</h1>
+        <p class="autor" id="txtAutor">Calculadora desarrollada por Enrique Franco</p>
+
+        <div class="bloque-titulo-estela">
+            <label class="subtitulo" for="inputTitulo" id="txtLblTitulo">Escribe un título para tu Estela</label>
+            <div class="titulo-input-wrap">
+                <input type="text" id="inputTitulo" maxlength="50" placeholder="Opcional (máx. 50 caracteres)">
+                <span class="contador-titulo" id="contadorTitulo">0/50</span>
+            </div>
+        </div>
+
+        <p class="subtitulo" id="txtSubtitulo">Selecciona los 5 numerales de la Cuenta Larga</p>
+
+        <!-- SELECTOR DE LOS 5 NUMERALES DE LA CUENTA LARGA -->
+        <div class="selector-fecha" aria-label="Selector de Cuenta Larga">
+            <div class="selector-cuenta-larga">
+                <!-- 1. Baktún (0-19) -->
+                <div class="campo-cl">
+                    <img class="glifo-periodo" src="/glifo/periodo/0.png" alt="Baktún">
+                    <label for="selBaktun" id="lblBaktun">Baktún</label>
+                    <span class="rango-hint">0–19 (×144,000d)</span>
+                    <svg class="svg-num-cl" id="svgBaktun" viewBox="0 0 36 28"></svg>
+                    <select id="selBaktun">
+                        {% for n in rango_20 %}
+                        <option value="{{ n }}" {% if n == hoy_baktun %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 2. Katún (0-19) -->
+                <div class="campo-cl">
+                    <img class="glifo-periodo" src="/glifo/periodo/1.png" alt="Katún">
+                    <label for="selKatun" id="lblKatun">Katún</label>
+                    <span class="rango-hint">0–19 (×7,200d)</span>
+                    <svg class="svg-num-cl" id="svgKatun" viewBox="0 0 36 28"></svg>
+                    <select id="selKatun">
+                        {% for n in rango_20 %}
+                        <option value="{{ n }}" {% if n == hoy_katun %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 3. Tun (0-19) -->
+                <div class="campo-cl">
+                    <img class="glifo-periodo" src="/glifo/periodo/2.png" alt="Tun">
+                    <label for="selTun" id="lblTun">Tun</label>
+                    <span class="rango-hint">0–19 (×360d)</span>
+                    <svg class="svg-num-cl" id="svgTun" viewBox="0 0 36 28"></svg>
+                    <select id="selTun">
+                        {% for n in rango_20 %}
+                        <option value="{{ n }}" {% if n == hoy_tun %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 4. Uinal (0-17) -->
+                <div class="campo-cl">
+                    <img class="glifo-periodo" src="/glifo/periodo/3.png" alt="Uinal">
+                    <label for="selWinal" id="lblWinal">Uinal</label>
+                    <span class="rango-hint">0–17 (×20d)</span>
+                    <svg class="svg-num-cl" id="svgWinal" viewBox="0 0 36 28"></svg>
+                    <select id="selWinal">
+                        {% for n in rango_18 %}
+                        <option value="{{ n }}" {% if n == hoy_winal %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 5. Kin (0-19) -->
+                <div class="campo-cl">
+                    <img class="glifo-periodo" src="/glifo/periodo/4.png" alt="Kin">
+                    <label for="selKin" id="lblKin">Kin</label>
+                    <span class="rango-hint">0–19 (×1d)</span>
+                    <svg class="svg-num-cl" id="svgKin" viewBox="0 0 36 28"></svg>
+                    <select id="selKin">
+                        {% for n in rango_20 %}
+                        <option value="{{ n }}" {% if n == hoy_kin %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="selector-acciones">
+                <button type="button" class="btn-secundario" id="btnPrevKin" title="Kin anterior">◀ −1 Kin</button>
+                <button type="button" class="btn-secundario destacado" id="btnHoyCl">Hoy ({{ hoy_baktun }}.{{ hoy_katun }}.{{ hoy_tun }}.{{ hoy_winal }}.{{ hoy_kin }})</button>
+                <button type="button" class="btn-secundario" id="btnNextKin" title="Kin siguiente">+1 Kin ▶</button>
+                <button type="button" class="btn-secundario" id="btnEpocaCero" title="Inicio de la Cuenta Larga (0.0.0.0.0)">0.0.0.0.0 (Creación)</button>
+                <button type="button" class="btn-secundario" id="btn8Ahau" title="Katún 8 Ahau (9.13.0.0.0)">9.13.0.0.0 (8 Ahau)</button>
+                <button type="button" class="btn-secundario" id="btnApocalipsis" title="Fin del Baktún 13 (21 de diciembre de 2012)">13.0.0.0.0 (Apocalipsis Maya)</button>
+            </div>
+        </div>
+
+        <div class="visor-postal" id="visorPostal">
+            <img id="imagenPostal" alt="Postal de estela maya generada por el servidor">
+        </div>
+
+        <div class="acciones-descarga">
+            <a class="btn-descarga btn-jpg" id="linkDescargarJpg" href="#">🖼 Descargar postal (JPG)</a>
+            <a class="btn-descarga btn-pdf" id="linkDescargarPdf" href="#">📄 Descargar postal (PDF)</a>
+        </div>
+
+        <div class="bloque-explicacion">
+            <a class="btn-explicacion" id="linkCalcDirecta" href="/?lang={{ lang_inicial|default:'es' }}">
+                📅 <span id="txtBtnCalcDirecta">Ir a Calculadora por Fecha Gregoriana</span>
+            </a>
+            <a class="btn-explicacion" id="linkExplicacion" href="/explicacion/?lang={{ lang_inicial|default:'es' }}">
+                📜 <span id="txtBtnExplicacion">Explicación del Calendario Maya</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const I18N_INV = {
+            es: {
+                pageTitle: 'Calculadora Inversa (Cuenta Larga a Gregoriano) — Enrique Franco',
+                heading: 'Calculadora Inversa de Cuenta Larga Maya',
+                autor: 'Calculadora desarrollada por Enrique Franco',
+                lblTitulo: 'Escribe un título para tu Estela',
+                phTitulo: 'Opcional (máx. 50 caracteres)',
+                subtitulo: 'Selecciona los 5 numerales de la Cuenta Larga',
+                lblBaktun: 'Baktún',
+                lblKatun: 'Katún',
+                lblTun: 'Tun',
+                lblWinal: 'Uinal',
+                lblKin: 'Kin',
+                prevKin: '◀ −1 Kin',
+                hoy: 'Hoy',
+                nextKin: '+1 Kin ▶',
+                epocaCero: '0.0.0.0.0 (Creación)',
+                apocalipsis: '13.0.0.0.0 (Apocalipsis Maya)',
+                descJpg: '🖼 Descargar postal (JPG)',
+                descPdf: '📄 Descargar postal (PDF)',
+                btnCalcDirecta: 'Ir a Calculadora por Fecha Gregoriana',
+                btnExplicacion: 'Explicación del Calendario Maya',
+                altPostal: 'Postal de estela maya generada por el servidor',
+            },
+            en: {
+                pageTitle: 'Inverse Calculator (Long Count to Gregorian) — Enrique Franco',
+                heading: 'Mayan Long Count Inverse Calculator',
+                autor: 'Calculator developed by Enrique Franco',
+                lblTitulo: 'Write a title for your Stela',
+                phTitulo: 'Optional (max 50 characters)',
+                subtitulo: 'Select the 5 Mayan Long Count numerals',
+                lblBaktun: 'Baktun',
+                lblKatun: 'Katun',
+                lblTun: 'Tun',
+                lblWinal: 'Winal',
+                lblKin: 'Kin',
+                prevKin: '◀ −1 Kin',
+                hoy: 'Today',
+                nextKin: '+1 Kin ▶',
+                epocaCero: '0.0.0.0.0 (Creation)',
+                apocalipsis: '13.0.0.0.0 (Mayan Apocalypse)',
+                descJpg: '🖼 Download postcard (JPG)',
+                descPdf: '📄 Download postcard (PDF)',
+                btnCalcDirecta: 'Go to Gregorian Date Calculator',
+                btnExplicacion: 'Mayan Calendar Explanation',
+                altPostal: 'Mayan stela postcard generated by the server',
+            },
+            fr: {
+                pageTitle: 'Calculatrice Inverse (Compte Long vers Grégorien) — Enrique Franco',
+                heading: 'Calculatrice Inverse du Compte Long Maya',
+                autor: 'Calculatrice développée par Enrique Franco',
+                lblTitulo: 'Écrivez un titre pour votre Stèle',
+                phTitulo: 'Optionnel (50 caractères max.)',
+                subtitulo: 'Sélectionnez les 5 chiffres du Compte Long',
+                lblBaktun: 'Baktun',
+                lblKatun: 'Katun',
+                lblTun: 'Tun',
+                lblWinal: 'Uinal',
+                lblKin: 'Kin',
+                prevKin: '◀ −1 Kin',
+                hoy: "Aujourd'hui",
+                nextKin: '+1 Kin ▶',
+                epocaCero: '0.0.0.0.0 (Création)',
+                apocalipsis: '13.0.0.0.0 (Apocalypse Maya)',
+                descJpg: '🖼 Télécharger la carte (JPG)',
+                descPdf: '📄 Télécharger la carte (PDF)',
+                btnCalcDirecta: 'Aller à la Calculatrice par Date Grégorienne',
+                btnExplicacion: 'Explication du Calendrier Maya',
+                altPostal: 'Carte postale de stèle maya générée par le serveur',
+            },
+            ja: {
+                pageTitle: 'マヤ長期暦 逆算計算機（長期暦から西暦へ） — Enrique Franco',
+                heading: 'マヤ長期暦 逆算計算機',
+                autor: 'Enrique Franco 開発の計算機',
+                lblTitulo: '石碑のタイトルを入力してください',
+                phTitulo: '任意（最大50文字）',
+                subtitulo: '長期暦の5つの数字を選択してください',
+                lblBaktun: 'バクトゥン',
+                lblKatun: 'カトゥン',
+                lblTun: 'トゥン',
+                lblWinal: 'ウィナル',
+                lblKin: 'キン',
+                prevKin: '◀ −1 キン',
+                hoy: '今日',
+                nextKin: '+1 キン ▶',
+                epocaCero: '0.0.0.0.0 (創世日)',
+                apocalipsis: '13.0.0.0.0 (マヤの終末予言)',
+                descJpg: '🖼 ポストカードを保存 (JPG)',
+                descPdf: '📄 ポストカードを保存 (PDF)',
+                btnCalcDirecta: '西暦からマヤ暦への計算機へ',
+                btnExplicacion: 'マヤ暦と石碑の詳しい解説',
+                altPostal: 'サーバーで生成されたマヤ石碑のポストカード',
+            },
+            zh: {
+                pageTitle: '玛雅长计历逆向计算器（长计历转公历） — Enrique Franco',
+                heading: '玛雅长计历逆向计算器',
+                autor: 'Enrique Franco 开发的计算器',
+                lblTitulo: '为你的石碑写一个标题',
+                phTitulo: '可选（最多50个字符）',
+                subtitulo: '请选择长计历的5个层级数字',
+                lblBaktun: '巴克盾',
+                lblKatun: '卡盾',
+                lblTun: '盾',
+                lblWinal: '乌纳尔',
+                lblKin: '金',
+                prevKin: '◀ −1 金',
+                hoy: '今天',
+                nextKin: '+1 金 ▶',
+                epocaCero: '0.0.0.0.0 (创世日)',
+                apocalipsis: '13.0.0.0.0 (玛雅末日预言)',
+                descJpg: '🖼 下载明信片 (JPG)',
+                descPdf: '📄 下载明信片 (PDF)',
+                btnCalcDirecta: '前往公历转玛雅历计算器',
+                btnExplicacion: '玛雅历法与石碑详解',
+                altPostal: '服务器生成的玛雅石碑明信片',
+            }
+        };
+
+        // Dibuja el numeral maya (0..19) en SVG
+        function generarSvgNumeroMaya(n, color = "#5a4028") {
+            if (n === 0) {
+                return `
+                    <ellipse cx="18" cy="14" rx="12" ry="7.5" fill="#e5d9c3" stroke="${color}" stroke-width="2"/>
+                    <path d="M8,14 Q18,19 28,14 M13,9 Q15,14 13,20 M18,7 L18,21 M23,9 Q21,14 23,20" stroke="${color}" stroke-width="1.5" fill="none"/>
+                `;
+            }
+            const barras = Math.floor(n / 5);
+            const puntos = n % 5;
+            let svg = "";
+            const totalItems = (puntos > 0 ? 1 : 0) + barras;
+            let startY = 14 - (totalItems * 5) / 2;
+
+            if (puntos > 0) {
+                const gap = 6.2;
+                const startX = 18 - ((puntos - 1) * gap) / 2;
+                const py = startY + 2.5;
+                for (let p = 0; p < puntos; p++) {
+                    svg += `<circle cx="${startX + p * gap}" cy="${py}" r="2.4" fill="${color}"/>`;
+                }
+                startY += 6.5;
+            }
+            for (let b = 0; b < barras; b++) {
+                const by = startY + b * 5.2;
+                svg += `<rect x="6" y="${by}" width="24" height="3.6" rx="1.8" fill="${color}"/>`;
+            }
+            return svg;
+        }
+
+        const HOY_CL = [{{ hoy_baktun }}, {{ hoy_katun }}, {{ hoy_tun }}, {{ hoy_winal }}, {{ hoy_kin }}];
+        let idiomaActual = '{{ lang_inicial|default:"es" }}';
+        let timerTitulo = null;
+
+        const selBaktun = document.getElementById('selBaktun');
+        const selKatun = document.getElementById('selKatun');
+        const selTun = document.getElementById('selTun');
+        const selWinal = document.getElementById('selWinal');
+        const selKin = document.getElementById('selKin');
+        const inputTitulo = document.getElementById('inputTitulo');
+        const contadorTitulo = document.getElementById('contadorTitulo');
+        const visorPostal = document.getElementById('visorPostal');
+        const imagenPostal = document.getElementById('imagenPostal');
+        const linkJpg = document.getElementById('linkDescargarJpg');
+        const linkPdf = document.getElementById('linkDescargarPdf');
+        const botonesIdioma = document.querySelectorAll('.lang-btn');
+
+        function obtenerValoresCl() {
+            return [
+                parseInt(selBaktun.value, 10) || 0,
+                parseInt(selKatun.value, 10) || 0,
+                parseInt(selTun.value, 10) || 0,
+                parseInt(selWinal.value, 10) || 0,
+                parseInt(selKin.value, 10) || 0,
+            ];
+        }
+
+        function establecerValoresCl(b, k, t, w, kin) {
+            selBaktun.value = Math.max(0, Math.min(19, b));
+            selKatun.value = Math.max(0, Math.min(19, k));
+            selTun.value = Math.max(0, Math.min(19, t));
+            selWinal.value = Math.max(0, Math.min(17, w));
+            selKin.value = Math.max(0, Math.min(19, kin));
+            actualizarTodo();
+        }
+
+        function moverKines(delta) {
+            const [b, k, t, w, kin] = obtenerValoresCl();
+            let dias = b * 144000 + k * 7200 + t * 360 + w * 20 + kin + delta;
+            dias = ((dias % 2880000) + 2880000) % 2880000;
+            const nb = Math.floor(dias / 144000); dias %= 144000;
+            const nk = Math.floor(dias / 7200); dias %= 7200;
+            const nt = Math.floor(dias / 360); dias %= 360;
+            const nw = Math.floor(dias / 20);
+            const nkin = dias % 20;
+            establecerValoresCl(nb, nk, nt, nw, nkin);
+        }
+
+        function actualizarTodo() {
+            const [b, k, t, w, kin] = obtenerValoresCl();
+
+            // Actualizar numerales mayas en SVG
+            document.getElementById('svgBaktun').innerHTML = generarSvgNumeroMaya(b);
+            document.getElementById('svgKatun').innerHTML = generarSvgNumeroMaya(k);
+            document.getElementById('svgTun').innerHTML = generarSvgNumeroMaya(t);
+            document.getElementById('svgWinal').innerHTML = generarSvgNumeroMaya(w);
+            document.getElementById('svgKin').innerHTML = generarSvgNumeroMaya(kin);
+
+            // Actualizar imagen de la estela y enlaces de descarga
+            const params = new URLSearchParams({
+                baktun: b,
+                katun: k,
+                tun: t,
+                winal: w,
+                kin: kin,
+                lang: idiomaActual,
+            });
+            const tituloLimpio = inputTitulo.value.trim().slice(0, 50);
+            if (tituloLimpio) {
+                params.set('titulo', tituloLimpio);
+            }
+            visorPostal.classList.add('cargando');
+            imagenPostal.src = `/postal.jpg?${params.toString()}`;
+            linkJpg.href = `/postal.jpg?${params.toString()}&descargar=1`;
+            linkPdf.href = `/postal.pdf?${params.toString()}`;
+        }
+
+        imagenPostal.addEventListener('load', () => visorPostal.classList.remove('cargando'));
+
+        function aplicarIdioma(lang) {
+            idiomaActual = I18N_INV[lang] ? lang : 'es';
+            const tr = I18N_INV[idiomaActual];
+            document.documentElement.lang = idiomaActual;
+            document.title = tr.pageTitle;
+
+            document.getElementById('txtHeading').textContent = tr.heading;
+            document.getElementById('txtAutor').textContent = tr.autor;
+            document.getElementById('txtLblTitulo').textContent = tr.lblTitulo;
+            inputTitulo.placeholder = tr.phTitulo;
+            document.getElementById('txtSubtitulo').textContent = tr.subtitulo;
+
+            document.getElementById('lblBaktun').textContent = tr.lblBaktun;
+            document.getElementById('lblKatun').textContent = tr.lblKatun;
+            document.getElementById('lblTun').textContent = tr.lblTun;
+            document.getElementById('lblWinal').textContent = tr.lblWinal;
+            document.getElementById('lblKin').textContent = tr.lblKin;
+
+            document.getElementById('btnPrevKin').textContent = tr.prevKin;
+            document.getElementById('btnHoyCl').textContent = `${tr.hoy} (${HOY_CL.join('.')})`;
+            document.getElementById('btnNextKin').textContent = tr.nextKin;
+            document.getElementById('btnEpocaCero').textContent = tr.epocaCero;
+            document.getElementById('btnApocalipsis').textContent = tr.apocalipsis;
+
+            linkJpg.textContent = tr.descJpg;
+            linkPdf.textContent = tr.descPdf;
+            document.getElementById('txtBtnCalcDirecta').textContent = tr.btnCalcDirecta;
+            document.getElementById('txtBtnExplicacion').textContent = tr.btnExplicacion;
+            document.getElementById('linkCalcDirecta').href = `/?lang=${idiomaActual}`;
+            document.getElementById('linkExplicacion').href = `/explicacion/?lang=${idiomaActual}`;
+            imagenPostal.alt = tr.altPostal;
+
+            botonesIdioma.forEach(btn => {
+                btn.classList.toggle('activo', btn.dataset.lang === idiomaActual);
+            });
+
+            actualizarTodo();
+        }
+
+        [selBaktun, selKatun, selTun, selWinal, selKin].forEach(sel => {
+            sel.addEventListener('change', actualizarTodo);
+        });
+
+        document.getElementById('btnPrevKin').addEventListener('click', () => moverKines(-1));
+        document.getElementById('btnNextKin').addEventListener('click', () => moverKines(1));
+        document.getElementById('btnHoyCl').addEventListener('click', () => {
+            establecerValoresCl(...HOY_CL);
+        });
+        document.getElementById('btnEpocaCero').addEventListener('click', () => {
+            establecerValoresCl(0, 0, 0, 0, 0);
+        });
+        document.getElementById('btn8Ahau').addEventListener('click', () => {
+            establecerValoresCl(9, 13, 0, 0, 0);
+        });
+        document.getElementById('btnApocalipsis').addEventListener('click', () => {
+            establecerValoresCl(13, 0, 0, 0, 0);
+        });
+
+        inputTitulo.addEventListener('input', () => {
+            contadorTitulo.textContent = `${inputTitulo.value.length}/50`;
+            clearTimeout(timerTitulo);
+            timerTitulo = setTimeout(actualizarTodo, 350);
+        });
+        inputTitulo.addEventListener('change', () => {
+            clearTimeout(timerTitulo);
+            actualizarTodo();
+        });
+
+        botonesIdioma.forEach(btn => {
+            btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+        });
+
+        aplicarIdioma(idiomaActual);
+    </script>
+</body>
+</html>

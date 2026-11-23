@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Explicación del Calendario Maya y la Estela — Enrique Franco</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 28px 14px 48px;
+            line-height: 1.65;
+        }
+        .container {
+            position: relative;
+            background-color: #ffffff;
+            padding: 56px 34px 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        /* Barra superior: botón volver + selector de idioma */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e8e1d5;
+        }
+        .btn-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            background-color: #ece6da;
+            color: #5a4632;
+            border: 1px solid #d5cab6;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .btn-volver:hover {
+            background-color: #dfd6c5;
+            color: #3b2d1f;
+            transform: translateX(-2px);
+        }
+        .lang-switcher {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            background: #f4efe6;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid #e0d5c1;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: none;
+            background: transparent;
+            padding: 4px 8px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #6b5a45;
+            opacity: 0.65;
+            transition: all 0.2s ease;
+        }
+        .lang-btn:hover {
+            opacity: 0.95;
+        }
+        .lang-btn.activo {
+            background: #ffffff;
+            color: #3b2d1f;
+            opacity: 1;
+            box-shadow: 0 1px 4px rgba(60, 45, 30, 0.18);
+        }
+        .lang-btn svg {
+            width: 21px;
+            height: 14px;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.45);
+            flex-shrink: 0;
+        }
+        header.encabezado-pagina {
+            text-align: center;
+            margin-bottom: 34px;
+        }
+        h1 {
+            color: #8C5E35;
+            margin: 0 0 8px;
+            font-size: 2rem;
+        }
+        p.subtitulo-header {
+            margin: 0;
+            font-size: 16px;
+            color: #6b533b;
+            font-weight: 500;
+        }
+        h2 {
+            color: #724b29;
+            border-left: 5px solid #8C5E35;
+            padding-left: 14px;
+            margin: 38px 0 16px;
+            font-size: 1.45rem;
+        }
+        h3 {
+            color: #5a4028;
+            margin: 18px 0 8px;
+            font-size: 1.15rem;
+        }
+        p {
+            margin: 0 0 14px;
+            color: #3d352e;
+        }
+        /* Tarjetas de los 3 calendarios */
+        .grid-calendarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+            margin: 20px 0 28px;
+        }
+        .card-calendario {
+            background: #faf7f2;
+            border: 1px solid #e4dac8;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(90, 64, 40, 0.05);
+        }
+        .card-calendario .badge-ciclo {
+            display: inline-block;
+            background: #8C5E35;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 10px;
+        }
+        .card-calendario h3 {
+            margin-top: 4px;
+            color: #724b29;
+        }
+        .destacado-rueda {
+            background: linear-gradient(135deg, #f6f0e4 0%, #ede3d0 100%);
+            border: 1px solid #d6c5a9;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 18px 0 28px;
+        }
+        .destacado-rueda strong {
+            color: #6b4423;
+        }
+        /* Sección de numeración maya */
+        .grid-numeros {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 18px 0 16px;
+        }
+        .card-simbolo {
+            background: #fdfbf8;
+            border: 1px solid #e2d7c3;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .simbolo-visual {
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .nota-rotacion {
+            background: #f4efe6;
+            border-left: 4px solid #5D8B71;
+            padding: 14px 18px;
+            border-radius: 0 10px 10px 0;
+            margin: 16px 0 28px;
+            font-size: 14.5px;
+        }
+        /* Mapa interactivo / visual de la Estela */
+        .estela-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 28px;
+            align-items: start;
+            margin: 24px 0 32px;
+        }
+        @media (max-width: 780px) {
+            .estela-layout {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 36px 18px 28px;
+            }
+        }
+        .diagrama-estela {
+            background: #d8cfc0;
+            background-image: radial-gradient(rgba(90, 70, 45, 0.12) 1px, transparent 0);
+            background-size: 12px 12px;
+            border: 4px solid #b5a68e;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 8px 22px rgba(45, 35, 22, 0.18), inset 0 0 14px rgba(60, 45, 30, 0.25);
+            max-width: 320px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .marco-exterior-estela {
+            border: 2px dashed #7a6852;
+            border-radius: 10px;
+            padding: 12px;
+            background: rgba(236, 229, 216, 0.75);
+        }
+        .etiqueta-marco {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #5c4b37;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+        .bloque-isig-diag {
+            background: #e9e1d2;
+            border: 2px solid #8c765c;
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        .bloque-isig-diag .num-badge {
+            background: #724b29;
+        }
+        .grid-cartuchos-diag {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .cartucho-diag {
+            background: #f3ede2;
+            border: 2px solid #9c866b;
+            border-radius: 14px;
+            padding: 10px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(55, 42, 28, 0.12);
+        }
+        .cartucho-diag.centrado {
+            grid-column: 1 / -1;
+            width: 55%;
+            margin: 0 auto;
+        }
+        .num-maya-demo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 26px;
+            padding-right: 6px;
+            border-right: 1.5px dotted #b8a68e;
+            font-weight: 800;
+            color: #5a4028;
+            font-size: 13px;
+        }
+        .info-cartucho-diag {
+            flex: 1;
+            min-width: 0;
+        }
+        .info-cartucho-diag .titulo-c {
+            font-size: 12px;
+            font-weight: 800;
+            color: #463321;
+            display: block;
+            line-height: 1.2;
+        }
+        .info-cartucho-diag .sub-c {
+            font-size: 10.5px;
+            color: #75624d;
+            display: block;
+        }
+        .num-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #8C5E35;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .num-badge.verde {
+            background: #5D8B71;
+        }
+        /* Lista detallada de los bloques de la estela */
+        .lista-bloques-estela {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .item-bloque-estela {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #faf8f4;
+            border: 1px solid #e6decb;
+            border-radius: 10px;
+            padding: 12px 15px;
+        }
+        .item-bloque-estela .contenido-b h4 {
+            margin: 0 0 4px;
+            color: #5a4028;
+            font-size: 15px;
+        }
+        .item-bloque-estela .contenido-b p {
+            margin: 0;
+            font-size: 14px;
+            color: #4a4036;
+        }
+        .item-bloque-estela .equivalencia {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #5D8B71;
+            background: #eef5f0;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+        /* Ejemplo práctico del pie de la postal */
+        .caja-ejemplo-pie {
+            background: #f8f5ee;
+            border: 2px solid #d8cbb8;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .lectura-ejemplo {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 1.55rem;
+            color: #5e4f3c;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+        }
+        .desglose-pie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            text-align: left;
+        }
+        .desglose-item {
+            background: #ffffff;
+            border: 1px solid #e4dac8;
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+        .desglose-item code {
+            display: inline-block;
+            background: #efe8dc;
+            color: #724b29;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .footer-volver {
+            text-align: center;
+            margin-top: 36px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e1d5;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .btn-volver-grande {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            background-color: #8C5E35;
+            color: #ffffff;
+            padding: 13px 26px;
+            border-radius: 10px;
+            font-size: 15.5px;
+            font-weight: 700;
+            box-shadow: 0 3px 10px rgba(140, 94, 53, 0.28);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-volver-grande:hover {
+            background-color: #724b29;
+            transform: translateY(-1px);
+        }
+        .btn-volver-grande.verde {
+            background-color: #5D8B71;
+            box-shadow: 0 3px 10px rgba(93, 139, 113, 0.28);
+        }
+        .btn-volver-grande.verde:hover {
+            background-color: #4A6F5A;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <a class="btn-volver" id="linkVolverTop" href="/?lang={{ lang_inicial|default:'es' }}">
+                ◀ <span id="txtVolverTop">Volver a la calculadora</span>
+            </a>
+
+            <!-- Selector gráfico de idioma -->
+            <div class="lang-switcher" role="group" aria-label="Language selector">
+                <button type="button" class="lang-btn activo" data-lang="es" title="Español (México)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="7" height="15" x="0" fill="#006847"/>
+                        <rect width="7" height="15" x="7" fill="#ffffff"/>
+                        <rect width="7" height="15" x="14" fill="#ce1126"/>
+                        <circle cx="10.5" cy="7.5" r="1.9" fill="#8c5e35"/>
+                    </svg>
+                    <span>ES</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="en" title="English (USA)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#b22234"/>
+                        <path d="M0,2.3h21 M0,4.6h21 M0,6.9h21 M0,9.2h21 M0,11.5h21 M0,13.8h21" stroke="#ffffff" stroke-width="1.15"/>
+                        <rect width="9" height="8.1" fill="#3c3b6e"/>
+                        <g fill="#ffffff">
+                            <circle cx="1.8" cy="1.6" r="0.5"/><circle cx="3.6" cy="1.6" r="0.5"/><circle cx="5.4" cy="1.6" r="0.5"/><circle cx="7.2" cy="1.6" r="0.5"/>
+                            <circle cx="2.7" cy="2.8" r="0.5"/><circle cx="4.5" cy="2.8" r="0.5"/><circle cx="6.3" cy="2.8" r="0.5"/>
+                            <circle cx="1.8" cy="4.0" r="0.5"/><circle cx="3.6" cy="4.0" r="0.5"/><circle cx="5.4" cy="4.0" r="0.5"/><circle cx="7.2" cy="4.0" r="0.5"/>
+                            <circle cx="2.7" cy="5.2" r="0.5"/><circle cx="4.5" cy="5.2" r="0.5"/><circle cx="6.3" cy="5.2" r="0.5"/>
+                            <circle cx="1.8" cy="6.4" r="0.5"/><circle cx="3.6" cy="6.4" r="0.5"/><circle cx="5.4" cy="6.4" r="0.5"/><circle cx="7.2" cy="6.4" r="0.5"/>
+                        </g>
+                    </svg>
+                    <span>EN</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="fr" title="Français (France)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="7" height="15" x="0" fill="#002395"/>
+                        <rect width="7" height="15" x="7" fill="#ffffff"/>
+                        <rect width="7" height="15" x="14" fill="#ed2939"/>
+                    </svg>
+                    <span>FR</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="ja" title="日本語 (Japan)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#ffffff"/>
+                        <circle cx="10.5" cy="7.5" r="4.3" fill="#bc002d"/>
+                    </svg>
+                    <span>日本語</span>
+                </button>
+                <button type="button" class="lang-btn" data-lang="zh" title="中文 (China)">
+                    <svg viewBox="0 0 21 15" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <rect width="21" height="15" fill="#de2910"/>
+                        <polygon points="4.2,2.2 4.8,4.1 6.7,4.1 5.1,5.2 5.7,7.1 4.2,5.9 2.7,7.1 3.3,5.2 1.7,4.1 3.6,4.1" fill="#ffde00"/>
+                        <g fill="#ffde00">
+                            <circle cx="8.2" cy="1.8" r="0.65"/>
+                            <circle cx="9.6" cy="3.3" r="0.65"/>
+                            <circle cx="9.6" cy="5.5" r="0.65"/>
+                            <circle cx="8.2" cy="7.0" r="0.65"/>
+                        </g>
+                    </svg>
+                    <span>中文</span>
+                </button>
+            </div>
+        </div>
+
+        <header class="encabezado-pagina">
+            <h1 id="mainHeading">Explicación del Calendario Maya y la Estela</h1>
+            <p class="subtitulo-header" id="subHeading">Guía completa sobre los ciclos del tiempo maya y cómo leer cada número y glifo tallado en tu postal</p>
+        </header>
+
+        <!-- SECCIÓN 1: LOS 3 CALENDARIOS -->
+        <section>
+            <h2 id="sec1Title">1. Los Tres Sistemas del Tiempo Maya</h2>
+            <p id="sec1Intro">A diferencia de nuestro calendario actual, que usa una sola cuenta lineal de días, meses y años, la civilización maya entrelazaba simultáneamente tres cuentas distintas para registrar cada fecha con precisión astronómica, histórica y sagrada:</p>
+
+            <div class="grid-calendarios">
+                <div class="card-calendario">
+                    <span class="badge-ciclo" id="cal1Badge">Cuenta lineal (~7,890 años)</span>
+                    <h3 id="cal1Title">La Cuenta Larga</h3>
+                    <p id="cal1Desc">Es el registro histórico continuo que cuenta los días transcurridos desde la fecha mítica de la creación maya: el <strong>11 de agosto de 3114 a. C.</strong> (según la correlación GMT 584,283). Se escribe con 5 números separados por puntos (<em>B'ak'tun . K'atun . Tun . Winal . K'in</em>) y permite ubicar cualquier acontecimiento sin ambigüedad a lo largo de milenios.</p>
+                </div>
+
+                <div class="card-calendario">
+                    <span class="badge-ciclo" id="cal2Badge">Ciclo sagrado de 260 días</span>
+                    <h3 id="cal2Title">El Tzolk'in (Calendario Sagrado)</h3>
+                    <p id="cal2Desc">Es el calendario ritual y adivinatorio más antiguo de Mesoamérica. Combina dos engranes que avanzan día con día: los números del <strong>1 al 13</strong> con <strong>20 nombres de días sagrados</strong> (desde <em>Imix'</em> hasta <em>Ajaw</em>). Como 13 × 20 = 260, cada combinación (por ejemplo, <em>4 Ajaw</em>) tarda exactamente 260 días en repetirse.</p>
+                </div>
+
+                <div class="card-calendario">
+                    <span class="badge-ciclo" id="cal3Badge">Ciclo solar de 365 días</span>
+                    <h3 id="cal3Title">El Haab' (Calendario Civil y Agrícola)</h3>
+                    <p id="cal3Desc">Rige las estaciones, las lluvias y los ciclos agrícolas. Está compuesto por <strong>18 meses (veintenas) de 20 días cada uno</strong> (numerados del 0 al 19, lo que suma 360 días), más un período corto adicional de <strong>5 días llamados Wayeb'</strong> (numerados del 0 al 4) al final del año para completar los 365 días solares.</p>
+                </div>
+            </div>
+
+            <div class="destacado-rueda" id="boxRueda">
+                <strong>⚙️ La Rueda Calendárica (52 años):</strong> Cuando el ciclo sagrado <em>Tzolk'in</em> (260 días) y el año solar <em>Haab'</em> (365 días) se ponen a girar juntos, una fecha combinada (como <em>4 Ajaw 8 Kumk'u</em>) solo vuelve a coincidir una vez cada <strong>18,980 días</strong> (el mínimo común múltiplo de 260 y 365), lo que equivale exactamente a <strong>52 años solares (Haab')</strong> o 73 ciclos Tzolk'in.
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: LOS NUMERITOS MAYAS -->
+        <section>
+            <h2 id="sec2Title">2. ¿Cómo se leen los «numeritos» mayas (Barras y Puntos)?</h2>
+            <p id="sec2Intro">El sistema de numeración maya es <strong>vigesimal (base 20)</strong> y utiliza únicamente tres símbolos fundamentales para escribir cualquier número del 0 al 19 dentro de cada bloque de la estela:</p>
+
+            <div class="grid-numeros">
+                <div class="card-simbolo">
+                    <div class="simbolo-visual">
+                        <!-- Concha del Cero -->
+                        <svg width="56" height="36" viewBox="0 0 56 36">
+                            <ellipse cx="28" cy="18" rx="22" ry="13" fill="#e6dccb" stroke="#5a4028" stroke-width="2.5"/>
+                            <path d="M10,18 Q28,26 46,18 M18,10 Q22,19 18,27 M28,7 L28,29 M38,10 Q34,19 38,27" stroke="#5a4028" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 id="num0Title">El Caracol o Semilla = 0</h3>
+                    <p id="num0Desc">Los mayas fueron una de las primeras civilizaciones de la humanidad en descubrir y usar el <strong>cero posicional</strong>. Representa plenitud o un ciclo que está «asentado» (en el Haab', el día 0 marca la entronización o llegada del mes).</p>
+                </div>
+
+                <div class="card-simbolo">
+                    <div class="simbolo-visual">
+                        <!-- Punto = 1 -->
+                        <svg width="80" height="36" viewBox="0 0 80 36">
+                            <circle cx="22" cy="18" r="7" fill="#5a4028"/>
+                            <circle cx="40" cy="18" r="7" fill="#5a4028"/>
+                            <circle cx="58" cy="18" r="7" fill="#5a4028"/>
+                        </svg>
+                    </div>
+                    <h3 id="num1Title">El Punto (•) = 1 unidad</h3>
+                    <p id="num1Desc">Cada punto vale <strong>1</strong>. Se pueden agrupar desde 1 hasta un máximo de <strong>4 puntos</strong> seguidos (1, 2, 3 o 4). Cinco puntos nunca se escriben juntos porque se convierten en una barra.</p>
+                </div>
+
+                <div class="card-simbolo">
+                    <div class="simbolo-visual">
+                        <!-- Barra = 5 -->
+                        <svg width="80" height="44" viewBox="0 0 80 44">
+                            <rect x="14" y="10" width="52" height="9" rx="4" fill="#5a4028"/>
+                            <rect x="14" y="25" width="52" height="9" rx="4" fill="#5a4028"/>
+                        </svg>
+                    </div>
+                    <h3 id="num5Title">La Barra (—) = 5 unidades</h3>
+                    <p id="num5Desc">Cada barra vale <strong>5</strong>. Dos barras valen 10 y tres barras valen 15. Si sumas tres barras más cuatro puntos obtienes <strong>19</strong>, el número máximo dentro de un cartucho.</p>
+                </div>
+            </div>
+
+            <div class="nota-rotacion" id="boxRotacion">
+                <strong>💡 ¿Por qué los números están verticales en la estela?</strong> En los monumentos clásicos de piedra, cuando un número acompaña a un glifo por su <strong>lado izquierdo</strong>, el numeral se rota 90° en sentido antihorario: las barras se colocan <strong>verticalmente</strong> a la derecha (pegadas al glifo) y los puntos se alinean a la izquierda de las barras.
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: ANATOMÍA DE LA ESTELA -->
+        <section>
+            <h2 id="sec3Title">3. Anatomía de la Estela: ¿Qué representa cada bloque y cada número?</h2>
+            <p id="sec3Intro">Las estelas mayas clásicas se leen <strong>de arriba hacia abajo y en pares de izquierda a derecha</strong> (como una columna doble). A continuación puedes ver el mapa exacto de los elementos que componen la postal generada:</p>
+
+            <div class="estela-layout">
+                <!-- Diagrama visual de la estela -->
+                <div class="diagrama-estela" aria-label="Diagrama esquemático de la estela maya">
+                    <div class="marco-exterior-estela">
+                        <div class="etiqueta-marco" id="diagMarcoTxt">Marco exterior: 20 glifos del Tzolk'in</div>
+
+                        <div class="bloque-isig-diag">
+                            <span class="num-badge" style="margin-bottom:4px;">A</span>
+                            <div style="font-weight:800; font-size:12.5px; color:#463321;" id="diagIsigTitle">Encabezado (ISIG)</div>
+                            <div style="font-size:11px; color:#6e5a44;" id="diagIsigSub">Glifo Introductor de la Serie Inicial</div>
+                        </div>
+
+                        <div class="grid-cartuchos-diag">
+                            <!-- Bloque 1 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">|||<br>•</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge">1</span>
+                                    <span class="titulo-c">B'ak'tun</span>
+                                    <span class="sub-c">× 144,000 d</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 2 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">•</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge">2</span>
+                                    <span class="titulo-c">K'atun</span>
+                                    <span class="sub-c">× 7,200 d</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 3 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">||<br>•••</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge">3</span>
+                                    <span class="titulo-c">Tun</span>
+                                    <span class="sub-c">× 360 d</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 4 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">|<br>••</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge">4</span>
+                                    <span class="titulo-c">Winal</span>
+                                    <span class="sub-c">× 20 d</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 5 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">••</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge">5</span>
+                                    <span class="titulo-c">K'in</span>
+                                    <span class="sub-c">× 1 d</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 6 -->
+                            <div class="cartucho-diag">
+                                <div class="num-maya-demo">|<br>••••</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge verde">6</span>
+                                    <span class="titulo-c">Tzolk'in</span>
+                                    <span class="sub-c">1–13 + Día</span>
+                                </div>
+                            </div>
+                            <!-- Bloque 7 -->
+                            <div class="cartucho-diag centrado">
+                                <div class="num-maya-demo">|<br>•••</div>
+                                <div class="info-cartucho-diag">
+                                    <span class="num-badge verde">7</span>
+                                    <span class="titulo-c">Haab'</span>
+                                    <span class="sub-c">0–19 + Mes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explicación punto por punto -->
+                <div class="lista-bloques-estela">
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">A</span>
+                        <div class="contenido-b">
+                            <h4 id="blkATitle">Encabezado Superior (ISIG) y Marco de la Estela</h4>
+                            <p id="blkADesc">El gran emblema superior es el <strong>Glifo Introductor de la Serie Inicial (ISIG)</strong>, que anuncia solemnemente: «Aquí comienza el conteo del tiempo». Además, el borde exterior de la piedra está custodiado por los 20 glifos sagrados del Tzolk'in tallados alrededor del monumento.</p>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">1</span>
+                        <div class="contenido-b">
+                            <h4 id="blk1Title">1.er Cartucho (Arriba-Izquierda): B'ak'tun</h4>
+                            <p id="blk1Desc">Su número (del 0 al 19) indica cuántos ciclos de <strong>144,000 días</strong> (aprox. 394.26 años solares) han pasado desde la fecha cero maya (3114 a. C.). Todas las fechas cercanas a nuestra época actual están en el <strong>B'ak'tun 13</strong> (dos barras y tres puntos).</p>
+                            <span class="equivalencia" id="blk1Eq">1 B'ak'tun = 20 K'atunes = 144,000 días</span>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">2</span>
+                        <div class="contenido-b">
+                            <h4 id="blk2Title">2.º Cartucho (Arriba-Derecha): K'atun</h4>
+                            <p id="blk2Desc">Su número (del 0 al 19) indica cuántos períodos de <strong>7,200 días</strong> (aprox. 19.71 años solares) se suman dentro del B'ak'tun actual. Para los mayas, cada fin de K'atun era motivo de grandes ceremonias y erección de estelas.</p>
+                            <span class="equivalencia" id="blk2Eq">1 K'atun = 20 Tunes = 7,200 días</span>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">3</span>
+                        <div class="contenido-b">
+                            <h4 id="blk3Title">3.er Cartucho (Centro-Izquierda): Tun</h4>
+                            <p id="blk3Desc">Su número (del 0 al 19) cuenta los «años de piedra» o <strong>Tunes de 360 días</strong> acumulados en el K'atun actual.</p>
+                            <span class="equivalencia" id="blk3Eq">1 Tun = 18 Winales = 360 días</span>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">4</span>
+                        <div class="contenido-b">
+                            <h4 id="blk4Title">4.º Cartucho (Centro-Derecha): Winal</h4>
+                            <p id="blk4Desc">Su número va únicamente del <strong>0 al 17</strong> (porque 18 Winales forman 1 Tun exacto de 360 días). Representa cuántos «meses mayas» de <strong>20 días</strong> han transcurrido en el Tun actual.</p>
+                            <span class="equivalencia" id="blk4Eq">1 Winal = 20 K'ines = 20 días</span>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge">5</span>
+                        <div class="contenido-b">
+                            <h4 id="blk5Title">5.º Cartucho (Abajo-Izquierda): K'in</h4>
+                            <p id="blk5Desc"><em>K'in</em> significa «Sol» o «Día». Su número (del 0 al 19) representa los <strong>días individuales</strong> restantes que completan la suma exacta de la Cuenta Larga.</p>
+                            <span class="equivalencia" id="blk5Eq">1 K'in = 1 día solar</span>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge verde">6</span>
+                        <div class="contenido-b">
+                            <h4 id="blk6Title">6.º Cartucho (Abajo-Derecha): Fecha Sagrada Tzolk'in</h4>
+                            <p id="blk6Desc">A la izquierda aparece un numeral que siempre va del <strong>1 al 13</strong> (nunca lleva cero), y a la derecha se talla el glifo de uno de los <strong>20 días sagrados</strong> (<em>Imix', Ik', Ak'b'al, K'an, Chikchan, Kimi, Manik', Lamat, Muluk, Ok, Chuwen, Eb', B'en, Ix, Men, K'ib', Kaban, Etz'nab', Kawak, Ajaw</em>).</p>
+                        </div>
+                    </div>
+
+                    <div class="item-bloque-estela">
+                        <span class="num-badge verde">7</span>
+                        <div class="contenido-b">
+                            <h4 id="blk7Title">7.º Cartucho (Inferior Centrado): Fecha Solar Haab'</h4>
+                            <p id="blk7Desc">Cierra la inscripción en la base de la estela. El número de la izquierda va del <strong>0 al 19</strong> (o del 0 al 4 si cae en el mes corto <em>Wayeb'</em>) y señala qué día del mes corre, acompañado a la derecha por el glifo de uno de los <strong>19 meses del Haab'</strong> (<em>Pop, Wo', Sip, Sotz', Sek, Xul, Yaxk'in, Mol, Ch'en, Yax, Sak', Keh, Mak, K'ank'in, Muwan', Pax, K'ayab, Kumk'u, Wayeb'</em>).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: EJEMPLO DE LECTURA AL PIE DE LA POSTAL -->
+        <section>
+            <h2 id="sec4Title">4. Cómo leer la inscripción escrita debajo de la Estela</h2>
+            <p id="sec4Intro">Justo debajo de la piedra caliza de tu postal aparece una línea en letras cursivas separada por dos puntos centrales (·). Veamos qué significa cada parte con un ejemplo real:</p>
+
+            <div class="caja-ejemplo-pie">
+                <div class="lectura-ejemplo">13.0.14.2.1 · 9 Imix' · 9 K'ank'in</div>
+                <div class="desglose-pie-grid">
+                    <div class="desglose-item">
+                        <code>13.0.14.2.1</code>
+                        <p id="ej1Desc"><strong>Cuenta Larga (Bloques 1 al 5):</strong><br>
+                        13 B'ak'tunes (1,872,000 d) + 0 K'atunes (0 d) + 14 Tunes (5,040 d) + 2 Winales (40 d) + 1 K'in (1 d) = <strong>1,877,081 días</strong> desde el inicio de la era maya en 3114 a. C.</p>
+                    </div>
+                    <div class="desglose-item">
+                        <code>9 Imix'</code>
+                        <p id="ej2Desc"><strong>Tzolk'in (Bloque 6):</strong><br>
+                        El coeficiente numérico <strong>9</strong> (una barra y cuatro puntos) acompañado del primer glifo del calendario sagrado de 260 días: <strong>Imix'</strong> (asociado con el lirio acuático, el origen y la tierra primordial).</p>
+                    </div>
+                    <div class="desglose-item">
+                        <code>9 K'ank'in</code>
+                        <p id="ej3Desc"><strong>Haab' (Bloque 7):</strong><br>
+                        El día número <strong>9</strong> (una barra y cuatro puntos) del decimocuarto mes del año solar de 365 días: <strong>K'ank'in</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer-volver">
+            <a class="btn-volver-grande" id="linkVolverBottom" href="/?lang={{ lang_inicial|default:'es' }}">
+                ◀ <span id="txtVolverBottom">Volver al Tablero de la Estela Maya</span>
+            </a>
+            <a class="btn-volver-grande verde" id="linkMasDetalles" href="/explicacion/mas/?lang={{ lang_inicial|default:'es' }}">
+                📊 <span id="txtMasDetalles">Ver Matriz del Haab' y más detalles ▶</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const I18N_EXP = {
+            es: {
+                pageTitle: 'Explicación del Calendario Maya y la Estela — Enrique Franco',
+                volverTop: 'Volver a la calculadora',
+                volverBottom: 'Volver al Tablero de la Estela Maya',
+                masDetalles: "Ver Matriz del Haab' y más detalles ▶",
+                mainHeading: 'Explicación del Calendario Maya y la Estela',
+                subHeading: 'Guía completa sobre los ciclos del tiempo maya y cómo leer cada número y glifo tallado en tu postal',
+                sec1Title: '1. Los Tres Sistemas del Tiempo Maya',
+                sec1Intro: 'A diferencia de nuestro calendario actual, que usa una sola cuenta lineal de días, meses y años, la civilización maya entrelazaba simultáneamente tres cuentas distintas para registrar cada fecha con precisión astronómica, histórica y sagrada:',
+                cal1Badge: 'Cuenta lineal (~7,890 años)',
+                cal1Title: 'La Cuenta Larga',
+                cal1Desc: 'Es el registro histórico continuo que cuenta los días transcurridos desde la fecha mítica de la creación maya: el <strong>11 de agosto de 3114 a. C.</strong> (según la correlación GMT 584,283). Se escribe con 5 números separados por puntos (<em>B\'ak\'tun . K\'atun . Tun . Winal . K\'in</em>) y permite ubicar cualquier acontecimiento sin ambigüedad a lo largo de milenios.',
+                cal2Badge: 'Ciclo sagrado de 260 días',
+                cal2Title: 'El Tzolk\'in (Calendario Sagrado)',
+                cal2Desc: 'Es el calendario ritual y adivinatorio más antiguo de Mesoamérica. Combina dos engranes que avanzan día con día: los números del <strong>1 al 13</strong> con <strong>20 nombres de días sagrados</strong> (desde <em>Imix\'</em> hasta <em>Ajaw</em>). Como 13 × 20 = 260, cada combinación (por ejemplo, <em>4 Ajaw</em>) tarda exactamente 260 días en repetirse.',
+                cal3Badge: 'Ciclo solar de 365 días',
+                cal3Title: 'El Haab\' (Calendario Civil y Agrícola)',
+                cal3Desc: 'Rige las estaciones, las lluvias y los ciclos agrícolas. Está compuesto por <strong>18 meses (veintenas) de 20 días cada uno</strong> (numerados del 0 al 19, lo que suma 360 días), más un período corto adicional de <strong>5 días llamados Wayeb\'</strong> (numerados del 0 al 4) al final del año para completar los 365 días solares.',
+                boxRueda: '<strong>⚙️ La Rueda Calendárica (52 años):</strong> Cuando el ciclo sagrado <em>Tzolk\'in</em> (260 días) y el año solar <em>Haab\'</em> (365 días) se ponen a girar juntos, una fecha combinada (como <em>4 Ajaw 8 Kumk\'u</em>) solo vuelve a coincidir una vez cada <strong>18,980 días</strong> (el mínimo común múltiplo de 260 y 365), lo que equivale exactamente a <strong>52 años solares (Haab\')</strong> o 73 ciclos Tzolk\'in.',
+                sec2Title: '2. ¿Cómo se leen los «numeritos» mayas (Barras y Puntos)?',
+                sec2Intro: 'El sistema de numeración maya es <strong>vigesimal (base 20)</strong> y utiliza únicamente tres símbolos fundamentales para escribir cualquier número del 0 al 19 dentro de cada bloque de la estela:',
+                num0Title: 'El Caracol o Semilla = 0',
+                num0Desc: 'Los mayas fueron una de las primeras civilizaciones de la humanidad en descubrir y usar el <strong>cero posicional</strong>. Representa plenitud o un ciclo que está «asentado» (en el Haab\', el día 0 marca la entronización o llegada del mes).',
+                num1Title: 'El Punto (•) = 1 unidad',
+                num1Desc: 'Cada punto vale <strong>1</strong>. Se pueden agrupar desde 1 hasta un máximo de <strong>4 puntos</strong> seguidos (1, 2, 3 o 4). Cinco puntos nunca se escriben juntos porque se convierten en una barra.',
+                num5Title: 'La Barra (—) = 5 unidades',
+                num5Desc: 'Cada barra vale <strong>5</strong>. Dos barras valen 10 y tres barras valen 15. Si sumas tres barras más cuatro puntos obtienes <strong>19</strong>, el número máximo dentro de un cartucho.',
+                boxRotacion: '<strong>💡 ¿Por qué los números están verticales en la estela?</strong> En los monumentos clásicos de piedra, cuando un número acompaña a un glifo por su <strong>lado izquierdo</strong>, el numeral se rota 90° en sentido antihorario: las barras se colocan <strong>verticalmente</strong> a la derecha (pegadas al glifo) y los puntos se alinean a la izquierda de las barras.',
+                sec3Title: '3. Anatomía de la Estela: ¿Qué representa cada bloque y cada número?',
+                sec3Intro: 'Las estelas mayas clásicas se leen <strong>de arriba hacia abajo y en pares de izquierda a derecha</strong> (como una columna doble). A continuación puedes ver el mapa exacto de los elementos que componen la postal generada:',
+                diagMarcoTxt: 'Marco exterior: 20 glifos del Tzolk\'in',
+                diagIsigTitle: 'Encabezado (ISIG)',
+                diagIsigSub: 'Glifo Introductor de la Serie Inicial',
+                blkATitle: 'Encabezado Superior (ISIG) y Marco de la Estela',
+                blkADesc: 'El gran emblema superior es el <strong>Glifo Introductor de la Serie Inicial (ISIG)</strong>, que anuncia solemnemente: «Aquí comienza el conteo del tiempo». Además, el borde exterior de la piedra está custodiado por los 20 glifos sagrados del Tzolk\'in tallados alrededor del monumento.',
+                blk1Title: '1.er Cartucho (Arriba-Izquierda): B\'ak\'tun',
+                blk1Desc: 'Su número (del 0 al 19) indica cuántos ciclos de <strong>144,000 días</strong> (aprox. 394.26 años solares) han pasado desde la fecha cero maya (3114 a. C.). Todas las fechas cercanas a nuestra época actual están en el <strong>B\'ak\'tun 13</strong> (dos barras y tres puntos).',
+                blk1Eq: '1 B\'ak\'tun = 20 K\'atunes = 144,000 días',
+                blk2Title: '2.º Cartucho (Arriba-Derecha): K\'atun',
+                blk2Desc: 'Su número (del 0 al 19) indica cuántos períodos de <strong>7,200 días</strong> (aprox. 19.71 años solares) se suman dentro del B\'ak\'tun actual. Para los mayas, cada fin de K\'atun era motivo de grandes ceremonias y erección de estelas.',
+                blk2Eq: '1 K\'atun = 20 Tunes = 7,200 días',
+                blk3Title: '3.er Cartucho (Centro-Izquierda): Tun',
+                blk3Desc: 'Su número (del 0 al 19) cuenta los «años de piedra» o <strong>Tunes de 360 días</strong> acumulados en el K\'atun actual.',
+                blk3Eq: '1 Tun = 18 Winales = 360 días',
+                blk4Title: '4.º Cartucho (Centro-Derecha): Winal',
+                blk4Desc: 'Su número va únicamente del <strong>0 al 17</strong> (porque 18 Winales forman 1 Tun exacto de 360 días). Representa cuántos «meses mayas» de <strong>20 días</strong> han transcurrido en el Tun actual.',
+                blk4Eq: '1 Winal = 20 K\'ines = 20 días',
+                blk5Title: '5.º Cartucho (Abajo-Izquierda): K\'in',
+                blk5Desc: '<em>K\'in</em> significa «Sol» o «Día». Su número (del 0 al 19) representa los <strong>días individuales</strong> restantes que completan la suma exacta de la Cuenta Larga.',
+                blk5Eq: '1 K\'in = 1 día solar',
+                blk6Title: '6.º Cartucho (Abajo-Derecha): Fecha Sagrada Tzolk\'in',
+                blk6Desc: 'A la izquierda aparece un numeral que siempre va del <strong>1 al 13</strong> (nunca lleva cero), y a la derecha se talla el glifo de uno de los <strong>20 días sagrados</strong> (<em>Imix\', Ik\', Ak\'b\'al, K\'an, Chikchan, Kimi, Manik\', Lamat, Muluk, Ok, Chuwen, Eb\', B\'en, Ix, Men, K\'ib\', Kaban, Etz\'nab\', Kawak, Ajaw</em>).',
+                blk7Title: '7.º Cartucho (Inferior Centrado): Fecha Solar Haab\'',
+                blk7Desc: 'Cierra la inscripción en la base de la estela. El número de la izquierda va del <strong>0 al 19</strong> (o del 0 al 4 si cae en el mes corto <em>Wayeb\'</em>) y señala qué día del mes corre, acompañado a la derecha por el glifo de uno de los <strong>19 meses del Haab\'</strong> (<em>Pop, Wo\', Sip, Sotz\', Sek, Xul, Yaxk\'in, Mol, Ch\'en, Yax, Sak\', Keh, Mak, K\'ank\'in, Muwan\', Pax, K\'ayab, Kumk\'u, Wayeb\'</em>).',
+                sec4Title: '4. Cómo leer la inscripción escrita debajo de la Estela',
+                sec4Intro: 'Justo debajo de la piedra caliza de tu postal aparece una línea en letras cursivas separada por dos puntos centrales (·). Veamos qué significa cada parte con un ejemplo real:',
+                ej1Desc: '<strong>Cuenta Larga (Bloques 1 al 5):</strong><br>13 B\'ak\'tunes (1,872,000 d) + 0 K\'atunes (0 d) + 14 Tunes (5,040 d) + 2 Winales (40 d) + 1 K\'in (1 d) = <strong>1,877,081 días</strong> desde el inicio de la era maya en 3114 a. C.',
+                ej2Desc: '<strong>Tzolk\'in (Bloque 6):</strong><br>El coeficiente numérico <strong>9</strong> (una barra y cuatro puntos) acompañado del primer glifo del calendario sagrado de 260 días: <strong>Imix\'</strong> (asociado con el lirio acuático, el origen y la tierra primordial).',
+                ej3Desc: '<strong>Haab\' (Bloque 7):</strong><br>El día número <strong>9</strong> (una barra y cuatro puntos) del decimocuarto mes del año solar de 365 días: <strong>K\'ank\'in</strong>.',
+            },
+            en: {
+                pageTitle: 'Mayan Calendar & Stela Explanation — Enrique Franco',
+                volverTop: 'Back to calculator',
+                volverBottom: 'Back to the Mayan Stela Board',
+                masDetalles: "View Haab' Matrix & More Details ▶",
+                mainHeading: 'Mayan Calendar & Stela Explanation',
+                subHeading: 'A complete guide to the Mayan cycles of time and how to read every number and glyph carved on your postcard',
+                sec1Title: '1. The Three Mayan Timekeeping Systems',
+                sec1Intro: 'Unlike our modern calendar, which uses a single linear count of days, months, and years, the Maya civilization simultaneously wove together three distinct counts to record every date with astronomical, historical, and sacred precision:',
+                cal1Badge: 'Linear count (~7,890 years)',
+                cal1Title: 'The Long Count',
+                cal1Desc: 'The continuous historical record counting the days elapsed since the mythical Mayan creation date: <strong>August 11, 3114 BC</strong> (according to the GMT 584,283 correlation). It is written with 5 dot-separated numbers (<em>B\'ak\'tun . K\'atun . Tun . Winal . K\'in</em>), pinpointing any event unambiguously across millennia.',
+                cal2Badge: '260-day sacred cycle',
+                cal2Title: 'The Tzolk\'in (Sacred Calendar)',
+                cal2Desc: 'Mesoamerica\'s oldest ritual and divinatory calendar. It interlocks two gears advancing day by day: the numbers <strong>1 through 13</strong> paired with <strong>20 sacred day names</strong> (from <em>Imix\'</em> to <em>Ajaw</em>). Since 13 × 20 = 260, each combination (e.g., <em>4 Ajaw</em>) takes exactly 260 days to repeat.',
+                cal3Badge: '365-day solar cycle',
+                cal3Title: 'The Haab\' (Civil & Agricultural Calendar)',
+                cal3Desc: 'Governs the seasons, rains, and agricultural cycles. It consists of <strong>18 months of 20 days each</strong> (numbered 0 to 19, totaling 360 days), plus a short closing period of <strong>5 days called Wayeb\'</strong> (numbered 0 to 4) at the end of the year to complete the 365 solar days.',
+                boxRueda: '<strong>⚙️ The Calendar Round (52 years):</strong> When the sacred <em>Tzolk\'in</em> (260 days) and the solar <em>Haab\'</em> (365 days) turn together, a combined date (such as <em>4 Ajaw 8 Kumk\'u</em>) repeats only once every <strong>18,980 days</strong> (the least common multiple of 260 and 365), which equals exactly <strong>52 Haab\' solar years</strong> or 73 Tzolk\'in cycles.',
+                sec2Title: '2. How to Read the Mayan Numbers (Bars & Dots)',
+                sec2Intro: 'The Mayan numeral system is <strong>vigesimal (base 20)</strong> and uses only three fundamental symbols to write any number from 0 to 19 inside each block of the stela:',
+                num0Title: 'The Shell / Seed = 0',
+                num0Desc: 'The Maya were one of the very first civilizations in human history to conceive and use a <strong>positional zero</strong>. It represents fullness or a cycle being "seated" (in the Haab\', day 0 marks the seating or arrival of the month).',
+                num1Title: 'The Dot (•) = 1 unit',
+                num1Desc: 'Each dot equals <strong>1</strong>. From 1 up to a maximum of <strong>4 dots</strong> can be grouped together (1, 2, 3, or 4). Five dots are never written together because they merge into a bar.',
+                num5Title: 'The Bar (—) = 5 units',
+                num5Desc: 'Each bar equals <strong>5</strong>. Two bars equal 10, and three bars equal 15. Combining three bars with four dots yields <strong>19</strong>, the highest number inside a single glyph block.',
+                boxRotacion: '<strong>💡 Why are the numbers rotated vertically on the stela?</strong> On Classic Mayan stone monuments, whenever a number accompanies a glyph on its <strong>left side</strong>, the numeral is rotated 90° counterclockwise: the bars stand <strong>vertically</strong> on the right (next to the glyph) and the dots line up to the left of the bars.',
+                sec3Title: '3. Anatomy of the Stela: What Each Block and Number Means',
+                sec3Intro: 'Classic Mayan stelae are read <strong>from top to bottom in pairs from left to right</strong> (as a double column). Below is the exact map of the elements carved on your generated postcard:',
+                diagMarcoTxt: 'Outer border: 20 Tzolk\'in day glyphs',
+                diagIsigTitle: 'Header (ISIG)',
+                diagIsigSub: 'Initial Series Introductory Glyph',
+                blkATitle: 'Top Header (ISIG) & Stela Frame',
+                blkADesc: 'The large top emblem is the <strong>Initial Series Introductory Glyph (ISIG)</strong>, which solemnly announces: "Here begins the count of time." Additionally, the outer rim of the limestone is guarded by all 20 sacred Tzolk\'in glyphs carved around the monument.',
+                blk1Title: '1st Cartouche (Top-Left): B\'ak\'tun',
+                blk1Desc: 'Its number (0 to 19) indicates how many cycles of <strong>144,000 days</strong> (~394.26 solar years) have elapsed since the Mayan zero date (3114 BC). All dates around our modern era fall in <strong>B\'ak\'tun 13</strong> (two bars and three dots).',
+                blk1Eq: '1 B\'ak\'tun = 20 K\'atuns = 144,000 days',
+                blk2Title: '2nd Cartouche (Top-Right): K\'atun',
+                blk2Desc: 'Its number (0 to 19) shows how many periods of <strong>7,200 days</strong> (~19.71 solar years) have been completed within the current B\'ak\'tun. For the Maya, every K\'atun ending was celebrated with grand ceremonies and the erection of stelae.',
+                blk2Eq: '1 K\'atun = 20 Tuns = 7,200 days',
+                blk3Title: '3rd Cartouche (Middle-Left): Tun',
+                blk3Desc: 'Its number (0 to 19) counts the "stone years" or <strong>360-day Tuns</strong> accumulated within the current K\'atun.',
+                blk3Eq: '1 Tun = 18 Winals = 360 days',
+                blk4Title: '4th Cartouche (Middle-Right): Winal',
+                blk4Desc: 'Its number only goes from <strong>0 to 17</strong> (because 18 Winals make 1 exact Tun of 360 days). It represents how many <strong>20-day Mayan months</strong> have elapsed in the current Tun.',
+                blk4Eq: '1 Winal = 20 K\'ins = 20 days',
+                blk5Title: '5th Cartouche (Bottom-Left): K\'in',
+                blk5Desc: '<em>K\'in</em> means "Sun" or "Day." Its number (0 to 19) represents the remaining <strong>individual days</strong> that complete the exact Long Count sum.',
+                blk5Eq: '1 K\'in = 1 solar day',
+                blk6Title: '6th Cartouche (Bottom-Right): Tzolk\'in Sacred Date',
+                blk6Desc: 'On the left is a numeral that always ranges from <strong>1 to 13</strong> (never zero), and on the right is the glyph of one of the <strong>20 sacred days</strong> (<em>Imix\', Ik\', Ak\'b\'al, K\'an, Chikchan, Kimi, Manik\', Lamat, Muluk, Ok, Chuwen, Eb\', B\'en, Ix, Men, K\'ib\', Kaban, Etz\'nab\', Kawak, Ajaw</em>).',
+                blk7Title: '7th Cartouche (Bottom-Center): Haab\' Solar Date',
+                blk7Desc: 'Closes the inscription at the base of the stela. The left number ranges from <strong>0 to 19</strong> (or 0 to 4 during the short month of <em>Wayeb\'</em>) indicating the day of the month, paired on the right with the glyph of one of the <strong>19 Haab\' months</strong> (<em>Pop, Wo\', Sip, Sotz\', Sek, Xul, Yaxk\'in, Mol, Ch\'en, Yax, Sak\', Keh, Mak, K\'ank\'in, Muwan\', Pax, K\'ayab, Kumk\'u, Wayeb\'</em>).',
+                sec4Title: '4. How to Read the Inscription Below the Stela',
+                sec4Intro: 'Right below the limestone block on your postcard is an italicized line separated by middle dots (·). Here is what each part means using a real example:',
+                ej1Desc: '<strong>Long Count (Blocks 1 to 5):</strong><br>13 B\'ak\'tuns (1,872,000 d) + 0 K\'atuns (0 d) + 14 Tuns (5,040 d) + 2 Winals (40 d) + 1 K\'in (1 d) = <strong>1,877,081 days</strong> since the start of the Mayan era in 3114 BC.',
+                ej2Desc: '<strong>Tzolk\'in (Block 6):</strong><br>The numeric coefficient <strong>9</strong> (one bar and four dots) paired with the first glyph of the 260-day sacred calendar: <strong>Imix\'</strong> (associated with the water lily, origin, and primordial earth).',
+                ej3Desc: '<strong>Haab\' (Block 7):</strong><br>Day number <strong>9</strong> (one bar and four puntos) of the fourteenth month of the 365-day solar year: <strong>K\'ank\'in</strong>.',
+            },
+            fr: {
+                pageTitle: 'Explication du Calendrier Maya et de la Stèle — Enrique Franco',
+                volverTop: 'Retour à la calculatrice',
+                volverBottom: 'Retour au Tableau de la Stèle Maya',
+                masDetalles: "Voir la Matrice du Haab' et plus de détails ▶",
+                mainHeading: 'Explication du Calendrier Maya et de la Stèle',
+                subHeading: 'Guide complet sur les cycles du temps maya et sur la lecture de chaque chiffre et glyphe gravé sur votre carte',
+                sec1Title: '1. Les Trois Systèmes du Temps Maya',
+                sec1Intro: 'Contrairement à notre calendrier actuel qui utilise un seul décompte linéaire, la civilisation maya entrelacait simultanément trois comptes distincts pour enregistrer chaque date avec une précision astronomique, historique et sacrée :',
+                cal1Badge: 'Compte linéaire (~7 890 ans)',
+                cal1Title: 'Le Compte Long',
+                cal1Desc: 'C\'est le registre historique continu qui compte les jours écoulés depuis la date mythique de la création maya : le <strong>11 août 3114 av. J.-C.</strong> (selon la corrélation GMT 584 283). Il s\'écrit avec 5 nombres séparés par des points (<em>B\'ak\'tun . K\'atun . Tun . Winal . K\'in</em>) et situe tout événement sans ambiguïté sur des millénaires.',
+                cal2Badge: 'Cycle sacré de 260 jours',
+                cal2Title: 'Le Tzolk\'in (Calendrier Sacré)',
+                cal2Desc: 'Le plus ancien calendrier rituel et divinatoire de Mésoamérique. Il combine deux engrenages : les nombres de <strong>1 à 13</strong> avec <strong>20 noms de jours sacrés</strong> (de <em>Imix\'</em> à <em>Ajaw</em>). Comme 13 × 20 = 260, chaque combinaison (ex. <em>4 Ajaw</em>) met exactement 260 jours à se répéter.',
+                cal3Badge: 'Cycle solaire de 365 jours',
+                cal3Title: 'Le Haab\' (Calendrier Civil et Agricole)',
+                cal3Desc: 'Régit les saisons et les cycles agricoles. Il comprend <strong>18 mois de 20 jours chacun</strong> (numérotés de 0 à 19, soit 360 jours), plus une courte période de <strong>5 jours appelés Wayeb\'</strong> (numérotés de 0 à 4) en fin d\'année pour compléter les 365 jours solaires.',
+                boxRueda: '<strong>⚙️ La Roue Calendaire (52 ans) :</strong> Lorsque le <em>Tzolk\'in</em> (260 jours) et le <em>Haab\'</em> (365 jours) tournent ensemble, une date combinée (comme <em>4 Ajaw 8 Kumk\'u</em>) ne se répète que tous les <strong>18 980 jours</strong> (le PPCM de 260 et 365), soit exactement <strong>52 années solaires Haab\'</strong> ou 73 cycles Tzolk\'in.',
+                sec2Title: '2. Comment lire les chiffres mayas (Barres et Points) ?',
+                sec2Intro: 'Le système de numération maya est <strong>vigésimal (base 20)</strong> et n\'utilise que trois symboles fondamentaux pour écrire tout nombre de 0 à 19 dans chaque bloc de la stèle :',
+                num0Title: 'Le Coquillage ou Graine = 0',
+                num0Desc: 'Les Mayas furent l\'une des premières civilisations de l\'histoire à inventer et utiliser le <strong>zéro de position</strong>. Il représente la plénitude ou l\'intronisation d\'un cycle (dans le Haab\', le jour 0 marque l\'installation du mois).',
+                num1Title: 'Le Point (•) = 1 unité',
+                num1Desc: 'Chaque point vaut <strong>1</strong>. On peut regrouper de 1 à <strong>4 points</strong> maximum (1, 2, 3 ou 4). Cinq points ne s\'écrivent jamais ensemble car ils forment une barre.',
+                num5Title: 'La Barre (—) = 5 unités',
+                num5Desc: 'Chaque barre vaut <strong>5</strong>. Deux barres valent 10 et trois barres valent 15. Trois barres plus quatre points donnent <strong>19</strong>, le nombre maximal dans un cartouche.',
+                boxRotacion: '<strong>💡 Pourquoi les chiffres sont-ils verticaux sur la stèle ?</strong> Sur les monuments classiques en pierre, lorsqu\'un nombre accompagne un glyphe sur son <strong>côté gauche</strong>, le chiffre est tourné de 90° dans le sens antihoraire : les barres sont placées <strong>verticalement</strong> à droite (contre le glyphe) et les points s\'alignent à gauche des barres.',
+                sec3Title: '3. Anatomie de la Stèle : Que représente chaque bloc et chaque numéro ?',
+                sec3Intro: 'Les stèles mayas classiques se lisent <strong>de haut en bas et par paires de gauche à droite</strong> (en double colonne). Voici le plan exact des éléments qui composent votre carte postale :',
+                diagMarcoTxt: 'Cadre extérieur : 20 glyphes du Tzolk\'in',
+                diagIsigTitle: 'En-tête (ISIG)',
+                diagIsigSub: 'Glyphe Introducteur de la Série Initiale',
+                blkATitle: 'En-tête Supérieur (ISIG) et Cadre de la Stèle',
+                blkADesc: 'Le grand emblème supérieur est le <strong>Glyphe Introducteur de la Série Initiale (ISIG)</strong>, qui annonce : « Ici commence le compte du temps ». De plus, la bordure extérieure de la pierre est entourée des 20 glyphes sacrés du Tzolk\'in.',
+                blk1Title: '1er Cartouche (Haut-Gauche) : B\'ak\'tun',
+                blk1Desc: 'Son numéro (0 à 19) indique combien de cycles de <strong>144 000 jours</strong> (~394,26 années solaires) se sont écoulés depuis l\'an zéro maya (3114 av. J.-C.). Toutes les dates proches de notre époque se situent dans le <strong>B\'ak\'tun 13</strong> (deux barres et trois points).',
+                blk1Eq: '1 B\'ak\'tun = 20 K\'atuns = 144 000 jours',
+                blk2Title: '2e Cartouche (Haut-Droite) : K\'atun',
+                blk2Desc: 'Son numéro (0 à 19) indique combien de périodes de <strong>7 200 jours</strong> (~19,71 années solaires) s\'ajoutent dans le B\'ak\'tun actuel. Chez les Mayas, chaque fin de K\'atun donnait lieu à de grandes cérémonies.',
+                blk2Eq: '1 K\'atun = 20 Tuns = 7 200 jours',
+                blk3Title: '3e Cartouche (Milieu-Gauche) : Tun',
+                blk3Desc: 'Son numéro (0 à 19) compte les « années de pierre » ou <strong>Tuns de 360 jours</strong> accumulés dans le K\'atun actuel.',
+                blk3Eq: '1 Tun = 18 Winals = 360 jours',
+                blk4Title: '4e Cartouche (Milieu-Droite) : Winal',
+                blk4Desc: 'Son numéro va uniquement de <strong>0 à 17</strong> (car 18 Winals forment exactement 1 Tun de 360 jours). Il représente le nombre de « mois mayas » de <strong>20 jours</strong> écoulés dans le Tun actuel.',
+                blk4Eq: '1 Winal = 20 K\'ins = 20 jours',
+                blk5Title: '5e Cartouche (Bas-Gauche) : K\'in',
+                blk5Desc: '<em>K\'in</em> signifie « Soleil » ou « Jour ». Son numéro (0 à 19) représente les <strong>jours individuels</strong> restants qui complètent la somme du Compte Long.',
+                blk5Eq: '1 K\'in = 1 jour solaire',
+                blk6Title: '6e Cartouche (Bas-Droite) : Date Sacrée Tzolk\'in',
+                blk6Desc: 'À gauche figure un chiffre allant toujours de <strong>1 à 13</strong> (jamais zéro), et à droite est gravé le glyphe de l\'un des <strong>20 jours sacrés</strong> (<em>Imix\', Ik\', Ak\'b\'al, K\'an, Chikchan, Kimi, Manik\', Lamat, Muluk, Ok, Chuwen, Eb\', B\'en, Ix, Men, K\'ib\', Kaban, Etz\'nab\', Kawak, Ajaw</em>).',
+                blk7Title: '7e Cartouche (Bas-Centré) : Date Solaire Haab\'',
+                blk7Desc: 'Clôt l\'inscription à la base de la stèle. Le chiffre de gauche va de <strong>0 à 19</strong> (ou de 0 à 4 pendant le mois court <em>Wayeb\'</em>) et indique le jour du mois, accompagné à droite du glyphe de l\'un des <strong>19 mois du Haab\'</strong>.',
+                sec4Title: '4. Comment lire l\'inscription écrite sous la Stèle',
+                sec4Intro: 'Juste en dessous de la pierre calcaire de votre carte apparaît une ligne en italique séparée par des points médians (·). Voici la signification de chaque partie avec un exemple concret :',
+                ej1Desc: '<strong>Compte Long (Blocs 1 à 5) :</strong><br>13 B\'ak\'tuns (1 872 000 j) + 0 K\'atun (0 j) + 14 Tuns (5 040 j) + 2 Winals (40 j) + 1 K\'in (1 j) = <strong>1 877 081 jours</strong> depuis le début de l\'ère maya en 3114 av. J.-C.',
+                ej2Desc: '<strong>Tzolk\'in (Bloc 6) :</strong><br>Le coefficient numérique <strong>9</strong> (une barre et quatre points) associé au premier glyphe du calendrier sacré de 260 jours : <strong>Imix\'</strong>.',
+                ej3Desc: '<strong>Haab\' (Bloc 7) :</strong><br>Le jour numéro <strong>9</strong> (une barre et quatre points) du quatorzième mois de l\'année solaire de 365 jours : <strong>K\'ank\'in</strong>.',
+            },
+            ja: {
+                pageTitle: 'マヤ暦と石碑の詳しい解説 — Enrique Franco',
+                volverTop: '計算機に戻る',
+                volverBottom: 'マヤ石碑ボードに戻る',
+                masDetalles: 'ハアブ暦マトリックスと詳細を見る ▶',
+                mainHeading: 'マヤ暦と石碑の詳しい解説',
+                subHeading: 'マヤの時間のサイクルと、ポストカードに刻まれた各数字・碑文（グリフ）の読み方完全ガイド',
+                sec1Title: '1. マヤ暦の3つの時間体系',
+                sec1Intro: '日・月・年を1つの直線的なカウントで数える現代のグレゴリオ暦とは異なり、マヤ文明では天文学的・歴史的・宗教的な精度で日付を記録するために、3つの異なる暦を同時に組み合わせていました：',
+                cal1Badge: '直線的な記録（約7,890年周期）',
+                cal1Title: '長期暦（ロング・カウント）',
+                cal1Desc: '神話上のマヤ創世の日である<strong>紀元前3114年8月11日</strong>（GMT相関値 584,283）からの経過日数を数える連続的な歴史記録です。ドットで区切られた5つの数字（<em>バクトゥン . カトゥン . トゥン . ウィナル . キン</em>）で表され、数千年にわたるあらゆる出来事を正確に特定できます。',
+                cal2Badge: '260日の神聖なサイクル',
+                cal2Title: 'ツォルキン暦（神聖暦）',
+                cal2Desc: 'メソアメリカ最古の儀式・占星カレンダーです。<strong>1から13までの数字</strong>と<strong>20種類の神聖な日の名前</strong>（<em>イミシュ</em>から<em>アハウ</em>まで）という2つの歯車が毎日1つずつ進みます。13 × 20 = 260 のため、同じ組み合わせ（例：<em>4 アハウ</em>）は正確に260日ごとに巡ってきます。',
+                cal3Badge: '365日の太陽サイクル',
+                cal3Title: 'ハアブ暦（太陽暦・農耕暦）',
+                cal3Desc: '季節や雨季、農耕サイクルを司る暦です。<strong>1ヶ月20日間の月が18ヶ月</strong>（各月は0から19まで数え、計360日）あり、年末に<strong>「ワヤブ」と呼ばれる5日間の短い月</strong>（0から4まで）を加えて太陽年の365日とします。',
+                boxRueda: '<strong>⚙️ カレンダー・ラウンド（52年周期）：</strong>神聖暦<em>ツォルキン</em>（260日）と太陽暦<em>ハアブ</em>（365日）が同時に回転すると、両方の組み合わせ（例：<em>4 アハウ 8 クムク</em>）が再び一致するのは<strong>18,980日ごと</strong>（260と365の最小公倍数）、つまり正確に<strong>ハアブ太陽暦の52年ごと</strong>（ツォルキン73周期）になります。',
+                sec2Title: '2. マヤ数字（棒と点）の読み方',
+                sec2Intro: 'マヤの記数法は<strong>二十進法（ベース20）</strong>であり、石碑の各ブロック内の0から19までの数字をわずか3つの基本記号だけで表します：',
+                num0Title: '貝殻（または種）＝ 0',
+                num0Desc: 'マヤ人は人類史上最も早く<strong>位取りのゼロ（0）</strong>を発見・使用した文明の一つです。完全さやサイクルの「着座」（ハアブ暦の0日は新しい月の到来・着座）を意味します。',
+                num1Title: '点（•）＝ 1',
+                num1Desc: '1つの点は<strong>1</strong>を表します。点は1つから最大<strong>4つまで</strong>（1、2、3、4）並べることができます。点が5つ集まると1本の棒に変わります。',
+                num5Title: '棒（—）＝ 5',
+                num5Desc: '1本の棒は<strong>5</strong>を表します。棒2本で10、棒3本で15です。棒3本（15）と点4つ（4）を足すと、1つのブロック内の最大値である<strong>19</strong>になります。',
+                boxRotacion: '<strong>💡 なぜ石碑の数字は縦向きなのですか？</strong> 古典期のマヤ石碑では、数字がグリフ（文字）の<strong>左側</strong>に添えられるとき、数字は反時計回りに90度回転して刻まれます。つまり、棒はグリフに近い右側に<strong>縦向き</strong>に並び、点は棒の左側に縦に並びます。',
+                sec3Title: '3. 石碑の解剖図：各ブロックと数字が表す意味',
+                sec3Intro: '古典期のマヤ石碑は、<strong>上から下へ、左右のペア（2列）で左から右へ</strong>読み進めます。生成されたポストカードの各要素の配置は以下の通りです：',
+                diagMarcoTxt: '外枠：ツォルキン暦の20の日グリフ',
+                diagIsigTitle: '上部ヘッダー (ISIG)',
+                diagIsigSub: '初期シリーズ導入グリフ',
+                blkATitle: '上部ヘッダー（ISIG）と石碑の外枠',
+                blkADesc: '最上部の大きな紋章は<strong>初期シリーズ導入グリフ（ISIG）</strong>と呼ばれ、「ここから時間の計測が始まる」ことを厳かに宣言します。また、石碑の外周フレームにはツォルキン暦の20の神聖な日グリフが彫り込まれ、碑文を守護しています。',
+                blk1Title: '第1ブロック（左上）：バクトゥン (B\'ak\'tun)',
+                blk1Desc: '左の数字（0〜19）は、マヤの起点（紀元前3114年）から<strong>144,000日</strong>（約394.26太陽年）の周期がいくつ経過したかを示します。現代の日付はすべて<strong>第13バクトゥン</strong>（棒2本と点3つ）に入ります。',
+                blk1Eq: '1 バクトゥン = 20 カトゥン = 144,000日',
+                blk2Title: '第2ブロック（右上）：カトゥン (K\'atun)',
+                blk2Desc: '左の数字（0〜19）は、現在のバクトゥンの中で<strong>7,200日</strong>（約19.71太陽年）の周期がいくつ経過したかを示します。マヤ人にとってカトゥンの終わりは盛大な儀式と石碑建立の節目でした。',
+                blk2Eq: '1 カトゥン = 20 トゥン = 7,200日',
+                blk3Title: '第3ブロック（中段左）：トゥン (Tun)',
+                blk3Desc: '左の数字（0〜19）は、現在のカトゥンの中で積み重なった<strong>360日の「石の年（トゥン）」</strong>の数を表します。',
+                blk3Eq: '1 トゥン = 18 ウィナル = 360日',
+                blk4Title: '第4ブロック（中段右）：ウィナル (Winal)',
+                blk4Desc: '18ウィナルでちょうど1トゥン（360日）になるため、この数字は<strong>0から17まで</strong>しかありません。現在のトゥンの中で経過した<strong>20日間の「マヤ月」</strong>の数を示します。',
+                blk4Eq: '1 ウィナル = 20 キン = 20日',
+                blk5Title: '第5ブロック（下段左）：キン (K\'in)',
+                blk5Desc: '<em>キン</em>は「太陽」または「日」を意味します。0から19までの数字で、長期暦の合計日数を完成させる残りの<strong>1日単位の日数</strong>を表します。',
+                blk5Eq: '1 キン = 1太陽日',
+                blk6Title: '第6ブロック（下段右）：ツォルキン神聖暦の日付',
+                blk6Desc: '左側に必ず<strong>1から13まで</strong>の数字（0はありません）が刻まれ、右側に<strong>20の神聖な日</strong>（<em>イミシュ、イク、アクバル、カン、チクチャン、キミ、マニク、ラマト、ムルク、オク、チュウェン、エブ、ベン、イシュ、メン、キブ、カバン、エツナブ、カワク、アハウ</em>）のいずれかのグリフが刻まれます。',
+                blk7Title: '第7ブロック（最下部中央）：ハアブ太陽暦の日付',
+                blk7Desc: '石碑の締めくくりです。左の数字は<strong>0から19</strong>（5日間の短い月<em>ワヤブ</em>のみ0から4）でその月の何日目かを示し、右側には<strong>ハアブ暦の19の月</strong>のいずれかのグリフが刻まれます。',
+                sec4Title: '4. 石碑の下に書かれたテキストの読み方',
+                sec4Intro: 'ポストカードの石碑のすぐ下には、中黒（·）で区切られた斜体のテキストが表示されます。実際の例でそれぞれの意味を見てみましょう：',
+                ej1Desc: '<strong>長期暦（ブロック1〜5）：</strong><br>13バクトゥン (1,872,000日) + 0カトゥン (0日) + 14トゥン (5,040日) + 2ウィナル (40日) + 1キン (1日) ＝ 紀元前3114年のマヤ創世から<strong>1,877,081日</strong>経過。',
+                ej2Desc: '<strong>ツォルキン暦（ブロック6）：</strong><br>数字の<strong>9</strong>（棒1本と点4つ）と、260日神聖暦の最初のグリフである<strong>イミシュ (Imix\')</strong>（睡蓮・起源・原初の大地を象徴）の組み合わせ。',
+                ej3Desc: '<strong>ハアブ暦（ブロック7）：</strong><br>365日太陽暦の14番目の月である<strong>カンキン (K\'ank\'in)</strong> の<strong>9日目</strong>（棒1本と点4つ）。',
+            },
+            zh: {
+                pageTitle: '玛雅历法与石碑详解 — Enrique Franco',
+                volverTop: '返回计算器',
+                volverBottom: '返回玛雅石碑面板',
+                masDetalles: '查看哈布历互动矩阵与更多细节 ▶',
+                mainHeading: '玛雅历法与石碑详解',
+                subHeading: '全面了解玛雅时间周期，以及如何解读明信片上雕刻的每一个数字与文字（雕文）',
+                sec1Title: '1. 玛雅时间的三大历法系统',
+                sec1Intro: '与我们现在使用的单一线性公历不同，玛雅文明同时交织使用三种截然不同的历法，以天文学、历史学和神圣仪式的精确度来记录每一个日期：',
+                cal1Badge: '线性纪年（约7,890年周期）',
+                cal1Title: '长计历（Long Count）',
+                cal1Desc: '这是连续的历史纪年，计算自玛雅神话创世日——<strong>公元前3114年8月11日</strong>（根据 GMT 584,283 换算常数）以来所经过的总天数。它由点号分隔的5个数字写出（<em>巴克盾 . 卡盾 . 盾 . 乌纳尔 . 金</em>），能够跨越数千年毫无歧义地定位任何历史事件。',
+                cal2Badge: '260天神圣周期',
+                cal2Title: '卓尔金历（Tzolk\'in 神圣历）',
+                cal2Desc: '中美洲最古老的宗教与占卜历法。它像两个咬合旋转的齿轮：<strong>数字 1 至 13</strong> 与 <strong>20 个神圣日名</strong>（从 <em>Imix\'</em> 到 <em>Ajaw</em>）逐日配对推进。因为 13 × 20 = 260，每一个组合（例如 <em>4 Ajaw</em>）精确地每隔 260 天重复一次。',
+                cal3Badge: '365天太阳周期',
+                cal3Title: '哈布历（Haab\' 太阳与农耕历）',
+                cal3Desc: '指导四季、雨季与农业周期。由<strong>18个月（每月20天，编号0至19，共360天）</strong>加上年末额外的<strong>5天短月 Wayeb\'（编号0至4）</strong>组成，合计正好 365 个太阳日。',
+                boxRueda: '<strong>⚙️ 历法轮（52年周期）：</strong>当神圣的<em>卓尔金历</em>（260天）与太阳历<em>哈布历</em>（365天）同时运转时，一个组合日期（如 <em>4 Ajaw 8 Kumk\'u</em>）每隔 <strong>18,980天</strong>（260与365的最小公倍数）才会再次重合，这恰好等于 <strong>52个哈布太阳年</strong> 或 73个卓尔金周期。',
+                sec2Title: '2. 如何辨读玛雅数字（横条与圆点）？',
+                sec2Intro: '玛雅数字系统是<strong>二十进制（Base 20）</strong>，在石碑的每个方格内，仅用三种基本符号即可写出 0 到 19 之间的任何数字：',
+                num0Title: '贝壳（或种子）= 0',
+                num0Desc: '玛雅人是人类历史上最早发明并使用<strong>位置零（0）</strong>的文明之一。它象征圆满或一个周期的“落座”（在哈布历中，第0天代表新月份的降临与就位）。',
+                num1Title: '圆点（•）= 1',
+                num1Desc: '每个圆点代表 <strong>1</strong>。最多可以连续排列 <strong>1 到 4 个圆点</strong>（1、2、3 或 4）。五个圆点绝不会写在一起，因为它们会合并成一条横杠。',
+                num5Title: '横条（—）= 5',
+                num5Desc: '每条横杠代表 <strong>5</strong>。两条横杠是 10，三条横杠是 15。三条横杠加四个圆点就是 <strong>19</strong>，即单个方格内的最大数字。',
+                boxRotacion: '<strong>💡 为什么石碑上的数字是竖着排列的？</strong> 在古典期玛雅石碑上，当数字位于主雕文的<strong>左侧</strong>时，整个数字会逆时针旋转 90°：横条会<strong>竖直排列</strong>在右侧（紧贴主雕文），而圆点则排列在竖条的左侧。',
+                sec3Title: '3. 石碑结构拆解：每个方格和数字代表什么？',
+                sec3Intro: '古典玛雅石碑的阅读顺序是<strong>从上到下、按左右成对（双列）从左往右读</strong>。以下是生成明信片上各个雕文方格的完整对应图：',
+                diagMarcoTxt: '外框：卓尔金历的20个神圣日雕文',
+                diagIsigTitle: '顶部碑首 (ISIG)',
+                diagIsigSub: '初始序列引入雕文',
+                blkATitle: '顶部碑首（ISIG）与石碑外框',
+                blkADesc: '最上方巨大的徽章是<strong>初始序列引入雕文（ISIG）</strong>，庄严宣告：“时间的计数由此开始”。此外，石灰岩外框四周环绕雕刻着卓尔金历的全部 20 个神圣日雕文，守护着整座石碑。',
+                blk1Title: '第1方格（左上）：巴克盾 (B\'ak\'tun)',
+                blk1Desc: '左侧数字（0至19）表示自玛雅创世零点（公元前3114年）以来经过了多少个 <strong>144,000天</strong>（约394.26个太阳年）的周期。我们现代的日期全都处于<strong>第13巴克盾</strong>（两条杠加三个点）。',
+                blk1Eq: '1 巴克盾 = 20 卡盾 = 144,000 天',
+                blk2Title: '第2方格（右上）：卡盾 (K\'atun)',
+                blk2Desc: '左侧数字（0至19）表示在当前巴克盾内累加了多少个 <strong>7,200天</strong>（约19.71个太阳年）的周期。对玛雅人而言，每个卡盾的结束都是举行盛大庆典和竖立石碑的重要时刻。',
+                blk2Eq: '1 卡盾 = 20 盾 = 7,200 天',
+                blk3Title: '第3方格（中左）：盾 (Tun)',
+                blk3Desc: '左侧数字（0至19）计算当前卡盾内累积的<strong>360天“石年（盾）”</strong>的数量。',
+                blk3Eq: '1 盾 = 18 乌纳尔 = 360 天',
+                blk4Title: '第4方格（中右）：乌纳尔 (Winal)',
+                blk4Desc: '其数字仅在 <strong>0 至 17</strong> 之间（因为18个乌纳尔正好构成1个360天的盾）。它代表当前盾内已经走过了多少个<strong>20天的“玛雅月”</strong>。',
+                blk4Eq: '1 乌纳尔 = 20 金 = 20 天',
+                blk5Title: '第5方格（下左）：金 (K\'in)',
+                blk5Desc: '<em>K\'in</em> 意为“太阳”或“日”。其数字（0至19）代表补足长计历总天数的剩余<strong>单日天数</strong>。',
+                blk5Eq: '1 金 = 1 个太阳日',
+                blk6Title: '第6方格（下右）：卓尔金神圣历日期',
+                blk6Desc: '左侧是一个范围永远在 <strong>1 至 13</strong> 之间的数字（绝不会出现0），右侧雕刻着 <strong>20个神圣日</strong>（<em>Imix\', Ik\', Ak\'b\'al, K\'an, Chikchan, Kimi, Manik\', Lamat, Muluk, Ok, Chuwen, Eb\', B\'en, Ix, Men, K\'ib\', Kaban, Etz\'nab\', Kawak, Ajaw</em>）之一的雕文。',
+                blk7Title: '第7方格（底部居中）：哈布太阳历日期',
+                blk7Desc: '在石碑底部收尾。左侧数字范围为 <strong>0 至 19</strong>（若落在年末5天短月 <em>Wayeb\'</em> 则为 0 至 4），代表当月的第几天；右侧配有<strong>哈布历19个月份</strong>之一的雕文。',
+                sec4Title: '4. 如何解读石碑下方的铭文？',
+                sec4Intro: '在明信片石灰岩下方的正中央，有一行由间隔号（·）分成三段的斜体铭文。让我们通过一个真实示例来看看每一段的含义：',
+                ej1Desc: '<strong>长计历（方格 1 至 5）：</strong><br>13个巴克盾 (1,872,000天) + 0个卡盾 (0天) + 14个盾 (5,040天) + 2个乌纳尔 (40天) + 1个金 (1天) = 自公元前3114年玛雅纪元起点以来共经过了 <strong>1,877,081 天</strong>。',
+                ej2Desc: '<strong>卓尔金历（方格 6）：</strong><br>数字系数 <strong>9</strong>（一条杠加四个点）搭配260天神圣历的第一个日名雕文 <strong>Imix\'</strong>（象征睡莲、本源与原初大地）。',
+                ej3Desc: '<strong>哈布历（方格 7）：</strong><br>365天太阳历第14个月份 <strong>K\'ank\'in</strong> 的<strong>第9天</strong>（一条杠加四个点）。',
+            },
+        };
+
+        let idiomaActual = '{{ lang_inicial|default:"es" }}';
+        const botonesIdioma = document.querySelectorAll('.lang-btn');
+
+        function aplicarIdioma(lang) {
+            idiomaActual = I18N_EXP[lang] ? lang : 'es';
+            const t = I18N_EXP[idiomaActual];
+            document.documentElement.lang = idiomaActual;
+            document.title = t.pageTitle;
+
+            document.getElementById('txtVolverTop').textContent = t.volverTop;
+            document.getElementById('txtVolverBottom').textContent = t.volverBottom;
+            document.getElementById('txtMasDetalles').textContent = t.masDetalles;
+            document.getElementById('linkVolverTop').href = `/?lang=${idiomaActual}`;
+            document.getElementById('linkVolverBottom').href = `/?lang=${idiomaActual}`;
+            document.getElementById('linkMasDetalles').href = `/explicacion/mas/?lang=${idiomaActual}`;
+
+            const idsTexto = [
+                'mainHeading', 'subHeading',
+                'sec1Title', 'sec1Intro',
+                'cal1Badge', 'cal1Title',
+                'cal2Badge', 'cal2Title',
+                'cal3Badge', 'cal3Title',
+                'sec2Title',
+                'num0Title', 'num1Title', 'num5Title',
+                'sec3Title',
+                'diagMarcoTxt', 'diagIsigTitle', 'diagIsigSub',
+                'blkATitle',
+                'blk1Title', 'blk1Eq',
+                'blk2Title', 'blk2Eq',
+                'blk3Title', 'blk3Eq',
+                'blk4Title', 'blk4Eq',
+                'blk5Title', 'blk5Eq',
+                'blk6Title',
+                'blk7Title',
+                'sec4Title', 'sec4Intro',
+            ];
+            idsTexto.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && t[id]) el.textContent = t[id];
+            });
+
+            const idsHtml = [
+                'cal1Desc', 'cal2Desc', 'cal3Desc', 'boxRueda',
+                'sec2Intro', 'num0Desc', 'num1Desc', 'num5Desc', 'boxRotacion',
+                'sec3Intro', 'blkADesc', 'blk1Desc', 'blk2Desc', 'blk3Desc', 'blk4Desc', 'blk5Desc', 'blk6Desc', 'blk7Desc',
+                'ej1Desc', 'ej2Desc', 'ej3Desc',
+            ];
+            idsHtml.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && t[id]) el.innerHTML = t[id];
+            });
+
+            botonesIdioma.forEach(btn => {
+                btn.classList.toggle('activo', btn.dataset.lang === idiomaActual);
+            });
+        }
+
+        botonesIdioma.forEach(btn => {
+            btn.addEventListener('click', () => aplicarIdioma(btn.dataset.lang));
+        });
+
+        if (idiomaActual !== 'es') {
+            aplicarIdioma(idiomaActual);
+        }
+    </script>
+</body>
+</html>
